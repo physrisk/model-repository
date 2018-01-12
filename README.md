@@ -36,7 +36,7 @@ These well-known libraries include:
 
 **Would you like to contribute an interactive content to Physics of Risk?** Great! Read the rough guidelines [here](http://rf.mokslasplius.lt/contribute/) and contact [us](http://rf.mokslasplius.lt/about/).
 
-**Have you noticed an error?** Great! Let us know -- submit an issue.
+**Have you noticed an error?** Great! Let us know -- submit an issue or use another proper github tool.
 
 ## License
 
