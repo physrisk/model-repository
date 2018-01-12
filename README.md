@@ -4,9 +4,9 @@ This repository stores development code for the models that are, or will be, fea
 
 ## Dependencies
 
-Most of the models depend on some well-known javascript libraries, which are not part of this repository. Some models also reuse "common" code written by us. All of these dependencies in our development environment are stored in `js-lib` folder.
+Most of the models depend on some well-known javascript libraries, which are not part of this repository. Some models also reuse "common" code written by the contributors for [Physics of Risk](http://rf.mokslasplius.lt). All of these dependencies in our development environment are stored in `js-lib` folder.
 
-Here, in this repository, we have only made available "common" code developed by us. You could fetch the well-known libraries on your own (e.g., from CDNs). You can always obtain the files from [Physics of Risk](http://rf.mokslasplius.lt) (click links in the braces).
+Here, in this repository, we have only included the commonly reused code developed by the contributors of [Physics of Risk](http://rf.mokslasplius.lt). You could fetch the well-known libraries on your own (e.g., from CDNs) or you can obtain the respective files from [Physics of Risk](http://rf.mokslasplius.lt) (click links in the braces).
 
 These well-known libraries include:
 * [d3](https://d3js.org/) 4.12 (stored as [js-lib/d3-v4.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/d3-v4.min.js))
