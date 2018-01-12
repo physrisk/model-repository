@@ -25,7 +25,14 @@ These well-known libraries include:
 1. **Create new models and provide their descriptions on [Physics of Risk](http://rf.mokslasplius.lt).** This is a top priority as it is needed to fill [Physics of Risk](http://rf.mokslasplius.lt) with content.
 1. **Include more comments in the code and make them more useful.** This priority will most likely hold only for the newly implemented models as in general the models and thus the implementing code are usually extremely simple (so the purpose of various code fragments is usually evident after reading the model descriptions).
 1. **Modernize coding style** (use linting, beautification and etc.). This priority will most likely hold for the newly implemented models, but it is possible that some of these tools can be automatically applied to older implementations.
-1. **Rewrite "ancient" code, replace "ancient" dependencies**. Some of the code was written way back in 2010, so the code and the dependencies appear to be "ancient" in web standards. It would be nice to do a rewrite, but most likely this will be done only if capable students appear.
+1. **Make user experience more uniform**. As the models were written at very different times, the UI behavior is not always the same. It would be nice to do the "uniformization" procedure and setup general guidelines for the future, but this most likely will happen only if capable students appear.
+1. **Rewrite "ancient" code and replace "ancient" dependencies**. Some of the code was written way back in 2010, so the code and the dependencies appear to be "ancient" in web standards. It would be nice to do a rewrite, but most likely this will be done only if capable students appear.
+
+## Contribute
+
+**Would you like to contribute an interactive content to Physics of Risk?** Great! Read the rough guidelines [here](http://rf.mokslasplius.lt/contribute/) and contact [us](http://rf.mokslasplius.lt/about/).
+
+**Have you noticed an error?** Great! Let us know -- submit an issue.
 
 ## License
 
