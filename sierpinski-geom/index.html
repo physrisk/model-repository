@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Sierpinski triangle</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html{margin:0;padding:0}
+		body{margin:0;padding:0}
+		#plot{width:450px;height:390px;}
+		#valdymas{width:450px;text-align:center}
+		#valdymas a{margin-right:10px;border:1px solid #ccc;background:#eee;color:#000;text-decoration:none;display:inline-block;height:20px;width:30px;text-align:center;font-weight:bold;margin-bottom:10px;}
+		#valdymas #color{width:50px;font-weight:normal}
+		#valdymas #bg{width:50px;font-weight:normal}
+	</style>
+</head>
+<body>
+<canvas id="plot" width="450" height="390"></canvas>
+<div id="valdymas"><a id="in" href="#in">+</a> <a id="out" href="#out">-</a><br/><a id="color" href="#color">color</a> <a id="bg" href="#bg">fill</a></div>
+<script type="text/javascript">
+var yMax=390;
+var sideLen=440;
+var x0=5;
+var y0=5;
+var graph=$("#plot").get(0).getContext("2d");
+var maxSteps=2;
+var useColorScheme=false;
+var useBg=true;
+var mathsqrt3=Math.sqrt(3);
+
+function drawTriangle(p1,p2,p3) {
+	graph.beginPath();
+	graph.moveTo(p1[[0]],yMax-p1[[1]]);
+	graph.lineTo(p2[[0]],yMax-p2[[1]]);
+	graph.lineTo(p3[[0]],yMax-p3[[1]]);
+	graph.lineTo(p1[[0]],yMax-p1[[1]]);
+	graph.stroke();
+}
+
+function graphStroke(d) {
+	if(!useColorScheme) {
+		graph.strokeStyle="#000000";
+		return ;
+	}
+	switch(d) {
+		case 0: graph.strokeStyle="#9400D3";break;
+		case 1: graph.strokeStyle="#009e73";break;
+		case 2: graph.strokeStyle="#56b4e9";break;
+		case 3: graph.strokeStyle="#e69f00";break;
+		case 4: graph.strokeStyle="#b22727";break;
+		case 5: graph.strokeStyle="#0072b2";break;
+		case 6: graph.strokeStyle="#e51e10";break;
+		default: graph.strokeStyle="#000000";break;
+	}
+}
+
+function drawInside(x,y,a) {
+	var point1=[x+a/4,y+a*mathsqrt3/4];
+	var point2=[x+3*a/4,y+a*mathsqrt3/4];
+	var point3=[x+a/2,y];
+	drawTriangle(point1,point2,point3);
+}
+
+function drawOutSide(x,y,a,d) {
+	if(d>=maxSteps) return ;
+	graphStroke(d);
+	drawInside(x,y,a);
+	if(useBg) {
+		graph.fillStyle="#eeeeee";
+		graph.fill();
+	}
+	drawOutSide(x,y,a*0.5,d+1);
+	drawOutSide(x+a*0.5,y,a*0.5,d+1);
+	drawOutSide(x+a*0.25,y+a*mathsqrt3*0.25,a*0.5,d+1);
+}
+
+function replot() {
+	graph.fillStyle="#eeeeee";
+	graph.fillRect(0,0,450,390);
+	graphStroke(-1);
+	drawTriangle([x0,y0],[x0+sideLen*0.5,y0+mathsqrt3*sideLen*0.5],[x0+sideLen,y0]);
+	if(useBg) {
+		graph.fillStyle="#000000";
+		graph.fill();
+	}
+	drawOutSide(x0,y0,sideLen,0);
+	graph.font="15px Arial";
+	graph.fillStyle="#000000";
+	graph.fillText("Level: "+(maxSteps+1)+"; Triangles: "+countTriangles(maxSteps)+".",5,20);
+}
+
+function countTriangles(d) {
+	var rez=1;
+	var l=1;
+	for(var i=0;i<d;i++) {
+		l*=3;
+		rez+=l;
+	}
+	return rez;
+}
+
+function setButtonColors() {
+	$("#in").css("color","black").css("cursor","pointer");
+	$("#out").css("color","black").css("cursor","pointer");
+	if(maxSteps>=7) $("#in").css("color","#cccccc").css("cursor","default");
+	if(maxSteps<=0) $("#out").css("color","#cccccc").css("cursor","default");
+}
+
+$("#in").click(function() {maxSteps++;if(maxSteps>7){maxSteps=7;};setButtonColors();replot();return true;});
+$("#out").click(function() {maxSteps--;if(maxSteps<0){maxSteps=0;};setButtonColors();replot();return true;});
+$("#color").click(function (){useColorScheme=!useColorScheme;if(useColorScheme){useBg=false;};replot();return true;});
+$("#bg").click(function (){useBg=!useBg;if(useBg){useColorScheme=false;};replot();return true;});
+
+/*main*/
+$(function () {
+	$("#in").click();
+});
+</script>
+</body>
+</html>

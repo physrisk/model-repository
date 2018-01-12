@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="utf-8"/>
+<title>Scale-free network with constant clusterization</title>
+<link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+<script language="javascript" type="text/javascript" src="../js-lib/jit-201.min.js"></script>
+<script language="javascript" type="text/javascript" src="../js-lib/plotFDNetworkJit-201.js"></script>
+<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+<script language="javascript" type="text/javascript" src="./constCluster.js"></script>
+<style>
+html,body{margin:0;padding:0}
+#graphPlot,#plotHolder{width:240px;height:240px;overflow:hidden;margin-bottom:10px;display:inline-block}
+#graphPlot{background:black;margin-right:5px}
+#ccPlot,#pdfPlot{width:240px;height:120px;overflow:hidden}
+.controlBlock{display:inline-block;margin-left:10px;}
+#controls button {width:135px;}
+#controlM{width:40px;}
+</style>
+</head>
+<body>
+	<div id="graphPlot"></div>
+	<div id="plotHolder">
+		<div id="ccPlot"></div>
+		<div id="pdfPlot"></div>
+	</div>
+	<div id="controls">
+		<span class="controlBlock">m=<input type="text" name="controlM" id="controlM" value="2"/></span>
+		<br/>
+		<span class="controlBlock"><button id="play">Generate</button></span>
+		<span class="controlBlock"><button id="pause">Pause</button></span>
+		<span class="controlBlock"><button id="restart">Restart</button></span>
+	</div>
+	<script type="text/javascript">
+		$('#ccPlot').data('plotOptions',{yaxis:{axisLabel:"C"},xaxis:{axisLabel:"t"}});
+		$('#pdfPlot').data('plotOptions',{yaxis:{axisLabel:"lg[p(d)]"},xaxis:{axisLabel:"lg[d]"}});
+		
+		var ccModel=new constCluster();
+		
+		$(function () {
+			$("#restart").click(function(){
+				$("#pause").click();
+				ccModel.init("graphPlot","ccPlot","pdfPlot","controlM");
+			});
+			$("#play").click(function(){
+				$("#play").attr('disabled', 'disabled');
+				$("#pause").removeAttr('disabled');
+				ccModel.play();
+			});
+			$("#pause").click(function(){
+				$("#play").removeAttr('disabled');
+				$("#pause").attr('disabled', 'disabled');
+				ccModel.pause();
+			});
+			
+			$("#restart").click();
+		});
+	</script>
+</body>
+</html>

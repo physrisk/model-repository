@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Agent based herding model of financial markets</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+	<script language="javascript" type="text/javascript" src="./kirmanSdeRetModel.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;}
+		#plotDiv,#plotDiv2,#plotDiv3{width:225px;height:200px;margin-bottom:5px;display:inline-block;}
+		#plotDiv{width:450px;}
+		#epsi1,#epsi2,#alpha{width:40px;}
+		#controls .controlBlock{display:inline-block;margin-left:10px;}
+		#controls button {width: 210px;}
+		#controls .label{display:inline-block;width:30px;}
+	</style>
+</head>
+<body>
+<div id="plotDiv2"></div>
+<div id="plotDiv3"></div>
+<br/>
+<div id="plotDiv"></div>
+<div id="controls">
+<span class="controlBlock"><span class="label">&epsilon;<sub>1</sub>=</span><input type="text" name="epsi1" id="epsi1" value="0.1"/></span>
+<span class="controlBlock"><span class="label">&epsilon;<sub>2</sub>=</span><input type="text" name="epsi2" id="epsi2" value="0.1"/></span>
+<span class="controlBlock"><span class="label">&alpha;=</span><select name="alpha" id="alpha">
+<option value="3" selected="selected">2</option>
+<option value="2">1</option>
+<option value="1">0.5</option>
+<option value="0">0</option>
+</select></span>
+<br/>
+<span class="controlBlock"><button name="restart" id="restart">Start</button> <button name="stop" id="stop">Stop</button></span>
+</div>
+<script type="text/javascript">
+function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
+
+/*options and settings*/
+var timeoutID=null;
+var colony=null;
+$('#plotDiv').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 't',
+		min: null,
+		max: null
+	} ,
+	yaxis: {
+		axisLabel: 'lg[x(t)]',
+		min: -2.1,
+		max: 2.1
+	}
+});
+$('#plotDiv2').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 'lg[x]',
+		min: -2,
+		max: 2
+	} ,
+	yaxis: {
+		axisLabel: 'lg[p(x)]',
+		min: null,
+		max: null
+	}
+});
+$('#plotDiv3').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 'lg[f]',
+		min: 0,
+		max: 2
+	} ,
+	yaxis: {
+		axisLabel: 'lg[S(f)]',
+		min: -5.5,
+		max: -3
+	}
+});
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function () {
+	setup();
+	readAndLoad();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	//readAndLoad();
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+
+function plotFigure() {
+	var modelSignal=$('#plotDiv').data('modelSignal');
+	var logModelSignal=$('#plotDiv').data('logModelSignal');
+	$.plot($("#plotDiv"),[{data: logModelSignal, color: "red"}],$('#plotDiv').data('plotOptions'));
+	var pdf=$('#plotDiv2').data('pdf');
+	var showPdf=[];
+	var pdfLen=$('#plotDiv2').data('pdfLen');
+	if(pdfLen>0) {
+		showPdf=commonFunctions.pdfModification(pdf,true,1e-2,1e2,101,1e-2,1e-2,pdfLen);
+	}
+	$.plot($("#plotDiv2"),[{data: showPdf, color: "red"}],$('#plotDiv2').data('plotOptions'));
+	var curSpec=commonFunctions.performRealFFT(commonFunctions.toOneDimensionalArray(modelSignal,1));
+	var plotOpts=$('#plotDiv3').data('plotOptions');
+	var showSpec=$('#plotDiv3').data('showSpec');
+	var specShown=$('#plotDiv3').data('specShown');
+	if(specShown>0) {
+		for(var i=0;i<curSpec.length;i++) {
+			curSpec[i]=(curSpec[i]+specShown*showSpec[i])/(specShown+1);
+		}
+	}
+	specShown++;
+	$('#plotDiv3').data('specShown',specShown);
+	$('#plotDiv3').data('showSpec',curSpec);
+	showSpec=commonFunctions.specModification(curSpec,colony.integrationDt,100,true);
+	if(typeof showSpec[0]!=="undefined") {
+		plotOpts.xaxis.min=Math.floor(showSpec[0][0]);
+		plotOpts.xaxis.max=Math.ceil(showSpec[showSpec.length-1][0]);
+		plotOpts.yaxis.min=Math.floor(Math.min.apply(Math,commonFunctions.toOneDimensionalArray(showSpec,1)));
+		plotOpts.yaxis.max=Math.ceil(Math.max.apply(Math,commonFunctions.toOneDimensionalArray(showSpec,1)));
+	}
+	$.plot($("#plotDiv3"),[{data: showSpec, color: "red"}],plotOpts);
+}
+
+function play() {
+	var modelSignal=$('#plotDiv').data('modelSignal');
+	var logModelSignal=$('#plotDiv').data('logModelSignal');
+	var pdf=$('#plotDiv2').data('pdf');
+	var pdfLen=$('#plotDiv2').data('pdfLen');
+	for(var i=0;i<64;i++) {
+		modelSignal=modelSignal.slice(1);
+		logModelSignal=logModelSignal.slice(1);
+		colony.stepPerTime();
+		var m=colony.frac;
+		var xm=myParseFloat(modelSignal[modelSignal.length-1][0]);
+		var pdfi=Math.floor(m*100);
+		if(pdfi<pdf.length) {
+			pdf[pdfi]++;
+			pdfLen++;
+		}
+		modelSignal.push([xm+colony.integrationDt,m]);
+		logModelSignal.push([xm+colony.integrationDt,commonFunctions.LogBase10(m)]);
+	}
+	$('#plotDiv').data('modelSignal',modelSignal);
+	$('#plotDiv').data('logModelSignal',logModelSignal);
+	$('#plotDiv2').data('pdf',pdf);
+	$('#plotDiv2').data('pdfLen',pdfLen);
+	plotFigure();
+}
+
+function readAndLoad() {
+	var e1=myParseFloat($("#epsi1").attr("value"));
+	var e2=myParseFloat($("#epsi2").attr("value"));
+	var alpha=parseInt($("#alpha").attr("value"));
+	if(e1<0) e1=0;
+	if(e2<0) e2=0;
+	$("#epsi1").attr("value",e1);
+	$("#epsi2").attr("value",e2);
+	colony.setEpsilons(e1,e2);
+	colony.setTauScenario(alpha);
+	pdfSetup();
+	$('#plotDiv3').data('specShown',0);
+}
+
+function setup() {
+	colony=new kirmanSdeRetModel();
+	var signal=[];
+	var logSignal=[];
+	var log05=commonFunctions.LogBase10(0.5);
+	for(var i=0;i<4096;i++) {
+		signal.push([(i-4096)*colony.integrationDt,0.5]);
+		logSignal.push([(i-4096)*colony.integrationDt,log05]);
+	}
+	$('#plotDiv').data('modelSignal',signal);
+	$('#plotDiv').data('logModelSignal',logSignal);
+}
+
+function pdfSetup() {
+	var pdf=[];
+	for(var i=0;i<=10000;i++) pdf.push(0);
+	$('#plotDiv2').data('pdf',pdf);
+	$('#plotDiv2').data('pdfLen',0);
+}
+
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('play()',25.0);
+}
+
+/*main*/
+$(function () {
+	setup();
+	plotFigure();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Many particle interaction model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;}
+		#plotDiv{width:400px;height:300px;margin-bottom:20px;}
+		#plotLabel{width:400px;text-align:center;margin-bottom:10px;}
+		.controlBlock{display:inline-block;margin-left:10px;}
+		#controlL {width:40px;}
+		#controls button {width:135px;}
+	</style>
+</head>
+<body>
+<div id="plotLabel">Many particle interaction model (t=0)</div>
+<div id="plotDiv"></div>
+<div id="controls">
+	<span class="controlBlock">N=<input type="text" name="controlL" id="controlL" value="3"/></span>
+	<br/>
+	<span class="controlBlock"><button id="stop">Start</button></span>
+	<span class="controlBlock"><button id="restart">Restart</button></span>
+</div>
+<script type="text/javascript">
+/*options and settings*/
+var energyDist=new Array();
+var energies=new Array();
+var NParticles=1000;
+var timer=null;
+var interactionsOccured=0;
+var manyWay=3;
+$('#plotDiv').data('plotOptions', {
+	xaxis:{axisLabel:'w',min:null,max:null},
+	yaxis:{axisLabel:'lg[N(w)]',min:-1,max:null}
+});
+$('#restart').click(function() {initialize();plotFigure();$('#stop').click();});
+$('#stop').toggle(
+	function() {$('#restart').hide();start();$('#stop').text('Pause');},
+	function() {stop();$('#restart').show();$('#stop').text('Resume');}
+);
+
+function plotFigure() {
+	var outDist=new Array();
+	var matlog10=Math.log(10);
+	for(var i=0;i<28;i++) {
+		if(energyDist[i][1]<1) outDist.push([energyDist[i][0],-20]);
+		else outDist.push([energyDist[i][0],Math.log(energyDist[i][1])/matlog10]);
+	}
+	$.plot($("#plotDiv"),[{data:outDist, color:"blue"}],$('#plotDiv').data('plotOptions'));
+}
+
+function play() {
+	var ids=new Array();
+	var epsilon=new Array();
+	var totalEpsilon=0;
+	var totalEnergy=0;
+	for(var i=0;i<manyWay;i++) {
+		var tmpId=Math.floor(Math.random()*NParticles);
+		if(i>0) {
+			if($.inArray(tmpId,ids)>-1) return false;
+		}
+		ids.push(tmpId);
+		totalEnergy+=energies[tmpId];
+		epsilon.push(Math.random());
+		totalEpsilon+=epsilon[epsilon.length-1];
+	}
+	for(var i=0;i<manyWay;i++) epsilon[i]/=totalEpsilon;
+	for(var i=0;i<manyWay;i++) {
+		var tmpId=ids[i];
+		var tmpE=Math.floor(energies[tmpId]*4.0);
+		energyDist[tmpE][1]--;
+		energies[tmpId]=epsilon[i]*totalEnergy;
+		tmpE=Math.floor(energies[tmpId]*4.0);
+		if(energyDist.length<=tmpE+10) {
+			for(var k=energyDist.length;k<=tmpE+10;k++) energyDist.push([(k+0.5)/4,0]);
+		}
+		energyDist[tmpE][1]++;
+	}
+	var totalProb=0;
+	for(var i=0;i<energyDist.length;i++) totalProb+=energyDist[i][1];
+	return true;
+}
+
+function timeStep() {
+	var interactionsOcc=0;
+	for(var j=0;j<1000;j++) {
+		if(play()) interactionsOcc++;
+	}
+	plotFigure();
+	interactionsOccured+=(interactionsOcc/1000.0);
+	var interactionsString=interactionsOccured.toString();
+	$('#plotLabel').text('Many particle interaction model (t='+interactionsString.substr(0,Math.min(interactionsString.indexOf(".")+3,interactionsString.length))+'k)');
+}
+
+function initialize() {
+	energyDist=new Array();
+	energies=new Array();
+	NParticles=1000;
+	timer=null;
+	interactionsOccured=0;
+	manyWay=$('#controlL').val();
+	for(var i=0;i<=28;i++) energyDist.push([(i+0.5)/4,0]);
+	for(var i=0;i<NParticles;i++) {
+		energies.push(1);
+		energyDist[4][1]++;
+	}
+}
+
+function start() {timer=setInterval(function(){timeStep();},100);}
+function stop() {clearInterval(timer);}
+
+/*main*/
+$(function () {
+	initialize();plotFigure();
+});
+</script>
+</body>
+</html>

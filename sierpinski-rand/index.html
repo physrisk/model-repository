@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Stochastinis sierpinskio trikampis</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html{margin:0;padding:0}
+		body{margin:0;padding:0}
+		#plot{width:450px;height:390px;}
+		#valdymas{width:450px;text-align:center}
+		#valdymas a{margin-right:10px;border:1px solid #ccc;background:#eee;color:#000;text-decoration:none;display:inline-block;height:20px;width:70px;text-align:center;}
+	</style>
+</head>
+<body>
+<canvas id="plot" width="450" height="395"></canvas>
+<div id="valdymas"><a id="start" href="#start">&#9658;</a> <a id="stop" href="#stop" style="font-size:0.85em;">&#10074;&#10074;</a> <a id="restart" href="#restart" style="font-size:0.85em;">&#10226;</a></div>
+<script type="text/javascript">
+var yMax=395;
+var graph=$("#plot").get(0).getContext("2d");
+var point1=[5,5];
+var point2=[440,5];
+var point3=[225,390];
+var rpoint=[-1,-1];
+var timer=null;
+
+function drawTriangle(p1,p2,p3) {
+	graph.beginPath();
+	graph.moveTo(p1[[0]],yMax-p1[[1]]);
+	graph.lineTo(p2[[0]],yMax-p2[[1]]);
+	graph.lineTo(p3[[0]],yMax-p3[[1]]);
+	graph.lineTo(p1[[0]],yMax-p1[[1]]);
+	graph.stroke();
+}
+
+function drawPointSize(p,s) {
+	graph.fillRect(Math.floor(p[0]-s/2),yMax-Math.floor(p[1]+s/2),s,s);
+}
+
+function drawPoint(p) {
+	drawPointSize(p,1);
+}
+
+function randomMidPoint(rp,p1,p2,p3) {
+	var tp=p1;
+	graph.fillStyle="#f00";
+	var rand=Math.floor(3*Math.random());
+	if(rand==2) {
+		tp=p3;
+		graph.fillStyle="#00f";
+	} else if(rand==1) {
+		tp=p2;
+		graph.fillStyle="#0f0";
+	}
+	var ans=[(rp[0]+tp[0])/2,(rp[1]+tp[1])/2];
+	return ans;
+}
+
+function randomPointInsideTriangle(p1,p2,p3) {
+	//use barrycentric coordinates
+	var s=99;
+	var t=99;
+	while(s+t>1) {
+		s=Math.random();
+		t=Math.random();
+	}
+	var rp=[0,0];
+	rp[0]=p1[0]+(p2[0]-p1[0])*s+(p3[0]-p1[0])*t;
+	rp[1]=p1[1]+(p2[1]-p1[1])*s+(p3[1]-p1[1])*t;
+	return rp;
+}
+
+function nextPoint() {
+	rpoint=randomMidPoint(rpoint,point1,point2,point3);
+	drawPoint(rpoint);
+}
+
+function restart() {
+	graph.fillStyle="#eeeeee";
+	graph.fillRect(0,0,460,400);
+	graph.fillStyle="#f00";
+	drawPointSize(point1,4);
+	graph.fillStyle="#0f0";
+	drawPointSize(point2,4);
+	graph.fillStyle="#00f";
+	drawPointSize(point3,4);
+	rpoint=randomPointInsideTriangle(point1,point2,point3);
+	graph.fillStyle="#000";
+	drawPoint(rpoint);
+}
+
+function disableLink(id) {
+	$(id).data("disabled",true).css("color","#ccc").css("cursor","default");
+}
+
+function enableLink(id) {
+	$(id).data("disabled",false).css("color","#000").css("cursor","pointer");
+}
+
+$("#start").click(function() {if($("#start").data("disabled")){return true;}timer=setInterval("nextPoint()",5);disableLink("#start");disableLink("#restart");enableLink("#stop");return true;});
+$("#stop").click(function() {if($("#stop").data("disabled")){return true;}clearInterval(timer);enableLink("#start");enableLink("#restart");disableLink("#stop");return true;});
+$("#restart").click(function() {if($("#restart").data("disabled")){return true;}restart();$("#start").click();return true;});
+
+/*main*/
+$(function () {
+	disableLink("#stop");
+	restart();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Nonlinear GARCH(1,1) model with feedback</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+	<script language="javascript" type="text/javascript" src="./nonlinearGarch2.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;}
+		#plotDiv,#plotDiv2,#plotDiv3{width:225px;height:200px;margin-bottom:5px;display:inline-block;}
+		#plotDiv{width:450px;}
+		#a1,#b1,#c1,#mu{width:40px;}
+		#controls .controlBlock{display:inline-block;margin-left:10px;}
+		#controls button {width: 210px;}
+		#controls .label{display:inline-block;width:30px;}
+		#controls .wide-label{display:inline-block;width:130px;}
+	</style>
+</head>
+<body>
+<div id="plotDiv2"></div>
+<div id="plotDiv3"></div>
+<br/>
+<div id="plotDiv"></div>
+<div id="controls">
+<span class="controlBlock"><span class="label">a<sub>1</sub>=</span><input type="text" name="a1" id="a1" value="1"/>&middot;10<sup>-6</sup></span>
+<span class="controlBlock"><span class="label">b<sub>1</sub>=</span><input type="text" name="b1" id="b1" value="1"/>&middot;10<sup>-3</sup></span>
+<span class="controlBlock"><span class="label">c<sub>1</sub>=</span><input type="text" name="c1" id="c1" value="1"/>&middot;b<sub>1</sub></span>
+<span class="controlBlock"><span class="label">&mu;=</span><select name="mu" id="mu"></select></span>
+<br/>
+<span class="controlBlock"><button name="restart" id="restart">Start</button> <button name="stop" id="stop">Stop</button></span>
+</div>
+<script type="text/javascript">
+function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
+
+/*options and settings*/
+var timeoutID=null;
+var ngarch11=null;
+$('#plotDiv').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 't',
+		min: null,
+		max: null
+	} ,
+	yaxis: {
+		axisLabel: 'lg[y(t)]',
+		min: -2.1,
+		max: 2.1
+	}
+});
+$('#plotDiv2').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 'lg[y]',
+		min: -2,
+		max: 2
+	} ,
+	yaxis: {
+		axisLabel: 'lg[p(y)]',
+		min: null,
+		max: null
+	}
+});
+$('#plotDiv3').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 'lg[f]',
+		min: -7,
+		max: -3
+	} ,
+	yaxis: {
+		axisLabel: 'lg[S(f)]',
+		min: 1,
+		max: 6
+	}
+});
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function () {
+	setup();
+	readAndLoad();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	//readAndLoad();
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+$("#mu").change(function () {setupFits();setupC1();});
+
+function plotFigure() {
+	var modelSignal=$('#plotDiv').data('modelSignal');
+	var logModelSignal=$('#plotDiv').data('logModelSignal');
+	$.plot($("#plotDiv"),[{data: logModelSignal, color: "red"}],$('#plotDiv').data('plotOptions'));
+	var pdf=$('#plotDiv2').data('pdf');
+	var showPdf=[];
+	var pdfLen=$('#plotDiv2').data('pdfLen');
+	if(pdfLen>0) {
+		showPdf=commonFunctions.pdfModification(pdf,true,1e-2,1e2,101,1e-2,1e-2,pdfLen);
+	}
+	$.plot($("#plotDiv2"),[{data: $('#plotDiv2').data('fit'), color: "blue"},{data: showPdf, color: "red"}],$('#plotDiv2').data('plotOptions'));
+	var curSpec=commonFunctions.performRealFFT(commonFunctions.toOneDimensionalArray(modelSignal,1));
+	var plotOpts=$('#plotDiv3').data('plotOptions');
+	showSpec=$('#plotDiv3').data('showSpec');
+	var specShown=$('#plotDiv3').data('specShown');
+	if(specShown>0) {
+		for(var i=0;i<curSpec.length;i++) {
+			curSpec[i]=(curSpec[i]+specShown*showSpec[i])/(specShown+1);
+		}
+	}
+	specShown++;
+	$('#plotDiv3').data('specShown',specShown);
+	$('#plotDiv3').data('showSpec',curSpec);
+	var showSpec=commonFunctions.specModification(curSpec,1000.0,100,true);
+	var adj=0;
+	var adj2=0;
+	var fit=$('#plotDiv3').data('fit').slice(0);
+	$.map(showSpec,function(val,i){adj+=val[1];});
+	$.map(fit,function(val,i){adj2+=val[1];});
+	adj=adj2/fit.length-adj/showSpec.length-0.5;
+	if(isNaN(adj)) adj=0;
+	for(var i=0;i<fit.length;i++) fit[i][1]-=adj;
+	if(typeof showSpec[0]!=="undefined") {
+		plotOpts.xaxis.min=Math.floor(showSpec[0][0]);
+		plotOpts.xaxis.max=Math.ceil(showSpec[showSpec.length-1][0]);
+		plotOpts.yaxis.min=Math.floor(Math.min.apply(Math,commonFunctions.toOneDimensionalArray(showSpec,1)));
+		plotOpts.yaxis.max=Math.ceil(Math.max.apply(Math,commonFunctions.toOneDimensionalArray(showSpec,1)));
+	}
+	$.plot($("#plotDiv3"),[{data: fit, color: "blue"},{data: showSpec, color: "red"}],plotOpts);
+}
+
+function play() {
+	var modelSignal=$('#plotDiv').data('modelSignal');
+	var logModelSignal=$('#plotDiv').data('logModelSignal');
+	var pdf=$('#plotDiv2').data('pdf');
+	var pdfLen=$('#plotDiv2').data('pdfLen');
+	for(var i=0;i<64;i++) {
+		modelSignal=modelSignal.slice(1);
+		logModelSignal=logModelSignal.slice(1);
+		var xm=myParseFloat(modelSignal[modelSignal.length-1][0]);
+		var m=0;
+		for(var j=0;j<1000;j++) {
+			m=ngarch11.step();
+			var pdfi=Math.floor(m*100);
+			if(pdfi<pdf.length) {
+				pdf[pdfi]++;
+				pdfLen++;
+			}
+		}
+		modelSignal.push([xm+1,m]);
+		logModelSignal.push([xm+1,commonFunctions.LogBase10(m)]);
+	}
+	$('#plotDiv').data('modelSignal',modelSignal);
+	$('#plotDiv').data('logModelSignal',logModelSignal);
+	$('#plotDiv2').data('pdf',pdf);
+	$('#plotDiv2').data('pdfLen',pdfLen);
+	plotFigure();
+}
+
+function readAndLoad() {
+	var a1=myParseFloat($("#a1").attr("value"));
+	var b1=myParseFloat($("#b1").attr("value"));
+	var c1=myParseFloat($("#c1").attr("value"));
+	var mu=parseInt($("#mu").val());
+	if(a1<0) a1=0;
+	if(b1<0) b1=0;
+	if(c1<0) c1=0;
+	$("#a1").attr("value",a1);
+	$("#b1").attr("value",b1);
+	$("#c1").attr("value",c1);
+	ngarch11.setParameters(a1*1e-6,b1*1e-3,c1*b1*1e-3,mu);
+	pdfSetup();
+	$('#plotDiv3').data('specShown',0);
+}
+
+function setup() {
+	ngarch11=new nonlinearGarch();
+	var signal=[];
+	var logSignal=[];
+	var log05=commonFunctions.LogBase10(0.5);
+	for(var i=0;i<4096;i++) {
+		signal.push([(i-4096),0.5]);
+		logSignal.push([(i-4096),log05]);
+	}
+	$('#plotDiv').data('modelSignal',signal);
+	$('#plotDiv').data('logModelSignal',logSignal);
+}
+
+function pdfSetup() {
+	var pdf=[];
+	for(var i=0;i<=10000;i++) pdf.push(0);
+	$('#plotDiv2').data('pdf',pdf);
+	$('#plotDiv2').data('pdfLen',0);
+}
+
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('play()',50.0);
+}
+
+function setupMu() {
+	var vals=[3,4,5,6,7];
+	$("#mu").empty();
+	$.each(vals,function(key,value) {
+		$("#mu").append($("<option></option>").attr("value",value).text(value));
+	});
+}
+function setupC1() {
+	var vmu=parseInt($("#mu").val());
+	var omegaBar=1;
+	if(vmu%2==1) {
+		omegaBar=(doublefactorial(vmu-1)*Math.sqrt(2.0/Math.PI));
+	} else {
+		omegaBar=doublefactorial(vmu-1);
+	}
+	$("#c1").val(omegaBar);
+}
+function doublefactorial(x) {
+	if(x<=1) return 1;
+	return x*doublefactorial(x-2);
+}
+
+function setupFits() {
+	var mu=parseInt($("#mu").val());
+	$('#plotDiv2').data('fit',[[-1,mu-1],[2,-2*mu-1]]);
+	var beta=1+(mu-3.0)/(mu-2.0);
+	var con=-5.0*beta+4.0;
+	$('#plotDiv3').data('fit',[[-7,7*beta+con],[-6,6*beta+con],[-5,5*beta+con],[-4,4*beta+con],[-3,3*beta+con]]);
+}
+
+/*main*/
+$(function () {
+	setupMu();
+	setupC1();
+	setupFits();
+	setup();
+	plotFigure();
+});
+</script>
+</body>
+</html>

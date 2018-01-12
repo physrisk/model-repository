@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Bornholdt model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+	<script language="javascript" type="text/javascript" src="./bornholdtModel.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;font-size:14px}
+		#graphsDiv{max-width:490px;margin-bottom:20px}
+		#plotDiv{width:240px;height:240px;display:inline-block}
+		.flotPlot{max-width:240px;display:inline-block}
+		.flotLabel{width:240px;height:20px;margin-bottom:0;display:inline-block;text-align:center}
+        .broadLabel{display:block;margin:7px 0 3px 0;text-align:center}
+		#returnDiv, #volumeDiv, #priceDiv, #pdfDiv, #specDiv{width:240px;height:220px;display:inline-block}
+        #pdfDiv, #specDiv{height:190px}
+		#indicatorPanel {margin-top:10px;margin-bottom:10px}
+		#indicatorPanel span{background:#999999}
+		#controlAM,#controlB,#controlBeta,#controlAlpha,#controlAM,#controlSigma{width:40px}
+		.controlBlock{display:inline-block;margin:5px 0 0 5px}
+		.buttonBlock{display:block;margin-top:5px}
+        #controls {max-width:490px}
+		#controls button{width:80px}
+    	#controls #stat{width:180px}
+	</style>
+</head>
+<body>
+<div id="graphsDiv">
+<canvas id="plotDiv" width="240" height="240"></canvas>
+<div class="flotPlot"><div class="flotLabel">Return</div><div id="returnDiv"></div></div>
+<div class="flotPlot varPlot"><div class="flotLabel">Log-price</div><div id="priceDiv"></div></div>
+<div class="flotPlot varPlot"><div class="flotLabel">Trade volume</div><div id="volumeDiv"></div></div>
+<div class="broadLabel statPlot">Absolute normalized <span id="retLabel">return</span><span id="fundBlock"> and <span id="fundLabel">changes of fundamental price</span></span></div>
+<div class="flotPlot statPlot"><div class="flotLabel">Probability density</div><div id="pdfDiv"></div></div>
+<div class="flotPlot statPlot"><div class="flotLabel">Spectral density</div><div id="specDiv"></div></div>
+</div>
+<div id="controls">
+<span class="controlBlock">a&middot;m=<input type="text" name="controlAM" id="controlAM" value="1000"/></span>
+<span class="controlBlock">b=<input type="text" name="controlB" id="controlB" value="1"/></span>
+<span class="controlBlock">&alpha;=<input type="text" name="controlAlpha" id="controlAlpha" value="20"/></span>
+<span class="controlBlock">&beta;=<input type="text" name="controlBeta" id="controlBeta" value="1"/></span>
+<span class="controlBlock">&sigma;=<input type="text" name="controlSigma" id="controlSigma" value="0"/></span>
+<span class="buttonBlock"><button name="start" id="start">Start</button> <button name="resume" id="resume">Continue</button> <button name="stat" id="stat">Statistical properties</button></span>
+</div>
+<script language="javascript" type="text/javascript" src="./general.js"></script>
+<script type="text/javascript">
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+	$("#resume").text("Continue");
+	$("#start").removeAttr("disabled");
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('singleFrame()',6.0);
+	$("#resume").text("Stop");
+	$("#start").attr("disabled","disabled");
+}
+
+function showStat(){$(".varPlot").hide();$(".statPlot").show();$("#stat").text("Time series");statisticalProp=true;plotFigure();}
+function hideStat(){$(".statPlot").hide();$(".varPlot").show();$("#stat").text("Statistical properties");statisticalProp=false;plotFigure();}
+</script>
+</body>
+</html>

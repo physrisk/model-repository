@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+	<meta charset="utf-8"/>
+	<title>Enhanced redirection network</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jit-201.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<script language="javascript" type="text/javascript" src="./redirectionNetwork.js"></script>
+	<style>
+		html,body{margin:0;padding:0}
+		#graphPlot{width:225px;height:225px;background:black;overflow:hidden;margin-bottom:10px;margin-right:5px;display:inline-block;}
+		#flotplot{width:220px;height:220px;margin-bottom:10px;display:inline-block;}
+		.controlBlock{display:inline-block;margin-left:10px;}
+		#controls button {width:135px;}
+		#controlLa{width:40px;}
+		#controlType{width:200px;}
+	</style>
+</head>
+<body>
+	<div id="graphPlot"></div>
+	<div id="flotplot"></div>
+	<div id="controls">
+		<span class="controlBlock">&lambda; =<input type="text" name="controlLa" id="controlLa" value="0.5"/></span>
+		<span class="controlBlock">Redirection type: <select name="controlType" id="controlType"><option value="1">Enhanced redirection</option><option value="2" selected="selected">Constant prob. redirection</option><option value="3">Hindered redirection</option></select></span>
+		<br/>
+		<span class="controlBlock"><button id="play">Generate</button></span>
+		<span class="controlBlock"><button id="play-pause">Add node</button></span>
+		<span class="controlBlock"><button id="pause">Pause</button></span>
+		<br/>
+		<span class="controlBlock"><button id="layout">Redo layout</button></span>
+		<span class="controlBlock"><button id="restart">Restart</button></span>
+	</div>
+	<script type="text/javascript">
+		var redirModel=new redirectionNetwork();
+		
+		$(function () {
+			$("#restart").click(function(){
+				$("#pause").click();
+				redirModel.init("graphPlot","flotplot","controlLa","controlType");
+			});
+			$("#play").click(function(){
+				$("#play").attr('disabled', 'disabled');
+				$("#play-pause").attr('disabled', 'disabled');
+				$("#pause").removeAttr('disabled');
+				redirModel.play();
+			});
+			$("#play-pause").click(function(){
+				$("#play").removeAttr('disabled');
+				$("#pause").attr('disabled', 'disabled');
+				redirModel.pause();
+				redirModel.addNode();
+			});
+			$("#pause").click(function(){
+				$("#play").removeAttr('disabled');
+				$("#play-pause").removeAttr('disabled');
+				$("#pause").attr('disabled', 'disabled');
+				redirModel.pause();
+			});
+			$("#layout").click(function(){
+				$("#pause").click();
+				redirModel.refreshPlot();
+			});
+			
+			$("#restart").click();
+		});
+	</script>
+</body>
+</html>

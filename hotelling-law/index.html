@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Hotelling law</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		*{padding:0;margin:0;box-sizing:border-box}
+		#street ul{list-style-type:none}
+		#street li{display:inline-block;height:30px;width:30px;border:1px solid #333}
+		#street .red-player{background:#f00}
+		#street .red-turf{background:#f99}
+		#street .blue-player{background:#00f}
+		#street .blue-turf{background:#99f}
+		#controls{margin-top:10px}
+		#controls button{width:150px}
+	</style>
+</head>
+<body>
+<div id="street"><ul><li id="cell1"></li><li id="cell2"></li><li id="cell3"></li><li id="cell4"></li><li id="cell5"></li><li id="cell6"></li><li id="cell7"></li><li id="cell8"></li><li id="cell9"></li><li id="cell10"></li><li id="cell11"></li><li id="cell12"></li><li id="cell13"></li><li id="cell14"></li></ul></div>
+<div id="controls"><button id="restart" type="button">Restart</button></div>
+<script type="text/javascript">
+var street=[];
+
+function restart() {
+	street=[10,0,0,0,0,0,0,0,0,0,0,0,0,20];
+	$("#cell14").unbind("click");
+	calculateTurf();
+	colorTurf();
+}
+
+function calculateTurf() {
+	for(var i=0;i<street.length;i++) {
+		if(street[i]<10) {
+			var firstMeet=0;
+			for(var k=1;k<street.length && firstMeet==0;k++) {
+				if(i-k>=0) {
+					if(street[i-k]>9) firstMeet=street[i-k];
+				}
+				if(i+k<street.length) {
+					if(street[i+k]>9) {
+						if(firstMeet==0) firstMeet=street[i+k];
+						else {
+							if(Math.random()>0.5) firstMeet=street[i+k];
+							else firstMeet=street[i-k];
+						}
+					}
+				}
+			}
+			if(firstMeet==10) street[i]=1;
+			else if(firstMeet==20) street[i]=2;
+			else street[i]=0;
+		}
+	}
+}
+
+function colorTurf() {
+	$("#street li").removeClass("red-turf").removeClass("blue-turf").removeClass("red-player").removeClass("blue-player");
+	for(var i=0;i<street.length;i++) {
+		if(street[i]==10) $("#cell"+(i+1)).addClass("red-player");
+		else if(street[i]==20) $("#cell"+(i+1)).addClass("blue-player");
+		else if(street[i]==1) $("#cell"+(i+1)).addClass("red-turf");
+		else if(street[i]==2) $("#cell"+(i+1)).addClass("blue-turf");
+	}
+}
+
+function makeMove(id) {
+	for(var i=0;i<street.length;i++) {
+		if(street[i]==20) street[i]=0;
+	}
+	if(id<street.length/2) {
+		street[id+1]=20;
+		$("#cell"+(id+2)).unbind("click");
+	} else {
+		street[id-1]=20;
+		$("#cell"+(id)).unbind("click");
+	}
+	calculateTurf();
+	colorTurf();
+	$("#street li").click(function (e){
+		$("#street li").unbind("click");
+		e.stopPropagation();
+		onclick($(this).attr("id"));	
+	});
+}
+
+function onclick(id) {
+	id=parseInt(id.substr(4))-1;
+	for(var i=0;i<street.length;i++) {
+		if(street[i]<19) street[i]=0;
+	}
+	street[id]=10;
+	calculateTurf();
+	colorTurf();
+	setTimeout("makeMove("+id+")",1000);
+}
+
+$("#street li").click(function (e){
+	$("#street li").unbind("click");
+	e.stopPropagation();
+	onclick($(this).attr("id"));	
+});
+
+$("#restart").click(function (e){
+	restart();
+});
+
+$(function () {
+	restart();
+});
+</script>
+</body>
+</html>

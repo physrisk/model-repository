@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Modified heterogeneous kinetic model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;}
+		#plotDiv{width:400px;height:300px;margin-bottom:20px;}
+		#plotLabel{width:400px;text-align:center;margin-bottom:10px;}
+		.controlBlock{display:inline-block;margin-left:10px;}
+		#controlL, #controlP {width:40px;}
+		#controls button {width:135px;}
+	</style>
+</head>
+<body>
+<div id="plotLabel">Modified heterogeneous kinetic model (t=0)</div>
+<div id="plotDiv"></div>
+<div id="controls">
+	<span class="controlBlock">&kappa;<sub>0</sub>=<input type="text" name="controlL" id="controlL" value="0.2"/></span>
+	<span class="controlBlock">p<sub>0</sub>=<input type="text" name="controlP" id="controlP" value="0.99"/></span>
+	<br/>
+	<span class="controlBlock"><button id="stop">Start</button></span>
+	<span class="controlBlock"><button id="restart">Restart</button></span>
+</div>
+<script type="text/javascript">
+function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
+
+/*options and settings*/
+var energyDist=new Array();
+var energies=new Array();
+var NParticles=10000;
+var timer=null;
+var interactionsOccured=0;
+var savingProp=new Array();
+var kappa0=0.2;
+var p0=0.99;
+$('#plotDiv').data('plotOptions', {
+	xaxis:{
+		axisLabel:'lg[w]',
+		min:-2,
+		max:2
+	} ,
+	yaxis:{
+		axisLabel:'lg[p(w)]',
+		min:-6,
+		max:1
+	}
+});
+$('#plotDiv').data('plotOptions', {
+	xaxis:{axisLabel:'lg[w]',min:-2,max:2},
+	yaxis:{axisLabel:'lg[p(w)]',min:-6,max:1}
+});
+$('#restart').click(function() {initialize();plotFigure();$('#stop').click();});
+$('#stop').toggle(
+	function() {$('#restart').hide();start();$('#stop').text('Stop');},
+	function() {stop();$('#restart').show();$('#stop').text('Continue');}
+);
+
+function plotFigure() {
+	var outDist=pdfModification(energyDist,0.01,100,0.5/40.0,1.0/40.0,60);
+	var dy=0.7*(Math.log(1.0-p0)-Math.log(0.01))/Math.log(10);
+	$.plot($("#plotDiv"),[{data:outDist, color:"blue", label:"model"},{data:[[-2,2+dy],[1,-4+dy],[2,-6+dy]], color:"red", label:"x<sup>-2</sup>"}],$('#plotDiv').data('plotOptions'));
+}
+
+function play() {
+	var i1=Math.floor(Math.random()*NParticles);
+	var i2=Math.floor(Math.random()*NParticles);
+	if(i1==i2) return ;
+	var epsilon=Math.random();
+	var dw=((1.0-epsilon)*(1.0-savingProp[i1])*energies[i1]-epsilon*(1.0-savingProp[i2])*energies[i2]);
+	var e1=Math.floor(energies[i1]*40.0);
+	var e2=Math.floor(energies[i2]*40.0);
+	energyDist[e1][1]--;
+	energyDist[e2][1]--;
+	energies[i1]-=dw;
+	energies[i2]+=dw;
+	e1=Math.floor(energies[i1]*40.0);
+	e2=Math.floor(energies[i2]*40.0);
+	if(energyDist.length<=e1 || energyDist.length<=e2) {
+		var maxE=Math.max(e1,e2);
+		var matlog10=Math.log(10);
+		for(var i=energyDist.length;i<=maxE;i++) energyDist.push([Math.log((i+0.5)/40.0)/matlog10,0]);
+	}
+	energyDist[e1][1]++;
+	energyDist[e2][1]++;
+}
+
+function timeStep() {
+	for(var j=0;j<10000;j++) play();
+	plotFigure();
+	interactionsOccured+=10;
+	$('#plotLabel').text('Modified heterogeneous kinetic model (t='+interactionsOccured+'k)');
+}
+
+function initialize() {
+	energyDist=new Array();
+	energies=new Array();
+	NParticles=10000;
+	timer=null;
+	interactionsOccured=0;
+	savingProp=new Array();
+	p0=myParseFloat($('#controlP').val());
+	kappa0=myParseFloat($('#controlL').val());
+	var matlog10=Math.log(10);
+	for(var i=0;i<=4000;i++) energyDist.push([Math.log((i+0.5)/40.0)/matlog10,0]);
+	for(var i=0;i<NParticles;i++) {
+		var tmpEn=Math.random()+0.5;
+		energies.push(tmpEn);
+		if(Math.random()>p0) savingProp.push(Math.random());
+		else savingProp.push(kappa0);
+		energyDist[Math.floor(tmpEn*40.0)][1]++;
+	}
+}
+
+function pdfModification(pdf, llim, rlim, xlim, xstep, outPoints) {
+	var rez=new Array();
+	for(var i=0;i<outPoints;i++) rez.push([0,0]);
+	var nueita=0;
+	var curlim=xlim;
+	while(curlim<llim) {
+		curlim+=xstep;
+		nueita++;
+	}
+	var matlog10=Math.log(10);
+	llim=Math.log(llim)/matlog10;
+	rlim=Math.log(rlim)/matlog10;
+	var lstep=(rlim-llim)/(outPoints-1.0);
+	var panaudota=0;
+	while((llim<=rlim)&&(panaudota<outPoints)) {
+		var integralas=0;
+		llim+=lstep;
+		while((Math.log(curlim)/matlog10<llim)&&(nueita<pdf.length)) {
+			curlim+=xstep;
+			integralas+=(pdf[nueita][1]/NParticles);
+			nueita++;
+		}
+		if(integralas>0) {
+			rez[panaudota][0]=llim-0.5*lstep;
+			if(panaudota>0) rez[panaudota][1]=Math.log(integralas/(Math.pow(10,rez[panaudota][0])-Math.pow(10,rez[panaudota-1][0])))/matlog10;
+			else rez[panaudota][1]=Math.log(integralas/(Math.pow(10,rez[panaudota][0])-Math.pow(10,rez[panaudota][0]-lstep)))/matlog10;
+			panaudota++;
+		}
+	}
+	if(panaudota<outPoints) {
+		for(var i=outPoints;i>panaudota;i--) rez.pop();
+	}
+	return rez;
+}
+
+function start() {timer=setInterval(function(){timeStep();},100);}
+function stop() {clearInterval(timer);}
+
+/*main*/
+$(function () {
+	initialize();plotFigure();
+});
+</script>
+</body>
+</html>

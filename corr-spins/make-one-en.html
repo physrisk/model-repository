@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Generate one | Correlated spin model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{padding:0;margin:0}
+		#plotDiv{width:400px;height:4px;margin:5px 0;}
+		.controlBlock{display:inline-block;margin-left:10px;}
+		#controls button {width:135px;}
+		#controls input {width:40px;}
+	</style>
+</head>
+<body>
+<canvas id="plotDiv" height="4" width="400"></canvas>
+<div id="controls">
+	<span class="controlBlock">N=<input type="text" name="controlN" id="controlN" value="100" disabled="disabled"/></span>
+	<span class="controlBlock">d=<input type="text" name="controlD" id="controlD" value="4"/></span>
+	<span class="controlBlock">M=<input type="text" name="controlM" id="controlM" value="5" disabled="disabled"/></span>
+	<br/>
+	<span class="controlBlock"><button id="stop">Generate one</button></span>
+</div>
+<script language="javascript" type="text/javascript" src="./make-one.js"></script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Router network</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		body{overflow:hidden;}
+		html,body{margin:0;padding:0}
+		#plotDiv,#holder{width:240px;height:240px;margin-bottom:10px;display:inline-block}
+		#plotDiv{background:black}
+		#figDiv,#pdfDiv{width:240px;height:120px}
+		#plotDiv{margin-right:5px}
+		#controlD{width:40px;}
+		.controlBlock{display:inline-block;margin-left:10px;}
+		#controls button {width: 120px;}
+	</style>
+</head>
+<body>
+<canvas id="plotDiv" width="240" height="240"></canvas>
+<div id="holder">
+	<div id="figDiv"></div>
+	<div id="pdfDiv"></div>
+</div>
+<div id="controls">
+<span class="controlBlock">&delta;=<input type="text" name="controlD" id="controlD" value="1"/></span>
+<br/>
+<span class="controlBlock"><button name="restart" id="restart">Start</button> <button name="stop" id="stop">Stop</button></span>
+</div>
+<script type="text/javascript">
+$('#figDiv').data('plotOptions',{yaxis:{axisLabel:"Π(d)"},xaxis:{axisLabel:"d"}});
+$('#pdfDiv').data('plotOptions',{yaxis:{axisLabel:"lg[p(d)]"},xaxis:{axisLabel:"lg[d]"}});
+/*options and settings*/
+var g;
+var delta=5;
+var deltaT=10;
+var timeoutID=null;
+var coordinates=new Array();
+var resources=new Array();
+var destinations=new Array();
+var degree=new Array();
+var d100=new Array();
+for(var i=0;i<250;i++) d100.push(-1);
+
+function myParseFloat(val) {
+	return parseFloat((""+val).replace(",","."));
+}
+
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+	$("#stop").attr("disabled","disabled");
+	$("#restart").removeAttr("disabled");
+}
+
+function readParam() {
+	delta=myParseFloat($("#controlD").val());
+	if(delta<0) delta=0;
+	$("#controlD").attr("value",delta);
+}
+
+function restartGame() {
+	g.clearRect(0,0,240,240);
+	readParam();
+	coordinates=new Array();
+	resources=new Array();
+	destinations=new Array();
+	degree=new Array();
+	d100=new Array();
+	for(var i=0;i<250;i++) d100.push(-1);
+	addPoint(false);
+	timeoutID=window.setInterval('addPoint(true)',deltaT);
+	$("#stop").removeAttr("disabled");
+	$("#restart").attr("disabled","disabled");
+}
+
+function distance(vec1,vec2) {
+	return Math.sqrt((vec1[0]-vec2[0])*(vec1[0]-vec2[0])+(vec1[1]-vec2[1])*(vec1[1]-vec2[1]));
+}
+
+function cost(pos,id) {
+	return delta*distance(coordinates[id],pos)+resources[id];
+}
+
+function addPoint(link) {
+	link=((typeof link!=='undefined') ? link : true);
+	var destX=0;var destY=0;
+	var minId=0;
+	//generate node
+	var pos=new Array();
+	if(resources.length<1) {
+		pos.push(0.5);
+		pos.push(0.5);
+	} else {
+		pos.push(Math.random());
+		pos.push(Math.random());
+	}
+	if(link) {//find node connect to
+		var min=cost(pos,minId);
+		destX=coordinates[minId][0];destY=coordinates[minId][1];
+		for(var i=1;i<coordinates.length;i++) {
+			var tmp=cost(pos,i);
+			if(tmp<min) {
+				min=tmp;
+				minId=i;
+				destX=coordinates[minId][0];destY=coordinates[minId][1];
+			}
+		}
+	}
+	//write data
+	coordinates.push(pos);
+	degree.push(1);
+	if(resources.length<1) {
+		resources.push(0);
+		destinations.push(-1);
+	} else {
+		degree[minId]++;
+		d100.shift();
+		d100.push(minId);
+		resources.push(resources[minId]+1);
+		destinations.push(minId);
+	}
+	//draw
+	redrawGraph();
+	capturePi();
+	reevalPdf();
+}
+
+function capturePi() {
+	var inDegree=new Array();
+	for(var i=0;i<coordinates.length;i++) inDegree.push(0);
+	for(var i=0;i<d100.length;i++) {
+		if(d100[i]>-1) inDegree[d100[i]]++;
+	}
+	var deg=new Array();
+	var maxInDegree=0;
+	for(var i=0;i<Math.min(Math.max(d100.length,coordinates.length-d100.length),coordinates.length);i++) {
+		var tdeg=Math.abs(degree[i]-inDegree[i]);
+		maxInDegree=Math.max(tdeg,maxInDegree);
+		if(typeof deg[""+tdeg]=='undefined') {
+			deg[""+tdeg]=new Array();
+			deg[""+tdeg][0]=inDegree[i]/d100.length;
+			deg[""+tdeg][1]=1;
+		} else {
+			deg[""+tdeg][0]+=inDegree[i]/d100.length;
+			deg[""+tdeg][1]++;
+		}
+	}
+	var piArr=new Array();
+	for(var i=0;i<=maxInDegree;i++) {
+		if(typeof deg[""+i]!=='undefined') {
+			if(deg[""+i][0]>0) piArr.push([i,deg[""+i][0]/deg[""+i][1]]);
+		}
+	}
+	if(coordinates.length>2*d100.length) $.plot($("#figDiv"),[{data:piArr, color:"red", points: {show: true}, lines: {show: false}}],$('#figDiv').data('plotOptions'));
+	else $.plot($("#figDiv"),[{data:piArr, color:"blue", points: {show: true}, lines: {show: false}}],$('#figDiv').data('plotOptions'));
+}
+
+function reevalPdf() {
+	var diag=degree;
+	var llim=Math.min.apply(Math,diag);
+	var rlim=Math.max.apply(Math,diag);
+	var pdf=commonFunctions.pdfModification(commonFunctions.makePdf(diag,llim,rlim,rlim-llim,false),true,llim*0.9,rlim*1.1,60,llim,1.0);
+	delete diag;
+	if(coordinates.length>2*d100.length) $.plot($("#pdfDiv"),[{data: pdf, color: "red", points: {show: true}, lines: {show: false}}],$('#pdfDiv').data('plotOptions'));
+	else $.plot($("#pdfDiv"),[{data: pdf, color: "blue", points: {show: true}, lines: {show: false}}],$('#pdfDiv').data('plotOptions'));
+}
+
+function redrawGraph() {
+	g.clearRect(0,0,240,240);
+	//edges
+	g.beginPath();
+	g.lineWidth=1;
+	g.strokeStyle='white';
+	for(var i=1;i<coordinates.length;i++) {
+		g.moveTo(Math.floor(coordinates[i][0]*236+2),Math.floor(coordinates[i][1]*236+2));
+		g.lineTo(Math.floor(coordinates[destinations[i]][0]*236+2),Math.floor(coordinates[destinations[i]][1]*236+2));
+	}
+	g.stroke();
+	//nodes
+	for(var i=0;i<coordinates.length;i++) {
+		g.beginPath();
+		g.arc(Math.floor(coordinates[i][0]*236+2),Math.floor(coordinates[i][1]*236+2),2*(1+Math.log(degree[i])),0,2*Math.PI,false);
+		g.fillStyle='red';
+		g.fill();
+	}
+}
+
+/*main*/
+$(function () {
+	$("#controlD").attr("value",delta);
+	g=$("#plotDiv")[0].getContext('2d');
+	restartGame();
+	$("#restart").click(function(){restartGame();});
+	$("#stop").click(function(){stopGame();}).click();
+});
+</script>
+</body>
+</html>

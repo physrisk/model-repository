@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Standing ovation model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;}
+		#graphsDiv{max-width:450px;margin-bottom:20px;}
+		#plotDiv{width:200px;height:200px;display:inline-block;}
+		#figDiv{width:200px;height:200px;display:inline-block;}
+		#indicatorPanel {margin-top:10px;margin-bottom:10px;}
+		#indicatorPanel span{background:#999999;}
+		#controlSize{width:120px;}
+		#controlStandard,#controlRadius{width:40px;}
+		.controlBlock{display:inline-block;margin-right:7px;margin-bottom:4px;}
+		#controls button{width:80px;}
+	</style>
+</head>
+<body>
+<div id="graphsDiv">
+<canvas id="plotDiv" width="200" height="200"></canvas>
+<div id="figDiv"></div>
+</div>
+<div id="controls">
+<span class="controlBlock">Size: <select name="controlSize" id="controlSize"><option value="10">Small - 10x10</option><option value="20" selected="selected">Medium - 20x20</option><option value="40">Large - 40x40</option><option value="100">Extra large - 100x100</option></select></span>
+<span class="controlBlock">T= <input type="text" name="controlStandard" id="controlStandard" value="0.5"/></span>
+<span class="controlBlock">r= <input type="text" name="controlRadius" id="controlRadius" value="1"/></span><br/>
+<span class="controlBlock"><button name="start" id="start">Start</button> <button name="resume" id="resume">Resume</button></span>
+</div>
+<script language="javascript" type="text/javascript" src="./som.js"></script>
+<script type="text/javascript">
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+	$("#resume").text("Resume");
+	$("#start").removeAttr("disabled");
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('nextFrame()',100.0);
+	$("#resume").text("Stop");
+	$("#start").attr("disabled","disabled");
+}
+</script>
+</body>
+</html>

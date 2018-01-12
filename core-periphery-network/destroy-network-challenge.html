@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+	<meta charset="utf-8"/>
+	<title>Destroy network challenge</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jit-201.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/plotFDNetworkJit-201.js"></script>
+	<style>
+		html,body{margin:0;padding:0}
+		#infovis{width:450px;height:450px;background:black;overflow:hidden;margin-bottom:10px;}
+		.controlBlock{display:inline-block;margin-left:10px;}
+		#controls button {width: 120px;}
+		#controlN1,#controlN,#controlN2,#controlp1,#controlp2,#controlp3{width:40px;}
+	</style>
+</head>
+<body>
+	<div id="infovis"></div>
+	<div id="controls">
+		<span class="controlBlock"><button name="restart" id="restart">&gt;</button></span>
+	</div>
+	<script type="text/javascript">
+		function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
+		
+		var numCoreNodes=5;//+1 due to invisible root node
+		var numTotalNodes=50;
+		
+		function perfectCPNetwork() {
+			var adj=[];
+			for(var i=0;i<numTotalNodes;i++) {
+				var tmp=[];
+				for(var j=0;j<numTotalNodes;j++) {
+					if(i==0) {
+						if(j<numCoreNodes) tmp.push(1);
+						else tmp.push(0);
+					} else if(j==0) {
+						if(i<numCoreNodes) tmp.push(1);
+						else tmp.push(0);
+					} else if(i<numCoreNodes) tmp.push(1);
+					else if(j<numCoreNodes) tmp.push(1);
+					else tmp.push(0);
+				}
+				adj.push(tmp);
+				delete tmp;
+			}
+			return adj;
+		}
+		
+		function plotRGraph(json,graphTarget){
+			var graph=new $jit.RGraph({
+				'injectInto': graphTarget,
+				//iterations: 200,
+				Navigation: {
+					enable: true,
+					type: 'Native',
+					panning: 'avoid nodes',
+					zooming: 10
+				},
+				Node: {'overridable': true},
+				Edge: {'overridable': true},
+				Events: {
+					enable: true,
+					type: 'Native',
+					//Change cursor style when hovering a node
+					onMouseEnter: function() {
+						graph.canvas.getElement().style.cursor='move';
+					},
+					onMouseLeave: function() {
+						graph.canvas.getElement().style.cursor='';
+					},
+					//Update node positions when dragged
+					onDragMove: function(node, eventInfo, e) {
+						var pos=eventInfo.getPos();
+						node.pos.setc(pos.x, pos.y);
+						graph.plot();
+					},
+					//Implement the same handler for touchscreens
+					onTouchMove: function(node, eventInfo, e) {
+						$jit.util.event.stop(e); //stop default touchmove event
+						this.onDragMove(node, eventInfo, e);
+					}
+				},
+				background: {
+					CanvasStyles: {
+						strokeStyle: '#555'
+					}
+				},
+				onBeforePlotNode: function(node){//hide central node
+					if(node.id==graph.root) {
+						node.data.$color='transparent';
+					}
+				},
+				onBeforePlotLine: function(adj) {//hide central node
+					if(adj.nodeFrom.id==graph.root || adj.nodeTo.id==graph.root) {
+						adj.data.$color='transparent';
+					}
+				},
+				//-------------
+				onCreateLabel: function(domElement,node){
+					if(node.id==graph.root) return ;
+					destroyButton=document.createElement('span'),
+					destroyButton.className='destroy';
+					destroyButton.innerHTML='X';
+					destroyButton.style.cursor='crosshair';
+					domElement.appendChild(destroyButton);
+					destroyButton.style.fontSize="0.5em";
+					destroyButton.style.color="#000";
+					destroyButton.style.backgroundColor="#fff";
+					destroyButton.onclick=function() {
+						node.setData('alpha', 0, 'end');
+						node.eachAdjacency(function(adj) {
+							adj.setData('alpha', 0, 'end');
+						});
+						graph.fx.animate({
+							modes: ['node-property:alpha',
+								'edge-property:alpha'],
+							duration: 500
+						});
+					};
+				}
+			});
+			graph.loadJSON(json);
+			graph.root='node0';//set central node
+			graph.refresh();
+			setTimeout(function(){$('#restart').removeAttr('disabled');},150);
+		}
+		
+		function makeAndPlot(nNodes,pcreate1,pjoin1,pjoin2,pjoin3) {
+			var net=perfectCPNetwork();
+			plotRGraph(adjacencyMatrixToJSON(net),'infovis');
+			$("#infovis").data('adjMatrix',net);
+		}
+		
+		$(function () {
+			$("#restart").attr('disabled', 'disabled');
+			$("#controlN2").attr('disabled', 'disabled');
+			$("#controlN1").change(function(){
+				$("#controlN2").val(1.0-myParseFloat($("#controlN1").val()));
+			});
+			makeAndPlot($("#controlN").val(),$("#controlN1").val(),$("#controlp1").val(),$("#controlp2").val(),$("#controlp3").val());
+			$("#restart").click(function(){
+				$("#restart").attr('disabled', 'disabled');
+				$("#infovis").text("");
+				makeAndPlot($("#controlN").val(),$("#controlN1").val(),$("#controlp1").val(),$("#controlp2").val(),$("#controlp3").val());
+			});
+		});
+	</script>
+</body>
+</html>

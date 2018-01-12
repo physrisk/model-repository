@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>St. Petersburg paradox as a gambling strategy</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0}
+		#plotDiv{width:450px;height:400px;margin-bottom:20px;}
+	</style>
+</head>
+<body>
+<div id="plotDiv"></div>
+<div id="controls"><button id="restart">Restart</button> <button id="stop">Stop</button> <span id="indicator">Game has not started!</span></div>
+<script type="text/javascript">
+/*options and settings*/
+var timeoutID=null;
+$('#plotDiv').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 'time',
+		min: null,
+		max: null,
+		tickDecimals: 0
+	} ,
+	yaxis: {
+		axisLabel: 'money',
+		min: null,
+		max: null,
+		tickDecimals: 0
+	}
+});
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function() {
+	setupGame();
+	$("#indicator").text('Game is being played!').css("color","inherit");
+	$("#stop").removeAttr("disabled");
+	$("#stop").click();
+});
+$("#stop").toggle(function() {
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#indicator").text('Game is being played!').css("color","inherit");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Resume");
+	$("#indicator").text('Game is paused!').css("color","green");
+	$("#restart").removeAttr("disabled");
+});
+
+function play() {
+	var showData=$('#plotDiv').data('showData');
+	var lastBet=$('#plotDiv').data('lastBet');
+	var curTime=showData[0][showData[0].length-1][0];
+	var curMoney=showData[0][showData[0].length-1][1];
+	if(curMoney<=0) {
+		$("#stop").click();
+		$("#stop").attr("disabled","disabled");
+		$("#indicator").text('Game over!').css("color","red");
+	} else {
+		if(lastBet>curMoney && curMoney>0) {
+			while(lastBet>curMoney) lastBet/=2;
+		}
+		var rnd=Math.random()<0.5 ? 0 : 1;
+		curTime++;
+		if(rnd==1) {
+			curMoney+=lastBet;
+			lastBet=1;
+		} else {
+			curMoney-=lastBet;
+			lastBet*=2;
+		}
+		showData[0].push([curTime,curMoney]);
+	}
+	$('#plotDiv').data('showData',showData);
+	$('#plotDiv').data('lastBet',lastBet);
+	plotFigure();
+}
+
+function plotFigure() {
+	$.plot($("#plotDiv"),$('#plotDiv').data('showData'),$('#plotDiv').data('plotOptions'));
+}
+
+function setupGame() {
+	$('#plotDiv').data('showData',[[[0,100]]]);
+	$('#plotDiv').data('lastBet',1);
+}
+
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('play()',100.0);
+}
+
+/*main*/
+$(function () {
+	setupGame();
+	plotFigure();
+});
+</script>
+</body>
+</html>

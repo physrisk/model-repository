@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Price war game</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <style type="text/css">
+        *{box-sizing:border-box}
+        
+        html,body{margin:0;padding:0}
+        #wrapper{max-width:400px}
+		.controlBlock{display:inline-block;margin-left:5px}
+        #controls{line-height:2;clear:both;padding-top:10px}
+        #controls input{width:60px}
+
+        #gameWrapper{display:block;width:100%;font-size:13px}
+        .gameWrapperRow:after{clear:both}
+        .cellSimple, .cellBorder, .cellLarge, .cellThick{float:left;height:25px;line-height:25px;overflow:hidden;width:25%;text-align:center}
+        .cellBorder{border: 1px solid #333}
+        .cellLarge{width:50%}
+        .cellThick{height:50px;line-height:50px}
+        .companyA{color:#f00}
+        .companyB{color:#00f}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <div id="gameWrapper">
+        <div class="gameWrapperRow">
+            <div class="cellLarge">&nbsp;<!--skip--></div>
+            <div class="cellLarge companyA">
+                Company A
+            </div>
+        </div>
+        <div class="gameWrapperRow">
+            <div class="cellLarge">&nbsp;<!--skip--></div>
+            <div id="ha" class="cellSimple companyA">
+                Price 1
+            </div>
+            <div id="la" class="cellSimple companyA">
+                Price 2
+            </div>
+        </div>
+        <div class="gameWrapperRow">
+            <div class="cellThick companyB">
+                Company B
+            </div>
+            <div class="gameWrapperRow">
+                <div id="hb" class="cellSimple companyB">
+                    Price 1
+                </div>
+                <div id="hh" class="cellBorder">
+                    <span id="hhb" class="companyB">200</span>, <span id="hha" class="companyA">200</span>
+                </div>
+                <div class="cellBorder">
+                    <span id="hlb" class="companyB">-50</span>, <span id="lha" class="companyA">250</span>
+                </div>
+            </div>
+            <div class="gameWrapperRow">
+                <div id="lb" class="cellSimple companyB">
+                    Price 2
+                </div>
+                <div class="cellBorder">
+                    <span id="lhb" class="companyB">250</span>, <span id="hla" class="companyA">-50</span>
+                </div>
+                <div id="ll" class="cellBorder">
+                    <span id="llb" class="companyB">100</span>, <span id="lla" class="companyA">100</span>
+                </div>
+            </div>
+        </div>
+    </div><!-- #gameWrapper -->
+    <div id="controls">
+        <span class="controlBlock">p<sub>0</sub>=<input id="p0" name="p0" type="number" value="0.5" min="0" max="10" step="0.1"></span>
+        <span class="controlBlock">p<sub>1</sub>=<input id="p1" name="p1" type="number" value="5" min="0.1" max="10" step="0.1"></span>
+        <span class="controlBlock">p<sub>2</sub>=<input id="p2" name="p2" type="number" value="3" min="0.1" max="10" step="0.1"></span>
+        <span class="controlBlock">N=<input id="Nprod" name="Nprod" type="number" value="100" min="50" max="100" step="2"></span>
+    </div><!-- #controls -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript">
+function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
+
+function calculateProfits(p0,p1,p2,Nprod) {
+    var phh, phl, plh, pll, swap;
+    phh=50*p1-Nprod*p0;
+    pll=50*p2-Nprod*p0;
+    if(p1>p2) {
+        phl=(100-Nprod)*p1-Nprod*p0;
+        plh=Nprod*p2-Nprod*p0;
+    } else if(p2>p1) {
+        plh=(100-Nprod)*p2-Nprod*p0;
+        phl=Nprod*p1-Nprod*p0;
+    } else {
+        phl=phh;
+        plh=pll;
+    }
+    return [phh,phl,plh,pll];
+}
+
+function getParams() {
+    var p0, p1, p2, Nprod;
+    p0=myParseFloat($("#p0").val());
+    p1=myParseFloat($("#p1").val());
+    p2=myParseFloat($("#p2").val());
+    Nprod=parseInt($("#Nprod").val());
+    return [p0,p1,p2,Nprod];
+}
+
+function updateTable(phh,phl,plh,pll) {
+    $("#hha, #hhb").text(phh.toFixed(1));
+    $("#hla, #hlb").text(phl.toFixed(1));
+    $("#lha, #lhb").text(plh.toFixed(1));
+    $("#lla, #llb").text(pll.toFixed(1));
+}
+
+function findEquilibrium(p1,p2,phh,phl,plh,pll) {
+    $(".cellBorder").css("background-color","transparent");
+    $("#ha, #hb, #la, #lb").css("font-weight","normal");
+    if((phh<plh && phl<=pll) || (phh<=plh && phl<pll)) {
+        $("#ll").css("background-color","#dfa");
+        $("#la, #lb").css("font-weight","bold");
+        return;
+    }
+    if((phh>plh && phl>=pll) || (phh>=plh && phl>pll)) {
+        $("#hh").css("background-color","#dfa");
+        $("#ha, #hb").css("font-weight","bold");
+        return;
+    }
+    if(phh==pll) {
+        $(".cellBorder").css("background-color","#fea");
+        return;
+    }
+    $(".cellBorder").css("background-color","#abf");
+}
+
+function updateView() {
+    var params, profits;
+    params=getParams();
+    profits=calculateProfits(params[0],params[1],params[2],params[3]);
+    updateTable(profits[0],profits[1],profits[2],profits[3]);
+    findEquilibrium(params[1],params[2],profits[0],profits[1],profits[2],profits[3]);
+}
+
+$("#controls input").change(function() {
+    updateView();
+});
+
+/* onLoad */
+$(function () {
+    updateView();
+});
+</script>
+</body>
+</html>

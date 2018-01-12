@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Random reshuffle with savings | Elementary kinetic model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;}
+		#plotDiv{width:400px;height:300px;margin-bottom:20px;}
+		#plotLabel{width:400px;text-align:center;margin-bottom:10px;}
+		.controlBlock{display:inline-block;margin-left:10px;}
+		#controlL {width:40px;}
+		#controls button {width:135px;}
+	</style>
+</head>
+<body>
+<div id="plotLabel">Random reshuffle with savings (t=0)</div>
+<div id="plotDiv"></div>
+<div id="controls">
+	<span class="controlBlock">&kappa;=<input type="text" name="controlL" id="controlL" value="0.2"/></span>
+	<br/>
+	<span class="controlBlock"><button id="stop">Start</button></span>
+	<span class="controlBlock"><button id="restart">Restart</button></span>
+</div>
+<script type="text/javascript">
+function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
+
+/*options and settings*/
+var boltzmannDist=new Array();
+var energyDist=new Array();
+var energies=new Array();
+var NParticles=1000;
+var timer=null;
+var interactionsOccured=0;
+var savingProp=0;
+$('#plotDiv').data('plotOptions', {
+	xaxis:{axisLabel:'w',min:null,max:null},
+	yaxis:{axisLabel:'lg[N(w)]',min:-1,max:null}
+});
+$('#restart').click(function() {initialize();plotFigure();$('#stop').click();});
+$('#stop').toggle(
+	function() {$('#restart').hide();start();$('#stop').text('Stop');},
+	function() {stop();$('#restart').show();$('#stop').text('Continue');}
+);
+
+function plotFigure() {
+	var outDist=new Array();
+	var matlog10=Math.log(10);
+	for(var i=0;i<28;i++) {
+		if(energyDist[i][1]<1) outDist.push([energyDist[i][0],-20]);
+		else outDist.push([energyDist[i][0],Math.log(energyDist[i][1])/matlog10]);
+	}
+	$.plot($("#plotDiv"),[{data:outDist, color:"blue", label:"model"},{data:boltzmannDist, color:"red", label:"Gamma distribution"}],$('#plotDiv').data('plotOptions'));
+}
+
+function play() {
+	var i1=Math.floor(Math.random()*NParticles);
+	var i2=Math.floor(Math.random()*NParticles);
+	if(i1==i2) return ;
+	var epsilon=Math.random();
+	var dw=(1.0-savingProp)*((1.0-epsilon)*energies[i1]-epsilon*energies[i2]);
+	var e1=Math.floor(energies[i1]*4.0);
+	var e2=Math.floor(energies[i2]*4.0);
+	energyDist[e1][1]--;
+	energyDist[e2][1]--;
+	energies[i1]-=dw;
+	energies[i2]+=dw;
+	e1=Math.floor(energies[i1]*4.0);
+	e2=Math.floor(energies[i2]*4.0);
+	if(energyDist.length<=e1 || energyDist.length<=e2) {
+		var maxE=Math.max(e1,e2);
+		for(var i=energyDist.length;i<=maxE;i++) energyDist.push([(i+0.5)/4,0]);
+	}
+	energyDist[e1][1]++;
+	energyDist[e2][1]++;
+}
+
+function la_gamma(x){
+	var p=[0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+	var g=7;
+	if(x<0.5) return Math.PI/(Math.sin(Math.PI*x)*la_gamma(1-x));
+	x-=1;
+	var a=p[0];
+	var t=x+g+0.5;
+	for(var i=1;i<p.length;i++){
+		a+=p[i]/(x+i);
+	}
+	return Math.sqrt(2*Math.PI)*Math.pow(t,x+0.5)*Math.exp(-t)*a;
+}
+
+function timeStep() {
+	for(var j=0;j<1000;j++) play();
+	plotFigure();
+	interactionsOccured+=1;
+	$('#plotLabel').text('Random reshuffle with savings (t='+interactionsOccured+'k)');
+}
+
+function initialize() {
+	boltzmannDist=new Array();
+	energyDist=new Array();
+	energies=new Array();
+	NParticles=1000;
+	timer=null;
+	interactionsOccured=0;
+	savingProp=myParseFloat($('#controlL').val());
+	for(var i=0;i<=28;i++) energyDist.push([(i+0.5)/4,0]);
+	for(var i=0;i<NParticles;i++) {
+		energies.push(1);
+		energyDist[4][1]++;
+	}
+	var teorN=1.0+(3.0*savingProp)/(1.0-savingProp);
+	var matlog10=Math.log(10);
+	for(var i=0;i<=280;i++) boltzmannDist.push([i/40.0,Math.log((NParticles/4)*Math.pow(teorN*(i/40.0),teorN)*Math.exp(-teorN*(i/40.0))/((i/40.0)*la_gamma(teorN)))/matlog10]);
+}
+
+function start() {timer=setInterval(function(){timeStep();},100);}
+function stop() {clearInterval(timer);}
+
+/*main*/
+$(function () {
+	initialize();plotFigure();
+});
+</script>
+</body>
+</html>

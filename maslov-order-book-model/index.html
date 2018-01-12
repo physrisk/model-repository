@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Maslov order-book model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+    <style type="text/css">
+        html,body{margin:0;padding:0}
+        #wrapper{max-width:510px}
+        #figWrap{width:100%;text-align:center}
+        .statPlot{display:inline-block;width:250px;height:200px}
+        .timePlot{display:inline-block;width:250px;height:200px}
+		.controlBlock{display:inline-block;margin-left:5px}
+        #controls{line-height:2}
+        #controls input{width:60px}
+		#controls button{width:140px}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figWrap">
+    <div id="retPdf" class="statPlot"></div>
+    <div id="retSpec" class="statPlot"></div>
+    <div id="pSeries" class="timePlot"></div>
+    <div id="retSeries" class="timePlot"></div>
+</div><!-- #svgWrap -->
+<div id="controls">
+    <span class="controlBlock">p<sub>lim</sub>=<input id="plim" name="plim" type="number" min="0.1" max="0.9" step="0.1" value="0.5"></span>
+    <span class="controlBlock">&Delta;<sub>max</sub>=<input id="dmax" name="dmax" type="number" min="0.01" max="100" step="0.01" value="1.0"></span>
+    <span class="controlBlock">&delta;=<input id="dt" name="dt" type="number" min="1" max="100" step="1" value="10"></span>
+    <br/>
+    <span class="controlBlock">O<sub>max</sub>=<input id="omax" name="omax" type="number" min="100" max="10000" step="100" value="1000"></span>
+    <br/>
+    <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
+    <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
+</div><!-- #controls -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./maslovModel.js"></script>
+<script language="javascript" type="text/javascript" src="./mobm-main.js"></script>
+<script language="javascript" type="text/javascript">
+/* bind events and set initial states */
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function () {
+	setup();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+
+/* onLoad */
+$(function () {
+	setup();
+    plotFigures();
+});
+</script>
+</body>
+</html>

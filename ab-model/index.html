@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>AB model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+    <style type="text/css">
+        html,body{margin:0;padding:0;}
+        input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+        #graphsDiv{max-width:450px;margin-bottom:10px;}
+        #plotDiv,#figDiv{width:200px;height:200px;display:inline-block;}
+        #indicatorPanel {margin-top:10px;margin-bottom:10px;}
+        #indicatorPanel span{background:#999999;}
+        #rhoa,#rhob{width:40px}
+        .controlBlock{display:inline-block;margin-left:5px;}
+        #controls button{width:80px;}
+    </style>
+</head>
+<body>
+<div id="graphsDiv">
+<canvas id="plotDiv" width="200" height="200"></canvas>
+<div id="figDiv"></div>
+</div>
+<div id="controls">
+<span class="controlBlock">&rho;<sub>A</sub>=<input id="rhoa" name="rhoa" type="text" value="0.3"></span>
+<span class="controlBlock">&rho;<sub>B</sub>=<input id="rhob" name="rhob" type="text" value="0.3"></span>
+<br/>
+<span class="controlBlock"><button name="start" id="start">Start</button></span>
+<span class="controlBlock"><button name="resume" id="resume">Resume</button></span>
+<span class="controlBlock"><button name="fastf" id="fastf">&gt;&gt;</button></span>
+</div>
+<script language="javascript" type="text/javascript" src="./abmodel.js"></script>
+<script type="text/javascript">
+function stopGame() {
+    window.clearInterval(timeoutID);
+    timeoutID=null;
+    $("#resume").text("Resume");
+    $("#start, #fastf").removeAttr("disabled");
+}
+
+function resumeGame() {
+    timeoutID=window.setInterval('kadras()',100.0);
+    $("#resume").text("Stop");
+    $("#start, #fastf").attr("disabled","disabled");
+}
+
+function fastForward() {
+    for(var i=0;i<999;i++) iteracija();
+    kadras();
+}
+</script>
+</body>
+</html>

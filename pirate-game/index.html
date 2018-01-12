@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Pirate game</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		*,html,body{margin:0;padding:0}
+		.pirate{display:inline-block;margin-right:10px;text-align:center}
+		.pirate .portrait{width:75px;display:block;margin-bottom:5px}
+		#deck,#msg{margin-bottom:10px}
+		#mods{margin-left:150px;}
+		#mod1,#mod5,#mod10,#vote,.add,.subtract{background:#ccc;border:1px solid #999;padding:0 5px}
+	</style>
+</head>
+<body>
+<div id="deck">
+<div id="captain" class="pirate"><img class="portrait" src="img/dead-pirate.jpg"/><span class="money"><span class="result">100</span></span></div>
+<div id="p1" class="pirate"><img class="portrait" src="img/unhappy-pirate.jpg"/><span class="money"><span class="add">+</span> <span class="result">0</span> <span class="subtract">-</span></span></div>
+<div id="p2" class="pirate"><img class="portrait" src="img/unhappy-pirate.jpg"/><span class="money"><span class="add">+</span> <span class="result">0</span> <span class="subtract">-</span></span></div>
+<div id="p3" class="pirate"><img class="portrait" src="img/unhappy-pirate.jpg"/><span class="money"><span class="add">+</span> <span class="result">0</span> <span class="subtract">-</span></span></div>
+<div id="p4" class="pirate"><img class="portrait" src="img/unhappy-pirate.jpg"/><span class="money"><span class="add">+</span> <span class="result">0</span> <span class="subtract">-</span></span></div>
+</div>
+<div id="msg">If captain would keep all money to himself, he would die...</div>
+<span id="vote">Vote</span> <span id="mods"><span id="mod1">x1</span> <span id="mod5">x5</span> <span id="mod10">x10</span></span>
+<script type="text/javascript">
+function pirateVote(e,t){if(e=="captain")return true;else if(e=="p1")return t>=99;else return t>0}function add(e){if(money["captain"]<mod && e!="captain")return;money[e]+=mod;if(e!="captain")subtract("captain");$("#"+e+" .result").text(money[e])}function subtract(e){if(money[e]<mod)return;money[e]-=mod;if(e!="captain")add("captain");$("#"+e+" .result").text(money[e])}var money={captain:100,p1:0,p2:0,p3:0,p4:0};var mod=1;$("#mod"+mod).css("border","1px solid #000").css("background","#eee");$(".add").click(function(e){e.preventDefault();add($(this).parent().parent().attr("id"))});$(".subtract").click(function(e){e.preventDefault();subtract($(this).parent().parent().attr("id"))});$("#mod1").click(function(e){e.preventDefault();$("#mod"+mod).css("border","1px solid #999").css("background","#ccc");$("#mod1").css("border","1px solid #000").css("background","#eee");mod=1});$("#mod5").click(function(e){e.preventDefault();$("#mod"+mod).css("border","1px solid #999").css("background","#ccc");$("#mod5").css("border","1px solid #000").css("background","#eee");mod=5});$("#mod10").click(function(e){e.preventDefault();$("#mod"+mod).css("border","1px solid #999").css("background","#ccc");$("#mod10").css("border","1px solid #000").css("background","#eee");mod=10});$("#vote").click(function(e){var t=1;for(var n=1;n<5;n++){if(pirateVote("p"+n,money["p"+n])){t++;$("#p"+n+" .portrait").attr("src","img/happy-pirate.jpg")}else{t--;$("#p"+n+" .portrait").attr("src","img/unhappy-pirate.jpg")}}if(t>=0){if(money["captain"]==98){$("#captain .portrait").attr("src","img/happy-pirate.jpg");$("#msg").text("Captain is happy as is his crew.")}else{$("#captain .portrait").attr("src","img/unhappy-pirate.jpg");$("#msg").text("Captain is alive, but he is not happy about his share.")}}else{$("#captain .portrait").attr("src","img/dead-pirate.jpg");$("#msg").text("Captain is dead. Crew was not pleased with his proposal.")}})
+</script>
+</body>
+</html>

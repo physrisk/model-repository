@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Stochastic ant colony model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+	<script language="javascript" type="text/javascript" src="./kirmanSdeModel.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;}
+		#plotDiv,#plotDiv2,#plotDiv3{width:225px;height:200px;margin-bottom:5px;display:inline-block;}
+		#plotDiv{width:450px;}
+		#epsi1,#epsi2,#hpar{width:40px;}
+		#controls .controlBlock{display:inline-block;margin-left:10px;}
+		#controls button {width: 210px;}
+		#controls .label{display:inline-block;width:50px;}
+	</style>
+</head>
+<body>
+<div id="plotDiv2"></div>
+<div id="plotDiv3"></div>
+<br/>
+<div id="plotDiv"></div>
+<div id="controls">
+<span class="controlBlock"><span class="label">&sigma;<sub>1</sub>=</span><input type="text" name="epsi1" id="epsi1" value="2.0"/></span>
+<span class="controlBlock"><span class="label">&sigma;<sub>2</sub>=</span><input type="text" name="epsi2" id="epsi2" value="2.0"/></span>
+<span class="controlBlock"><span class="label">h=</span><input type="text" name="hpar" id="hpar" value="1.0" disabled="disabled"/></span>
+<br/>
+<span class="controlBlock"><button name="restart" id="restart">Start</button> <button name="stop" id="stop">Stop</button></span>
+</div>
+<script type="text/javascript">
+function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
+/*options and settings*/
+var timeoutID=null;
+var colony=null;
+$('#plotDiv').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 't',
+		min: null,
+		max: null
+	} ,
+	yaxis: {
+		axisLabel: 'x(t)',
+		min: 0,
+		max: 1
+	}
+});
+$('#plotDiv2').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 'x',
+		min: 0,
+		max: 1
+	} ,
+	yaxis: {
+		axisLabel: 'lg[p(x)]',
+		min: null,
+		max: null
+	}
+});
+$('#plotDiv3').data('plotOptions', {
+	series: {
+		lines: { show: true }
+	} ,
+	xaxis: {
+		axisLabel: 'lg[f]',
+		min: 0,
+		max: 2
+	} ,
+	yaxis: {
+		axisLabel: 'lg[S(f)]',
+		min: -5.5,
+		max: -3
+	}
+});
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function () {
+	setup();
+	readAndLoad();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	//readAndLoad();
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+
+function plotFigure() {
+	var modelSignal= $('#plotDiv').data('modelSignal');
+	$.plot($("#plotDiv"),[
+			{data: modelSignal, color: "red"}
+		],
+		$('#plotDiv').data('plotOptions')
+	);
+	var pdf=$('#plotDiv2').data('pdf');
+	var showPdf=[];
+	var pdfLen=$('#plotDiv2').data('pdfLen');
+	if(pdfLen>0) {
+		var norm=-Math.log(pdfLen)+Math.log(pdf.length-1);
+		for(var i=0;i<pdf.length;i++) {
+			if(pdf[i][1]>0) {
+				showPdf.push([pdf[i][0],(Math.log(pdf[i][1])+norm)/commonFunctions.matlog10]);
+			}
+		}
+	}
+	$.plot($("#plotDiv2"),[{data: showPdf, color: "red"}],$('#plotDiv2').data('plotOptions'));
+	var showSpec=commonFunctions.specModification(commonFunctions.performRealFFT(commonFunctions.toOneDimensionalArray(modelSignal,1)),colony.integrationDt,100,true);
+	var plotOpts=$('#plotDiv3').data('plotOptions');
+	if(typeof showSpec[0]!=="undefined") {
+		plotOpts.xaxis.min=Math.floor(showSpec[0][0]);
+		plotOpts.xaxis.max=Math.ceil(showSpec[showSpec.length-1][0]);
+		plotOpts.yaxis.min=Math.floor(Math.min.apply(Math,commonFunctions.toOneDimensionalArray(showSpec,1)));
+		plotOpts.yaxis.max=Math.ceil(Math.max.apply(Math,commonFunctions.toOneDimensionalArray(showSpec,1)));
+	}
+	$.plot($("#plotDiv3"),[{data: showSpec, color: "red"}],plotOpts);
+}
+
+function play() {
+	var modelSignal=$('#plotDiv').data('modelSignal');
+	var pdf=$('#plotDiv2').data('pdf');
+	var pdfLen=$('#plotDiv2').data('pdfLen');
+	for(var i=0;i<32;i++) {
+		modelSignal=modelSignal.slice(1);
+		colony.stepPerTime();
+		var m=colony.frac;
+		var xm=myParseFloat(modelSignal[modelSignal.length-1][0]);
+		pdf[Math.floor(m*100)][1]++;
+		pdfLen++;
+		modelSignal.push([xm+colony.integrationDt,m]);
+	}
+	$('#plotDiv').data('modelSignal',modelSignal);
+	$('#plotDiv2').data('pdf',pdf);
+	$('#plotDiv2').data('pdfLen',pdfLen);
+	plotFigure();
+}
+
+function readAndLoad() {
+	var e1=myParseFloat($("#epsi1").attr("value"));
+	var e2=myParseFloat($("#epsi2").attr("value"));
+	if(e1<0) e1=0;
+	if(e2<0) e2=0;
+	$("#epsi1").attr("value",e1);
+	$("#epsi2").attr("value",e2);
+	colony.setEpsilons(e1,e2);
+	colony.updateStep();
+	pdfSetup();
+}
+
+function setup() {
+	colony=new kirmanSdeModel();
+	var signal=[];
+	for(var i=0;i<2048;i++) signal.push([(i-2048)*colony.integrationDt,0.5]);
+	$('#plotDiv').data('modelSignal',signal);
+}
+
+function pdfSetup() {
+	var pdf=[];
+	for(var i=0;i<=100;i++) pdf.push([i/100.0,0]);
+	$('#plotDiv2').data('pdf',pdf);
+	$('#plotDiv2').data('pdfLen',0);
+}
+
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('play()',5.0);
+}
+
+/*main*/
+$(function () {
+	setup();
+	plotFigure();
+});
+</script>
+</body>
+</html>

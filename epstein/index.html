@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Epstein model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;} #figDiv,#plotDiv{width:200px;height:200px;display:inline-block}#figDiv,#plotDiv,.controlBlock{display:inline-block}body,html{margin:0;padding:0}#graphsDiv{max-width:450px;margin-bottom:20px}#figDiv{margin-left:10px}#indicatorPanel{margin-top:10px;margin-bottom:10px}#indicatorPanel span{background:#999}#controlJ,#controlL,#controlRC,#controlRP,#controlT,#controlV{width:40px}.controlBlock{margin-right:7px;margin-bottom:4px}#controls button{width:80px}
+	</style>
+</head>
+<body>
+<div id="graphsDiv">
+<canvas id="plotDiv" width="200" height="200"></canvas><div id="figDiv"></div>
+</div>
+<div id="controls">
+<span class="controlBlock">&rho;<sub>civ</sub>= <input type="text" name="controlRC" id="controlRC" value="0.7"/></span>
+<span class="controlBlock">&rho;<sub>cop</sub>= <input type="text" name="controlRP" id="controlRP" value="0.06"/></span>
+<br/>
+<span class="controlBlock">T= <input type="text" name="controlT" id="controlT" value="0.075"/></span>
+<span class="controlBlock">L= <input type="text" name="controlL" id="controlL" value="0.8"/></span>
+<span class="controlBlock">v= <input type="text" name="controlV" id="controlV" value="5"/></span>
+<span class="controlBlock">J<sub>max</sub>= <input type="text" name="controlJ" id="controlJ" value="40"/></span>
+<br/>
+<span class="controlBlock"><button name="start" id="start">Start</button> <button name="resume" id="resume">Resume</button></span>
+</div>
+<script language="javascript" type="text/javascript" src="./epstein.js"></script>
+<script type="text/javascript">
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+	$("#resume").text("Resume");
+	$("#start").removeAttr("disabled");
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('nextFrame()',100.0);
+	$("#resume").text("Stop");
+	$("#start").attr("disabled","disabled");
+}
+</script>
+</body>
+</html>

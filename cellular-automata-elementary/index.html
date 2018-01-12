@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Wolfram’s elementary automatons </title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0;}
+		#plotDiv{width:480px;height:480px;}
+		#controlDiv{width:330px;height:40px;}
+		.controlBlock{display:inline-block;margin-left:5px;}
+		#controls button{width:80px;}
+		#controls input {width:30px;}
+		#colonizeFields {margin-left:65px;}
+	</style>
+</head>
+<body>
+<canvas id="plotDiv" width="480" height="480"></canvas>
+<div id="controls">
+<span class="controlBlock">Rule: <span id="rule">100</span></span>
+<br/>
+<span class="controlBlock"><canvas id="controlDiv" width="330" height="40"></canvas></span>
+<br/>
+<span class="controlBlock"><button name="start" id="start">Start</button> <button name="resume" id="resume">Continue</button> <button name="iteration" id="iteration">Iteration</button> <span id="colonizeFields">p=<input type="text" name="prob" id="prob" value="50"/>% <button name="colonize" id="colonize">Colonize</button></span>
+</div>
+<script language="javascript" type="text/javascript" src="./ca.js"></script>
+<script language="javascript" type="text/javascript">
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+	$("#resume").text("Continue");
+	$("#start, #iteration, #colonize").removeAttr("disabled");
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('kadras()',100.0);
+	$("#resume").text("Stop");
+	$("#start, #iteration, #colonize").attr("disabled","disabled");
+}
+
+function startGame() {
+	initialize();
+	$("#resume").click().removeAttr("disabled");
+}
+
+/*main*/
+$(function () {
+	initialize();
+	$("#start").click(function(){startGame();}).removeAttr("disabled");
+	$("#iteration").click(function(){iteration();}).removeAttr("disabled");
+	$("#colonize").click(function(){populateField();initialize();}).removeAttr("disabled");
+	$("#resume").toggle(function(){resumeGame();},function(){stopGame();}).attr("disabled","disbled");
+});
+</script>
+</body>
+</html>

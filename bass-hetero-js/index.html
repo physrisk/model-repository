@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Heterogeneous unidirectional Kirman model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<script language="javascript" type="text/javascript" src="./kirmanBassModelH.js"></script>
+	<style type="text/css">
+        input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 2px;border:1px solid #999;}
+		html,body{margin:0;padding:0}
+		#plotDiv,#plotDiv2{width:450px;height:200px;margin-bottom:5px;}
+		#plotDivLabel,#plotDiv2Label{width:450px;text-align:center}
+		#controls input[type=text] {width:40px;}
+		#controls .controlBlock{display:inline-block;margin-left:10px;}
+		#controls button{width: 120px;}
+		#controls .label{display:inline-block;width:30px;}
+		#append{width:165px;}
+	</style>
+</head>
+<body>
+<div id="plotDivLabel">Total number of customers</div>
+<div id="plotDiv"></div>
+<div id="plotDiv2Label">Number of new customers during time step &Delta;t</div>
+<div id="plotDiv2"></div>
+<div id="controls">
+<span class="controlBlock"><span class="label">&sigma;=</span>[<input type="text" name="epsi1min" id="epsi1min" value="0.01"/>,<input type="text" name="epsi1max" id="epsi1max" value="0.02"/>]</span>
+<span class="controlBlock"><span class="label">h=</span>[<input type="text" name="hmin" id="hmin" value="0.25"/>,<input type="text" name="hmax" id="hmax" value="0.3"/>]</span>
+<span class="controlBlock"><span class="label">&Delta;t=</span><input type="text" name="deltaT" id="deltaT" value="0.25"/></span>
+<span class="controlBlock"><span class="label">N=</span><input type="text" name="Nagents" id="Nagents" value="1000"/></span>
+<br/>
+<span class="controlBlock"><button name="restart" id="restart">Start</button> <button name="stop" id="stop">Stop</button></span>
+</div>
+<script type="text/javascript">
+function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
+
+/*options and settings*/
+var timeoutID=null;
+var colony=null;
+$('#plotDiv').data('plotOptions',{series:{lines:{ show:true }},xaxis:{axisLabel:'t',min:null,max:null},yaxis:{axisLabel:'X(t)',min:0,max:null}});
+$('#plotDiv2').data('plotOptions',{series:{lines:{ show:true }},xaxis:{axisLabel:'t',min:null,max:null},yaxis:{axisLabel:'ΔX(t)',min:0,max:null}});
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function() {
+	setup();
+	readAndLoad();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	readAndLoad();
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+
+function plotFigure() {
+	$.plot($("#plotDiv"),[{data: $('#plotDiv').data('modelSignal'), color: "red", points: {show: true}, lines: {show: false}},{data: $('#plotDiv').data('predictedSignal'), color: "blue"}],$('#plotDiv').data('plotOptions'));
+	$.plot($("#plotDiv2"),[{data: $('#plotDiv2').data('modelSignal'), color: "red", points: {show: true}, lines: {show: false}},{data: $('#plotDiv2').data('predictedSignal'), color: "blue"}],$('#plotDiv2').data('plotOptions'));
+}
+
+function play() {
+	var modelSignal=$('#plotDiv').data('modelSignal');
+	var predictedSignal=$('#plotDiv').data('predictedSignal');
+	var modelSignal2=$('#plotDiv2').data('modelSignal');
+	var predictedSignal2=$('#plotDiv2').data('predictedSignal');
+	if(!colony.stepPerTime()) {
+		$("#stop").click();
+		$("#stop").attr("disabled","disabled");
+	}
+	modelSignal.push([colony.totalTime,colony.customers]);
+	modelSignal2.push([colony.totalTime,modelSignal[modelSignal.length-1][1]-modelSignal[modelSignal.length-2][1]]);
+	predictedSignal.push([colony.totalTime,colony.predict()]);
+	predictedSignal2.push([colony.totalTime,predictedSignal[predictedSignal.length-1][1]-predictedSignal[predictedSignal.length-2][1]]);
+	$('#plotDiv').data('modelSignal',modelSignal);
+	$('#plotDiv').data('predictedSignal',predictedSignal);
+	$('#plotDiv2').data('modelSignal',modelSignal2);
+	$('#plotDiv2').data('predictedSignal',predictedSignal2);
+	plotFigure();
+}
+
+function readAndLoad() {
+	var e1min=myParseFloat($("#epsi1min").attr("value"));
+	var e1max=myParseFloat($("#epsi1max").attr("value"));
+	var hmin=myParseFloat($("#hmin").attr("value"));
+	var hmax=myParseFloat($("#hmax").attr("value"));
+	var deltaT=myParseFloat($("#deltaT").attr("value"));
+	var Nagents=parseInt($("#Nagents").attr("value"));
+	if(e1min<0) e1min=0;
+    if(e1max<e1min) e1max=e1min;
+	if(hmin<0) hmin=0;
+	if(hmax<hmin) hmax=hmin;
+	if(deltaT<1e-6) deltaT=1e-6;
+	if(Nagents<100) Nagents=100;
+	$("#epsi1min").attr("value",e1min);
+	$("#epsi1max").attr("value",e1max);
+	$("#hmin").attr("value",hmin);
+	$("#hmax").attr("value",hmax);
+	$("#deltaT").attr("value",deltaT);
+	$("#Nagents").attr("value",Nagents);
+	colony.setParams(e1min,e1max,hmin,hmax);
+	colony.setPopulation(Nagents);
+	colony.integrationDt=deltaT;
+	colony.updateStep();
+}
+
+function setup() {
+	colony=new kirmanBassModel();
+	$('#plotDiv').data('modelSignal',[[0,0]]);
+	$('#plotDiv').data('predictedSignal',[[0,0]]);
+	$('#plotDiv2').data('modelSignal',[[0,0]]);
+	$('#plotDiv2').data('predictedSignal',[[0,0]]);
+}
+
+function stopGame() {
+	window.clearInterval(timeoutID);
+	timeoutID=null;
+}
+
+function resumeGame() {
+	timeoutID=window.setInterval('play()',100.0);
+}
+
+/*main*/
+$(function () {
+	setup();
+	plotFigure();
+});
+</script>
+</body>
+</html>
