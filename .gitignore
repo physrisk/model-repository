@@ -1,3 +1,6 @@
+##
+## Well-known external dependencies
+##
 /js-lib/d3-v4.min.js
 /js-lib/jit-201.min.js
 /js-lib/jquery-183.min.js
@@ -5,5 +8,24 @@
 /js-lib/jquery.flot-08.min.js
 /js-lib/normalize.css
 /js-lib/plotly-131.min.js
+
+##
+## Folder with old java applets
+##
 /old-java
 /old-java/*
+
+##
+## Folders with non-javascript models
+##
+/penn-europe-en
+/penn-europe-en/*
+/penn-world-en
+/penn-world-en/*
+/statplanet-gdp
+/statplanet-gdp/*
+
+##
+## temporary files
+##
+*.swp
