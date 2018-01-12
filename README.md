@@ -20,15 +20,15 @@ These well-known libraries include:
 
 **Why don't we use CDN ourselves?** Because once a CDN went under and we have noticed it only after a really long time :)
 
-# To do
+# To do (priorities)
 
-1. Create new models and provide their descriptions on [Physics of Risk](http://rf.mokslasplius.lt).
-1. Write more comments in the code. Models are usually extermely simple, so the purpose of various functions should be self-evident from model descriptions.
-1. Modernize coding style.
-1. Update ancient dependencies with newer ones. Some of the code was written back in 2010, so some of the dependencies are ancient in web standards.
+1. **Create new models and provide their descriptions on [Physics of Risk](http://rf.mokslasplius.lt).** This is a top priority as it is needed to fill [Physics of Risk](http://rf.mokslasplius.lt) with content.
+1. **Include more comments in the code and make them more useful.** This priority will most likely hold only for the newly implemented models as in general the models and thus the implementing code are usually extremely simple (so the purpose of various code fragments is usually evident after reading the model descriptions).
+1. **Modernize coding style** (use linting, beautification and etc.). This priority will most likely hold for the newly implemented models, but it is possible that some of these tools can be automatically applied to older implementations.
+1. **Rewrite "ancient" code, replace "ancient" dependencies**. Some of the code was written way back in 2010, so the code and the dependencies appear to be "ancient" in web standards. It would be nice to do a rewrite, but most likely this will be done only if capable students appear.
 
 # License
 
-You (re)use the code according to [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/) licence. Simply put - you may use or modify it, as long as you do so for non-commercial purpose and as long as you appropriately attribute (refer/link to) the [Physics of Risk](http://rf.mokslasplius.lt/).
+You may (re)use the code according to [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/) license. Simply put - you may use or modify it as long as you do so for non-commercial purpose and as long as you appropriately attribute (refer/link to) the [Physics of Risk](http://rf.mokslasplius.lt/).
 
 If in doubt, please contact [us](http://rf.mokslasplius.lt/about/).
