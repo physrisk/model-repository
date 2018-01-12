@@ -2,6 +2,10 @@
 
 This repository stores development code for the models that are, or will be, featured on [Physics of Risk](http://rf.mokslasplius.lt/) blog. All of the respective descriptions of the models will be published on [Physics of Risk](http://rf.mokslasplius.lt/) blog.
 
+Raw markdown files behind the posts and pages on Physics of Risk are stored in another GitHub repository: [https://github.com/akononovicius/physRisk-model-repository](https://github.com/akononovicius/physRisk-model-repository).
+
+Images and other external files are not uploaded to any GitHub repository.
+
 ## Dependencies
 
 Most of the models depend on some well-known javascript libraries, which are not part of this repository. Some models also reuse "common" code written by the contributors for [Physics of Risk](http://rf.mokslasplius.lt). All of these dependencies in our development environment are stored in `js-lib` folder.
