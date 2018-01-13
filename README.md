@@ -2,7 +2,7 @@
 
 This repository stores development code for the models that are, or will be, featured on [Physics of Risk](http://rf.mokslasplius.lt/) blog. All of the respective descriptions of the models will be published on [Physics of Risk](http://rf.mokslasplius.lt/) blog.
 
-Raw markdown files behind the posts and pages on Physics of Risk are stored in another GitHub repository: [https://github.com/akononovicius/physRisk-model-repository](https://github.com/akononovicius/physRisk-model-repository).
+Raw markdown files behind the posts and pages on Physics of Risk are stored in another GitHub repository: [https://github.com/akononovicius/physRisk-content-repository](https://github.com/akononovicius/physRisk-content-repository).
 
 Images and other external files are not uploaded to any GitHub repository.
 
