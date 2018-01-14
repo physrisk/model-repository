@@ -44,4 +44,8 @@ class plotlyPlot {
     reset() {
         this.update([[0]],[[0]]);
     }
+    setLabels(labels) {
+        this.layout.xaxis.title=labels[0];
+        this.layout.yaxis.title=labels[1];
+    }
 }
