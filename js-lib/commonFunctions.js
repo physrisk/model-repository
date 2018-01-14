@@ -22,8 +22,8 @@ commonFunctions={
 			llim=commonFunctions.LogBase10(llim);
 			rlim=commonFunctions.LogBase10(rlim);
 			var lstep=(rlim-llim)/(outPoints-1.0);
-			var panaudota=0;
-			while((llim<=rlim)&&(panaudota<outPoints)) {
+			var used=0;
+			while((llim<=rlim)&&(used<outPoints)) {
 				var integralas=0;
 				llim+=lstep;
 				while((commonFunctions.LogBase10(curlim)<llim)&&(nueita<pdf.length)) {
@@ -32,19 +32,19 @@ commonFunctions={
 					nueita++;
 				}
 				if(integralas>0) {
-					rez[panaudota][0]=llim-0.5*lstep;
-					if(panaudota>0) rez[panaudota][1]=commonFunctions.LogBase10(integralas/(Math.pow(10,rez[panaudota][0])-Math.pow(10,rez[panaudota-1][0])));
-					else rez[panaudota][1]=commonFunctions.LogBase10(integralas/(Math.pow(10,rez[panaudota][0])-Math.pow(10,rez[panaudota][0]-lstep)));
-					panaudota++;
+					rez[used][0]=llim-0.5*lstep;
+					if(used>0) rez[used][1]=commonFunctions.LogBase10(integralas/(Math.pow(10,rez[used][0])-Math.pow(10,rez[used-1][0])));
+					else rez[used][1]=commonFunctions.LogBase10(integralas/(Math.pow(10,rez[used][0])-Math.pow(10,rez[used][0]-lstep)));
+					used++;
 				}
 			}
-			if(panaudota<outPoints) {
+			if(used<outPoints) {
 				var rez2=[];
-				for(ii=0;ii<panaudota;ii++) {
+				for(ii=0;ii<used;ii++) {
 					rez2.push(rez[ii]);
 				}
 				rez=[];
-				for(ii=0;ii<panaudota;ii++) {
+				for(ii=0;ii<used;ii++) {
 					rez.push(rez2[ii]);
 				}
 				rez2=null;
@@ -171,49 +171,49 @@ commonFunctions={
 		}
 	},
 	specModification: function(spec,timeTick,outPoints,smoothen) {
-		var normavimas=this.LogBase10(2*timeTick/spec.length);
-		var skale=this.LogBase10(spec.length)+this.LogBase10(timeTick);
+		var normalization=this.LogBase10(timeTick/spec.length);
+		var scale=this.LogBase10(spec.length)+this.LogBase10(timeTick);
 		var llim=0;
 		var rlim=this.LogBase10(spec.length/2.0);
 		var lstep=(rlim-llim)/(outPoints);
 		var clim=llim+lstep;
 		var i=1;
-		var intervale=0;
+		var inInterval=0;
 		var rez=[];
 		for(var k=0;k<outPoints+1;k++) rez.push([0,0]);
-		var panaudota=0;
+		var used=0;
 		var total=0;
 		var oldX=0;
 		while(clim<=rlim) {
 			while(this.LogBase10(i)<clim) {
 				total+=spec[i];
 				i++;
-				intervale++;
+				inInterval++;
 			}
 			if(total>0) {
-				if(panaudota==0) {
-					oldX=Math.pow(10,clim-skale);
-					rez[panaudota][0]=this.LogBase10(oldX/2.0);
-					rez[panaudota][1]=this.LogBase10(total/(intervale));//oldX);
+				if(used==0) {
+					oldX=Math.pow(10,clim-scale);
+					rez[used][0]=this.LogBase10(oldX/2.0);
+					rez[used][1]=this.LogBase10(total/(inInterval));
 				} else {
-					var newX=Math.pow(10,clim-skale);
-					rez[panaudota][0]=this.LogBase10((newX+oldX)/2.0);
-					rez[panaudota][1]=this.LogBase10(total/(intervale));//(newX-oldX));
+					var newX=Math.pow(10,clim-scale);
+					rez[used][0]=this.LogBase10((newX+oldX)/2.0);
+					rez[used][1]=this.LogBase10(total/(inInterval));
 					oldX=newX;
 				}
-				rez[panaudota][1]+=normavimas;
-				panaudota++;
+				rez[used][1]+=normalization;
+				used++;
 			}
-			intervale=0;
+			inInterval=0;
 			total=0;
 			clim+=lstep;
 		}
 		var rez2=[];
-		for(var i=0;i<panaudota;i++) rez2.push([rez[i][0],rez[i][1]]);
+		for(var i=0;i<used;i++) rez2.push([rez[i][0],rez[i][1]]);
 		if(smoothen) {
 			/*movavg time window 3*/
-			for(var ii=0;ii<panaudota;ii++) {
-				if((ii>0)&&(ii<panaudota-1)) {
+			for(var ii=0;ii<used;ii++) {
+				if((ii>0)&&(ii<used-1)) {
 					rez2[ii][1]=(rez2[ii-1][1]+rez2[ii][1]+rez2[ii+1][1])/3.0;
 				}
 			}
