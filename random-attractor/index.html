@@ -11,20 +11,20 @@
 		html,body{margin:0;padding:0}
 		#ajax-loader {position:absolute;left:210px;top:210px;}
 		#figure {width:450px;height:450px}
-		#functions-panel input[type=text], #params input[type=text]{width:40px;}
+		.textField{width:40px;}
 	</style>
 </head>
 <body>
 <div id="figure"></div>
 <div id="control-panel">
 	<div id="functions-panel">
-		<div id="fx">f<sub>x</sub>(x,y)=<input type="text" name="a0" id="a0"/>*x<sup>2</sup>+<input type="text" name="a1" id="a1"/>*x*y+<input type="text" name="a2" id="a2"/>*x+<input type="text" name="a3" id="a3"/>*y<sup>2</sup>+<input type="text" name="a4" id="a4"/>*y+<input type="text" name="a5" id="a5"/></div>
-		<div id="fy">f<sub>y</sub>(x,y)=<input type="text" name="b0" id="b0"/>*x<sup>2</sup>+<input type="text" name="b1" id="b1"/>*x*y+<input type="text" name="b2" id="b2"/>*x+<input type="text" name="b3" id="b3"/>*y<sup>2</sup>+<input type="text" name="b4" id="b4"/>*y+<input type="text" name="b5" id="b5"/></div>
+		<div id="fx">f<sub>x</sub>(x,y)=<input class="textField" name="a0" id="a0"/>*x<sup>2</sup>+<input class="textField" name="a1" id="a1"/>*x*y+<input class="textField" name="a2" id="a2"/>*x+<input class="textField" name="a3" id="a3"/>*y<sup>2</sup>+<input class="textField" name="a4" id="a4"/>*y+<input class="textField" name="a5" id="a5"/></div>
+		<div id="fy">f<sub>y</sub>(x,y)=<input class="textField" name="b0" id="b0"/>*x<sup>2</sup>+<input class="textField" name="b1" id="b1"/>*x*y+<input class="textField" name="b2" id="b2"/>*x+<input class="textField" name="b3" id="b3"/>*y<sup>2</sup>+<input class="textField" name="b4" id="b4"/>*y+<input class="textField" name="b5" id="b5"/></div>
 	</div>
 	<div id="checkas"><input type="checkbox" name="randomize" id="randomize" value="1" checked="checked"/> Randomize coefficients in the equations?</div>
 	<div id="params">
-		Drop <input type="text" name="dropPoints" id="dropPoints" value="100"/> of the first points.<br/>
-		Show <input type="text" name="plotPoints" id="plotPoints" value="5000"/> of the next points.
+		Drop <input class="textField" name="dropPoints" id="dropPoints" value="100"/> of the first points.<br/>
+		Show <input class="textField" name="plotPoints" id="plotPoints" value="5000"/> of the next points.
 	</div>
 	<div id="buttons">
 		<button id="new-attractor">Generate attractor</button> <button id="clear-attractor">Cancel</button>

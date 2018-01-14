@@ -14,22 +14,22 @@
 		#plotDiv{width:450px;height:400px;margin-bottom:20px;}
 		#controls .controlBlock{display:inline-block;margin-left:10px;}
 		#controls .label{display:inline-block;width:50px;}
-		#controls input[type=text]{width:40px;}
+		#controls input.textField{width:40px;}
 		#controls button {width: 120px;}
 	</style>
 </head>
 <body>
 <div id="plotDiv"></div>
 <div id="controls">
-<span class="controlBlock"><span class="label">a<sub>1</sub>=</span><input type="text" name="inpa1" id="inpa1" value="20.0"/></span>
-<span class="controlBlock"><span class="label">a<sub>2</sub>=</span><input type="text" name="inpa2" id="inpa2" value="30.0"/></span>
-<span class="controlBlock"><span class="label">c<sub>12</sub>=</span><input type="text" name="inpc12" id="inpc12" value="1.0"/></span>
-<span class="controlBlock"><span class="label">c<sub>21</sub>=</span><input type="text" name="inpc21" id="inpc21" value="1.0"/></span>
+<span class="controlBlock"><span class="label">a<sub>1</sub>=</span><input class="textField" name="inpa1" id="inpa1" value="20.0"/></span>
+<span class="controlBlock"><span class="label">a<sub>2</sub>=</span><input class="textField" name="inpa2" id="inpa2" value="30.0"/></span>
+<span class="controlBlock"><span class="label">c<sub>12</sub>=</span><input class="textField" name="inpc12" id="inpc12" value="1.0"/></span>
+<span class="controlBlock"><span class="label">c<sub>21</sub>=</span><input class="textField" name="inpc21" id="inpc21" value="1.0"/></span>
 <br/>
-<span class="controlBlock"><span class="label">X<sub>1</sub>(0)=</span><input type="text" name="inpx1" id="inpx1" value="8"/></span>
-<span class="controlBlock"><span class="label">X<sub>2</sub>(0)=</span><input type="text" name="inpx2" id="inpx2" value="12"/></span>
+<span class="controlBlock"><span class="label">X<sub>1</sub>(0)=</span><input class="textField" name="inpx1" id="inpx1" value="8"/></span>
+<span class="controlBlock"><span class="label">X<sub>2</sub>(0)=</span><input class="textField" name="inpx2" id="inpx2" value="12"/></span>
 <br/>
-<span class="controlBlock"><span class="label">t<sub>max</sub>=</span><input type="text" name="inptmax" id="inptmax" value="1.0"/></span>
+<span class="controlBlock"><span class="label">t<sub>max</sub>=</span><input class="textField" name="inptmax" id="inptmax" value="1.0"/></span>
 <br/>
 <span class="controlBlock"><button name="restart" id="restart">Evaluate</button></span>
 </div>

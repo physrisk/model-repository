@@ -13,7 +13,7 @@
 		html,body{margin:0;padding:0}
 		#plotDiv,#plotDiv2{width:450px;height:200px;margin-bottom:5px;}
 		#plotDivLabel,#plotDiv2Label{width:450px;text-align:center}
-		#controls input[type=text] {width:40px;}
+		#controls input.textField {width:40px;}
 		#controls .controlBlock{display:inline-block;margin-left:10px;}
 		#controls button{width: 120px;}
 		#controls .label{display:inline-block;width:30px;}
@@ -26,10 +26,10 @@
 <div id="plotDiv2Label">Number of new customers during time step &Delta;t</div>
 <div id="plotDiv2"></div>
 <div id="controls">
-<span class="controlBlock"><span class="label">&sigma;=</span>[<input type="text" name="epsi1min" id="epsi1min" value="0.01"/>,<input type="text" name="epsi1max" id="epsi1max" value="0.02"/>]</span>
-<span class="controlBlock"><span class="label">h=</span>[<input type="text" name="hmin" id="hmin" value="0.25"/>,<input type="text" name="hmax" id="hmax" value="0.3"/>]</span>
-<span class="controlBlock"><span class="label">&Delta;t=</span><input type="text" name="deltaT" id="deltaT" value="0.25"/></span>
-<span class="controlBlock"><span class="label">N=</span><input type="text" name="Nagents" id="Nagents" value="1000"/></span>
+<span class="controlBlock"><span class="label">&sigma;=</span>[<input class="textField" name="epsi1min" id="epsi1min" value="0.01"/>,<input class="textField" name="epsi1max" id="epsi1max" value="0.02"/>]</span>
+<span class="controlBlock"><span class="label">h=</span>[<input class="textField" name="hmin" id="hmin" value="0.25"/>,<input class="textField" name="hmax" id="hmax" value="0.3"/>]</span>
+<span class="controlBlock"><span class="label">&Delta;t=</span><input class="textField" name="deltaT" id="deltaT" value="0.25"/></span>
+<span class="controlBlock"><span class="label">N=</span><input class="textField" name="Nagents" id="Nagents" value="1000"/></span>
 <br/>
 <span class="controlBlock"><button name="restart" id="restart">Start</button> <button name="stop" id="stop">Stop</button></span>
 </div>

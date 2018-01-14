@@ -14,7 +14,7 @@
 		#figDiv,#plotDiv{width:240px;height:240px;display:inline-block;}
 		#plotLabel{width:480px;text-align:center;margin-bottom:10px;}
 		.controlBlock{display:inline-block;margin-left:10px;}
-		#controls input[type=text] {width:40px;}
+		#controls input.textField {width:40px;}
 		#controls button {width:135px;}
 	</style>
 </head>
@@ -25,13 +25,13 @@
 	<canvas id="plotDiv" width="240" height="240"></canvas>
 </div>
 <div id="controls">
-	<span class="controlBlock">ξ(0)=<input type="text" name="controlL" id="controlL" value="0.5"/></span>
+	<span class="controlBlock">ξ(0)=<input class="textField" name="controlL" id="controlL" value="0.5"/></span>
 	<br/>
-	<span class="controlBlock">p[2]=<input type="text" name="controlp2" id="controlp2" value="0.63"/></span>
-	<span class="controlBlock">p[3]=<input type="text" name="controlp3" id="controlp3" value="0.28"/></span>
-	<span class="controlBlock">p[4]=<input type="text" name="controlp4" id="controlp4" value="0.08"/></span>
-	<span class="controlBlock">p[5]=<input type="text" name="controlp5" id="controlp5" value="0.01"/></span>
-	<span class="controlBlock">p[6]=<input type="text" name="controlp6" id="controlp6" value="0.0"/></span>
+	<span class="controlBlock">p[2]=<input class="textField" name="controlp2" id="controlp2" value="0.63"/></span>
+	<span class="controlBlock">p[3]=<input class="textField" name="controlp3" id="controlp3" value="0.28"/></span>
+	<span class="controlBlock">p[4]=<input class="textField" name="controlp4" id="controlp4" value="0.08"/></span>
+	<span class="controlBlock">p[5]=<input class="textField" name="controlp5" id="controlp5" value="0.01"/></span>
+	<span class="controlBlock">p[6]=<input class="textField" name="controlp6" id="controlp6" value="0.0"/></span>
 	<br/>
 	<span class="controlBlock"><button id="stop">Start</button></span>
 	<span class="controlBlock"><button id="restart">Restart</button></span>

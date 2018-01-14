@@ -11,13 +11,13 @@
 	<style type="text/css">
 		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
 		html,body{margin:0;padding:0}
-		#plotDiv,#plotDiv2{width:450px;height:200px;margin-bottom:5px;}
+		#plotDiv,#plotDiv2{width:450px;height:200px;margin-bottom:5px}
 		#plotDivLabel,#plotDiv2Label{width:450px;text-align:center}
-		#controls input[type=text] {width:40px;}
-		#controls .controlBlock{display:inline-block;margin-left:10px;}
-		#controls button{width: 120px;}
-		#controls .label{display:inline-block;width:30px;}
-		#append{width:165px;}
+		#controls input.textField {width:60px}
+		#controls .controlBlock{display:inline-block;margin-left:10px}
+		#controls button{width: 120px}
+		#controls .label{display:inline-block;width:30px}
+		#append{width:165px}
 	</style>
 </head>
 <body>
@@ -26,14 +26,14 @@
 <div id="plotDiv2Label">Number of new customers during time step &Delta;t</div>
 <div id="plotDiv2"></div>
 <div id="controls">
-<span class="controlBlock"><span class="label">&sigma;=</span><input type="text" name="epsi1" id="epsi1" value="0.01"/></span>
-<span class="controlBlock"><span class="label">h=</span><input type="text" name="h" id="h" value="0.275"/></span>
-<span class="controlBlock"><span class="label">&Delta;t=</span><input type="text" name="deltaT" id="deltaT" value="0.25"/></span>
-<span class="controlBlock"><span class="label">N=</span><input type="text" name="Nagents" id="Nagents" value="10000"/></span>
+<span class="controlBlock"><span class="label">&sigma;=</span><input class="textField" name="epsi1" id="epsi1" value="0.01"/></span>
+<span class="controlBlock"><span class="label">h=</span><input class="textField" name="h" id="h" value="0.275"/></span>
+<span class="controlBlock"><span class="label">&Delta;t=</span><input class="textField" name="deltaT" id="deltaT" value="0.25"/></span>
+<span class="controlBlock"><span class="label">N=</span><input class="textField" name="Nagents" id="Nagents" value="10000"/></span>
 <br/>
 <span class="controlBlock" id="append">Additional parameters:</span>
-<span class="controlBlock"><span class="label">&alpha;=</span><input type="text" name="alpha" id="alpha" value="0"/></span>
-<span class="controlBlock"><span class="label">Y<sub>0</sub>=</span><input type="text" name="Nchar" id="Nchar" value="0"/></span>
+<span class="controlBlock"><span class="label">&alpha;=</span><input class="textField" name="alpha" id="alpha" value="0"/></span>
+<span class="controlBlock"><span class="label">Y<sub>0</sub>=</span><input class="textField" name="Nchar" id="Nchar" value="0"/></span>
 <br/>
 <span class="controlBlock"><button name="restart" id="restart">Start</button> <button name="stop" id="stop">Stop</button></span>
 </div>

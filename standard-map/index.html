@@ -12,7 +12,7 @@
 		#ajax-loader {position:absolute;left:215px;top:215px;}
 		#figure {width:450px;height:450px}
 		#params {margin: 20px 0px;}
-		#params input[type=text]{width:40px;}
+		#params input.textField{width:60px;}
 		.controlBlock{display:inline-block;margin-left:10px;}
 	</style>
 </head>
@@ -20,9 +20,9 @@
 <div id="figure"></div>
 <div id="control-panel">
 	<div id="params">
-		<span class="controlBlock">K=<input type="text" name="stochForce" id="stochForce" value="0.5"/></span>
-		<span class="controlBlock">N<sub>trajectories</sub>=<input type="text" name="Ntrajectories" id="Ntrajectories" value="80"/></span>
-		<span class="controlBlock">N<sub>max.points</sub>=<input type="text" name="Npoints" id="Npoints" value="2000"/></span>
+		<span class="controlBlock">K=<input class="textField" name="stochForce" id="stochForce" value="0.5"/></span>
+		<span class="controlBlock">N<sub>trajectories</sub>=<input class="textField" name="Ntrajectories" id="Ntrajectories" value="80"/></span>
+		<span class="controlBlock">N<sub>max.points</sub>=<input class="textField" name="Npoints" id="Npoints" value="2000"/></span>
 		<br/>
 		<span class="controlBlock"><input type="checkbox" name="omegaLim" id="omegaLim"/> Restrict &omega;</span>
 	</div>
