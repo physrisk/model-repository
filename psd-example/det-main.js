@@ -2,8 +2,8 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 
 // setup global figure objects
-var timeSeriesPlot=new plotlyPlot("timeSeriesPlot",['x, s','f(x)']);
-var psdPlot=new plotlyPlot("psdPlot",['ν, Hz','S(ν)']);
+var timeSeriesPlot=new plotlyPlot("timeSeriesPlot",["x, s","f(x)"]);
+var psdPlot=new plotlyPlot("psdPlot",["ν, Hz","S(ν)"]);
 
 // other global variables
 var points=512;
