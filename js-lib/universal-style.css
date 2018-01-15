@@ -1,0 +1,30 @@
+* {
+    box-sizing:border-box;
+}
+html, body {
+    font-size:13px;
+    margin:0;
+    padding:0;
+}
+input, select, button {
+    height:20px;
+    line-height:20px;
+    padding:0 6px;
+    border:1px solid #999;
+}
+#wrapper {
+    max-width:510px;
+}
+#figureWrapper {
+    width:100%;
+    text-align:center;
+}
+#controls {
+    line-height:30px;
+}
+#controls input{
+    width:60px;
+}
+#controls button{
+    width:140px;
+}
