@@ -8,7 +8,7 @@ kirmanAbmModel.prototype.stepDt=1e-6;
 kirmanAbmModel.prototype.integrationDt=1e-3;
 kirmanAbmModel.prototype.kappa=0.3;
 //functions
-//-=1setting properties
+//--setting properties
 kirmanAbmModel.prototype.setEpsilon1=function (e) {
     this.e1=e;
 };
@@ -24,11 +24,11 @@ kirmanAbmModel.prototype.setPopulation=function (pop) {
     this.population=pop;
     this.optimists=frac*this.population;
 };
-//-=1special setting function
+//--special setting function
 kirmanAbmModel.prototype.updateStep=function () {
     this.stepDt=2*this.kappa/(this.population*(this.e1+this.e2+this.population));
 };
-//-=1runtime functions
+//--runtime functions
 kirmanAbmModel.prototype.stepPerTime=function (iDt) {
     if(typeof iDt==="undefined") iDt=this.integrationDt;
     var t=0;
