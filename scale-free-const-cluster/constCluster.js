@@ -166,7 +166,7 @@ constCluster.prototype.reevalPdf=function() {
 		commonFunctions.makePdf(diag,llim,rlim,rlim-llim,false),
 		true,llim*0.9,rlim*1.1,60,llim,1.0
 	);
-	delete diag;
+	diag=null;
 	var tmpConst=commonFunctions.LogBase10(1+this.a/this.links)+(1+this.a/this.links)*commonFunctions.LogBase10(llim);
 	$.plot($("#"+this.pdfPlot),[{data: pdf, color: "red", points: {show: true}, lines: {show: false}},{data: [[commonFunctions.LogBase10(llim),tmpConst-(2+this.a/this.links)*commonFunctions.LogBase10(llim)],[commonFunctions.LogBase10(rlim),tmpConst-(2+this.a/this.links)*commonFunctions.LogBase10(rlim)]], color: "gray"}],$('#'+this.pdfPlot).data('plotOptions'));
 	$.plot($("#"+this.ccPlot),[{data:this.clusterHistory, color:"red", points: {show: true}, lines: {show: false}}],$('#'+this.ccPlot).data('plotOptions'));

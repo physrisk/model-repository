@@ -171,7 +171,7 @@ scaleFree.prototype.reevalPdf=function() {
 		commonFunctions.makePdf(diag,llim,rlim,rlim-llim,false),
 		true,llim*0.9,rlim*1.1,60,llim,1.0
 	);
-	delete diag;
+	diag=null;
 	$('#'+this.pdfPlot).data('showData',[{data: pdf, color: "blue", points: {show: true}, lines: {show: false}}]);
 	this.plotFigure();
 }

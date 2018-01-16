@@ -154,9 +154,9 @@ redirectionNetwork.prototype.addNode=function () {
 	if(Math.random()<this.redirProb(targetNodeDegree,parrentNodeDegree)) {
 		targetNode=parrentNode;
 	}
-	delete targetNodeDegree;
-	delete parrentNode;
-	delete parrentNodeDegree;
+	targetNodeDegree=null;
+	parrentNode=null;
+	parrentNodeDegree=null;
 	this.lastNode2=this.networkPlot.graph.getNode("node"+targetNode);
 	//create an edge
 	this.networkPlot.graph.addAdjacence(this.lastNode1,this.lastNode2,{});
@@ -184,7 +184,7 @@ redirectionNetwork.prototype.reevalPdf=function() {
 		commonFunctions.makePdf(diag,llim,rlim,rlim-llim,false),
 		true,llim*0.9,rlim*1.1,60,llim,1.0
 	);
-	delete diag;
+    diag=null;
 	$('#'+this.pdfPlot).data('showData',[{data: pdf, color: "blue", points: {show: true}, lines: {show: false}}]);
 	this.plotFigure();
 }

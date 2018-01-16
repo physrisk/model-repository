@@ -92,7 +92,7 @@ constCluster.prototype.init=function (graphPlot,ccP,pdfP,linksControl,pControl) 
 		}
 		this.cluster.push(0.0);
 	}
-	delete tmpNode2;
+	tmpNode2=null;
 	this.clusterHistory.push([this.degrees.length-this.links,this.clusterSum/this.degrees.length]);
 	//update degrees and other model related data
 	clearInterval(this.timer);
@@ -215,7 +215,7 @@ constCluster.prototype.reevalPdf=function() {
 		commonFunctions.makePdf(diag,llim,rlim,rlim-llim,false),
 		true,llim*0.9,rlim*1.1,60,llim,1.0
 	);
-	delete diag;
+	diag=null;
 	$.plot($("#"+this.pdfPlot),[{data: pdf, color: "red", points: {show: true}, lines: {show: false}}],$('#'+this.pdfPlot).data('plotOptions'));
 	$.plot($("#"+this.ccPlot),[{data:this.clusterHistory, color:"red", points: {show: true}, lines: {show: false}}],$('#'+this.ccPlot).data('plotOptions'));
 }

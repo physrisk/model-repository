@@ -12,14 +12,14 @@ var field=new Array();
 var fieldL=50;
 var fieldPx=4;
 var fieldSq=fieldL*fieldL;
-$(figureDiv).data('plotOptions',{yaxis:{tickDecimals:2,min:0,max:1}});
+$(figureDiv).data("plotOptions",{yaxis:{tickDecimals:2,min:0,max:1}});
 
 function myParseFloat(val) {
-	return parseFloat((""+val).replace(",","."));
+    return parseFloat((""+val).replace(",","."));
 }
 
 function initialize() {
-    g=$("#plotDiv")[0].getContext('2d');
+    g=$("#plotDiv")[0].getContext("2d");
     time=0;
     window.clearInterval(timeoutID);
     timeoutID=null;
@@ -42,7 +42,7 @@ function initialize() {
 }
 
 function plotFigure() {
-    $.plot($(figureDiv),[{data:arrA,color:"#ff0000"},{data:arrB,color:"#0000ff"},{data:arrAB,color:"#ff00ff"}],$(figureDiv).data('plotOptions'));
+    $.plot($(figureDiv),[{data:arrA,color:"#ff0000"},{data:arrB,color:"#0000ff"},{data:arrAB,color:"#ff00ff"}],$(figureDiv).data("plotOptions"));
 }
 
 function startGame() {
@@ -120,8 +120,8 @@ function getSpin(x,y) {
     return field[(fieldL+x)%fieldL][(fieldL+y)%fieldL];
 }
 function getNeighborhood(x,y) {
-    sigmaA=0;
-    sigmaB=0
+    var sigmaA=0;
+    var sigmaB=0;
     if(getSpin(x+1,y)==1) sigmaA++;
     else if(getSpin(x+1,y)==-1) sigmaB++;
     if(getSpin(x-1,y)==1) sigmaA++;
@@ -130,7 +130,7 @@ function getNeighborhood(x,y) {
     else if(getSpin(x,y+1)==-1) sigmaB++;
     if(getSpin(x,y-1)==1) sigmaA++;
     else if(getSpin(x,y-1)==-1) sigmaB++;
-    return [sigmaA/4,sigmaB/4]
+    return [sigmaA/4,sigmaB/4];
 }
 function setSpin(x,y,v) {
     field[(fieldL+x)%fieldL][(fieldL+y)%fieldL]=v;
