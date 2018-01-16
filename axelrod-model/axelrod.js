@@ -9,7 +9,7 @@ var fieldPx=10;
 var interactions=100000;
 
 function initialize() {
-    g=$("#plotDiv")[0].getContext('2d');
+    g=$("#plotDiv")[0].getContext("2d");
     window.clearInterval(timeoutID);
     timeoutID=null;
     getParameterValues();
@@ -19,22 +19,19 @@ function initialize() {
 }
 
 function getParameterValues() {
-    fieldL=parseInt($('#controlSize').val());
+    fieldL=parseInt($("#controlSize").val());
     fieldPx=Math.floor(fieldSize/fieldL);
-    nTraits=parseInt($('#nTraits').val());
-    nFeats=parseInt($('#nFeats').val());
+    nTraits=parseInt($("#nTraits").val());
+    nFeats=parseInt($("#nFeats").val());
 }
 
 function resetSpeed() {
-    interactions=parseInt($('#controlSpeed').val());
-}
-
-function myParseFloat(val) {
-    return parseFloat((""+val).replace(",","."));
+    interactions=parseInt($("#controlSpeed").val());
 }
 
 function iteration() {
-    for(var i=0;i<interactions;i+=1) {
+    var i, k;
+    for(i=0;i<interactions;i+=1) {
         var x=Math.floor(Math.random()*fieldL);
         var y=Math.floor(Math.random()*fieldL);
         var n=Math.floor(Math.random()*4);
@@ -47,7 +44,7 @@ function iteration() {
             case 3: passive=getTraits(x,y-1); break;
         }
         var interactionProb=0;
-        for(var k=0;k<nFeats;k+=1) {
+        for(k=0;k<nFeats;k+=1) {
             if(passive[k]==active[k]) {
                 interactionProb+=1;
             }
@@ -60,7 +57,7 @@ function iteration() {
                 } else if(interactionProb==0) {
                     copyTrait=Math.floor(Math.random()*nFeats);
                 }
-                for(var k=0;k<nFeats;k+=1) {
+                for(k=0;k<nFeats;k+=1) {
                     if(passive[k]!=active[k]) {
                         if(copyTrait==0) {
                             active[k]=passive[k];
@@ -77,15 +74,16 @@ function iteration() {
 }
 
 function populateField() {
+    var i, j, k;
     field=new Array();
-    for(var i=0;i<fieldL;i+=1) {
+    for(i=0;i<fieldL;i+=1) {
         var tfield=new Array();
-        for(var j=0;j<fieldL;j+=1) {
+        for(j=0;j<fieldL;j+=1) {
             var props=new Array(3);
-            for(var k=0;k<nFeats;k+=1) {
+            for(k=0;k<nFeats;k+=1) {
                 props[k]=Math.floor(Math.random()*nTraits);
             }
-            for(var k=nFeats;k<3;k+=1) {
+            for(k=nFeats;k<3;k+=1) {
                 props[k]=0;
             }
             tfield.push(props);
@@ -94,11 +92,12 @@ function populateField() {
     }
 }
 function drawField() {
+    var i, j;
     function optToHex(x) {
         return parseInt((x*255)/(nTraits-1));
     }
-    for(var i=0;i<fieldL;i+=1) {
-        for(var j=0;j<fieldL;j+=1) {
+    for(i=0;i<fieldL;i+=1) {
+        for(j=0;j<fieldL;j+=1) {
             g.fillStyle="rgb("+optToHex(field[i][j][0])+","+optToHex(field[i][j][1])+","+optToHex(field[i][j][2])+")";
             g.fillRect(i*fieldPx,j*fieldPx,fieldPx,fieldPx);
         }
