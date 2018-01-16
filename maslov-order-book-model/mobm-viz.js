@@ -1,6 +1,6 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 
-var obFigPlot=new plotlyPlot("obFig",['log-price','orders'],[10,10,40,40]);
+var obFigPlot=new plotlyPlot("obFig",["log-price","orders"],[10,10,40,40]);
 
 var model=null;
 var price=0;
@@ -11,8 +11,9 @@ var lastOrder=0;
 var steps=21;
 var xStep=20/(steps-1.0);
 
+var timeoutID=null
+
 function play() {
-    var i;
     price=model.step();
 }
 
@@ -24,7 +25,7 @@ function plotFigures() {
     pdfBid=Array(steps);
     pdfAsk=Array(steps);
     var xMin=-10+Math.floor(price/xStep)*xStep;
-    var xMax=10+Math.floor(price/xStep)*xStep;
+    //var xMax=10+Math.floor(price/xStep)*xStep;
     pdfBidX[0]=xMin-xStep/5.0;
     pdfAskX[0]=xMin+xStep/5.0;
     pdfBid[0]=0;
@@ -37,7 +38,7 @@ function plotFigures() {
     }
     findIndex=function(x) {
         return Math.floor((x-xMin+xStep/2.0)/xStep);
-    }
+    };
     l=model.obBid.length;
     if(l>0) {
         for(i=0;i<l;i+=1) {
@@ -68,7 +69,7 @@ function plotFigures() {
     oldAskLength=l;
     obFigPlot.update([pdfBidX,pdfAskX,[price]],
                      [pdfBid,pdfAsk,[0.5]],
-                     'markers');
+                     "markers");
 }
 
 function updateIndicator() {
@@ -109,10 +110,10 @@ function frame() {
 }
 
 function stopGame() {
-	window.clearInterval(timeoutID);
-	timeoutID=null;
+    window.clearInterval(timeoutID);
+    timeoutID=null;
 }
 
 function resumeGame() {
-	timeoutID=window.setInterval('frame()',300.0);
+    timeoutID=window.setInterval("frame()",300.0);
 }

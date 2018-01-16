@@ -1,6 +1,5 @@
 class MaslovModel{
     constructor(limOrderProb=0.5,deltaMax=1,maxOrders=1000,steps=10) {
-        var i;
         this.limOrderProb=limOrderProb;
         this.deltaMax=deltaMax;
         this.maxOrders=maxOrders;
@@ -51,7 +50,6 @@ class MaslovModel{
             this.trimBook();
             return false;
         }
-        return false;// should not be reached
     }
     canMarketBuy(price=null) {
         if(this.obAsk.length==0) return false;//there are no sellers

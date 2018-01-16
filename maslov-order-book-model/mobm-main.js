@@ -1,9 +1,9 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 
-var retPdfPlot=new plotlyPlot("retPdf",['lg[r]','lg[P(r)]']);
-var retSpecPlot=new plotlyPlot("retSpec",['lg[f]','lg[S(f)]']);
-var pSeriesPlot=new plotlyPlot("pSeries",['time','log-price']);
-var retSeriesPlot=new plotlyPlot("retSeries",['time','absolute return']);
+var retPdfPlot=new plotlyPlot("retPdf",["lg[r]","lg[P(r)]"]);
+var retSpecPlot=new plotlyPlot("retSpec",["lg[f]","lg[S(f)]"]);
+var pSeriesPlot=new plotlyPlot("pSeries",["time","log-price"]);
+var retSeriesPlot=new plotlyPlot("retSeries",["time","absolute return"]);
 
 var model=null;
 var time=0;
@@ -15,6 +15,8 @@ var retSeries=null;
 
 var pdf=null;
 var pdfLen=0;
+
+var timeoutID=null;
 
 function play() {
     var i, price, ret;
@@ -33,12 +35,12 @@ function play() {
         askSeries.push(model.lastBestAsk);
         bidSeries.push(model.lastBestBid);
         retSeries.push(Math.abs(ret));
-		
+        
         var pdfi=Math.floor(Math.abs(ret)*100);
-		if(pdfi<pdf.length) {
-			pdf[pdfi]+=1;
-			pdfLen+=1;
-		}
+        if(pdfi<pdf.length) {
+            pdf[pdfi]+=1;
+            pdfLen+=1;
+        }
     }
 }
 
@@ -51,7 +53,7 @@ function plotFigures() {
         retPdfPlot.reset();
     }
     if(time>128) {
-	    var curSpec=commonFunctions.performRealFFT(retSeries);
+        var curSpec=commonFunctions.performRealFFT(retSeries);
         var showPsd=commonFunctions.specModification(curSpec,1.0,100,true);
         retSpecPlot.update([commonFunctions.toOneDimensionalArray(showPsd,0)],
                            [commonFunctions.toOneDimensionalArray(showPsd,1)]);
@@ -64,8 +66,8 @@ function plotFigures() {
 
 function pdfSetup() {
     var i;
-	pdf=new Array(10000);
-	for(i=0;i<pdf.length;i+=1) {
+    pdf=new Array(10000);
+    for(i=0;i<pdf.length;i+=1) {
         pdf[i]=0;
     }
     pdfLen=0;
@@ -109,10 +111,10 @@ function frame() {
 }
 
 function stopGame() {
-	window.clearInterval(timeoutID);
-	timeoutID=null;
+    window.clearInterval(timeoutID);
+    timeoutID=null;
 }
 
 function resumeGame() {
-	timeoutID=window.setInterval('frame()',100.0);
+    timeoutID=window.setInterval("frame()",100.0);
 }
