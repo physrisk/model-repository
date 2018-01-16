@@ -1,6 +1,6 @@
 var nonlinearGarch=function () {
-	this.lastOmega=Math.abs(this.GaussianRandom(0,1));
-	this.lastOmega2=this.lastOmega*this.lastOmega;
+    this.lastOmega=Math.abs(this.GaussianRandom(0,1));
+    this.lastOmega2=this.lastOmega*this.lastOmega;
 };
 //properties
 nonlinearGarch.prototype.a1=1.0;
@@ -15,49 +15,50 @@ nonlinearGarch.prototype.savedGauss=false;
 //functions
 //--setting properties
 nonlinearGarch.prototype.setParameters=function (va1,vb1,vc1,vmu) {
-	this.a1=va1;
-	this.b1=vb1;
-	this.c1=vc1;
-	this.mu=vmu;
+    this.a1=va1;
+    this.b1=vb1;
+    this.c1=vc1;
+    this.mu=vmu;
 };
 nonlinearGarch.prototype.setState=function (vo2,vs2) {
-	this.lastOmega2=vo2;
-	this.lastOmega=Math.sqrt(vo2);
-	this.lastSigma2=vs2;
+    this.lastOmega2=vo2;
+    this.lastOmega=Math.sqrt(vo2);
+    this.lastSigma2=vs2;
 };
 //--runtime functions
 nonlinearGarch.prototype.step=function () {
-	var zeta=this.lastOmega*Math.sqrt(this.lastSigma2);//eta=0.5
-	if(this.mu!=1) {//eta!=0.5
-		//spartus pakelimas laipsniu po 0.5
-		var rez=zeta;
-		for(var i=1;i<this.mu;i++) rez*=zeta;
-		zeta=rez;
-	}
-	
-	var feedback=Math.sqrt(this.lastSigma2);//eta=0.5
-	if(this.mu!=1) {//eta!=0.5
-		//spartus pakelimas laipsniu po 0.5
-		var rez=feedback;
-		for(var i=1;i<this.mu;i++) rez*=feedback;
-		feedback=rez;
-	}
-	this.lastSigma2=this.a1+this.b1*zeta+this.lastSigma2-this.c1*feedback;
-	
-	this.lastSigma2=Math.max(Math.min(this.lastSigma2,this.boundaries[1]),this.boundaries[0]);
-	this.lastOmega=Math.abs(this.GaussianRandom(0,1));
-	this.lastOmega2=this.lastOmega*this.lastOmega;
-	return this.lastSigma2;
-}
+    var rez, i;
+    var zeta=this.lastOmega*Math.sqrt(this.lastSigma2);//eta=0.5
+    if(this.mu!=1) {//eta!=0.5
+        //spartus pakelimas laipsniu po 0.5
+        rez=zeta;
+        for(i=1;i<this.mu;i+=1) rez*=zeta;
+        zeta=rez;
+    }
+    
+    var feedback=Math.sqrt(this.lastSigma2);//eta=0.5
+    if(this.mu!=1) {//eta!=0.5
+        //spartus pakelimas laipsniu po 0.5
+        rez=feedback;
+        for(i=1;i<this.mu;i+=1) rez*=feedback;
+        feedback=rez;
+    }
+    this.lastSigma2=this.a1+this.b1*zeta+this.lastSigma2-this.c1*feedback;
+    
+    this.lastSigma2=Math.max(Math.min(this.lastSigma2,this.boundaries[1]),this.boundaries[0]);
+    this.lastOmega=Math.abs(this.GaussianRandom(0,1));
+    this.lastOmega2=this.lastOmega*this.lastOmega;
+    return this.lastSigma2;
+};
 //--auxilary
 nonlinearGarch.prototype.GaussianRandom=function(mu,sigma) {
-	if(this.savedGauss===false) {
-		var u1=Math.random();
-		var u2=Math.random();
-		this.savedGauss=Math.sqrt(-2.0*Math.log(u1))*Math.sin(2.0*Math.PI*u2);
-		return mu+sigma*Math.sqrt(-2.0*Math.log(u1))*Math.cos(2.0*Math.PI*u2);
-	}
-	var ret=mu+sigma*this.savedGauss;
-	this.savedGauss=false;
-	return ret;
-}
+    if(this.savedGauss===false) {
+        var u1=Math.random();
+        var u2=Math.random();
+        this.savedGauss=Math.sqrt(-2.0*Math.log(u1))*Math.sin(2.0*Math.PI*u2);
+        return mu+sigma*Math.sqrt(-2.0*Math.log(u1))*Math.cos(2.0*Math.PI*u2);
+    }
+    var ret=mu+sigma*this.savedGauss;
+    this.savedGauss=false;
+    return ret;
+};
