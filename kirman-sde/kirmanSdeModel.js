@@ -8,7 +8,7 @@ kirmanSdeModel.prototype.integrationDt=1e-3;
 kirmanSdeModel.prototype.kappa=1e-6;
 kirmanSdeModel.prototype.boundary=1e-6;
 //functions
-//-=1setting properties
+//--setting properties
 kirmanSdeModel.prototype.setEpsilon1=function (e) {
     this.e1=e;
 };
@@ -22,11 +22,11 @@ kirmanSdeModel.prototype.setEpsilons=function (ee1, ee2) {
 kirmanSdeModel.prototype.setState=function (e) {
     this.frac=e;
 };
-//-=1special setting function
+//--special setting function
 kirmanSdeModel.prototype.updateStep=function () {
     this.stepDt=this.kappa/(this.e1+this.e2+1.0);
 };
-//-=1runtime functions
+//--runtime functions
 kirmanSdeModel.prototype.stepPerTime=function (iDt) {
     if(typeof iDt==="undefined") iDt=this.integrationDt;
     var t=0;

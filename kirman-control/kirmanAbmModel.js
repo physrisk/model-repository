@@ -10,7 +10,7 @@ kirmanAbmModel.prototype.integrationDt=1e-2;
 kirmanAbmModel.prototype.kappa=0.3;
 kirmanAbmModel.prototype.interactionType=1;
 //functions
-//-=1setting properties
+//--setting properties
 kirmanAbmModel.prototype.setEpsilon1=function (e) {
     this.e1=e;
 };
@@ -32,20 +32,20 @@ kirmanAbmModel.prototype.setPopulation=function (pop) {
 kirmanAbmModel.prototype.setInteractionType=function (x) {
     this.interactionType=x;
 };
-//-=1special setting function
+//--special setting function
 kirmanAbmModel.prototype.updateStep=function () {
     if(this.interactionType==1) this.stepDt=this.kappa/(this.population*(this.e1+this.e2+this.population+Math.abs(this.controledAgents)));
     else if(this.interactionType==2) this.stepDt=this.kappa/(this.population*(this.e1+this.e2+1.0+Math.abs(this.controledAgents)));
     else this.stepDt=this.kappa/(this.population*(this.e1+this.e2+1.0)+Math.abs(this.controledAgents));
 };
-//-=1getting interesting properties
+//--getting interesting properties
 kirmanAbmModel.prototype.getExpectedMean=function () {
     var optSpec=0;
     if(this.controledAgents>0) optSpec=this.controledAgents;
     if(this.interactionType==1 || this.interactionType==2) return (this.e1+optSpec)/(this.e1+this.e2+Math.abs(this.controledAgents));
     else return (this.e1+optSpec/this.population)/(this.e1+this.e2+Math.abs(this.controledAgents/this.population));
 };
-//-=1runtime functions
+//--runtime functions
 kirmanAbmModel.prototype.stepPerTime=function (iDt) {
     if(typeof iDt==="undefined") iDt=this.integrationDt;
     var t=0;

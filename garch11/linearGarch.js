@@ -11,7 +11,7 @@ linearGarch.prototype.lastSigma2=0.5;
 linearGarch.prototype.boundaries=[1e-2,1e2];
 linearGarch.prototype.savedGauss=false;
 //functions
-//-=1setting properties
+//--setting properties
 linearGarch.prototype.setParameters=function (va1,vb1,vc1) {
     this.a1=va1;
     this.b1=vb1;
@@ -21,7 +21,7 @@ linearGarch.prototype.setState=function (vo,vs2) {
     this.lastOmega2=vo;
     this.lastSigma2=vs2;
 };
-//-=1runtime functions
+//--runtime functions
 linearGarch.prototype.step=function () {
     this.lastSigma2=this.a1+this.lastSigma2*(this.c1+this.b1*this.lastOmega2);
     this.lastSigma2=Math.max(Math.min(this.lastSigma2,this.boundaries[1]),this.boundaries[0]);
@@ -30,7 +30,7 @@ linearGarch.prototype.step=function () {
     //console.log(this.lastSigma2+" "+this.lastOmega2);
     return this.lastSigma2;
 };
-//-=1auxilary
+//--auxilary
 linearGarch.prototype.GaussianRandom=function(mu,sigma) {
     if(this.savedGauss===false) {
         var u1=Math.random();
