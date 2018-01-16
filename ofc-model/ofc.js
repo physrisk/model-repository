@@ -145,6 +145,7 @@ function getAllNeighbors4(v) {
 }
 
 function getSingleNeighbor(o,d) {
+    var moves;
     if(d==4) return false;
     moves=[o[0]+Math.floor(d/3)-1,o[1]+(d % 3)-1];
     if(moves[0]<0 || field.length<=moves[0]) {
