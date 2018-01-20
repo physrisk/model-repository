@@ -7,6 +7,9 @@ html, body {
     margin: 0;
     padding: 0;
 }
+sup {
+    top: -0.75em;
+}
 input, select, button {
     height: 24px;
     width: 60px;
@@ -14,8 +17,27 @@ input, select, button {
     padding: 0 6px;
     border: 1px solid #999;
 }
+input[type=checkbox] {
+    height: auto;
+    width: auto;
+    vertical-align: baseline;
+}
+button{
+    width: 140px;
+}
 label {
     width: 40px;
+}
+.controlBlock{
+    display:inline-block;
+    margin-left:5px;
+}
+.controlBlockTitle {
+    font-weight:bold;
+}
+.controlBlockRow{
+    margin: 5px 0;
+    display: block;
 }
 #wrapper {
     max-width: 510px;
@@ -24,9 +46,19 @@ label {
     width: 100%;
     text-align: center;
 }
-#controls {
-    line-height: 30px;
+#figureWrapper div {
+    display: inline-block;
+    height: 200px;
 }
-#controls button{
-    width: 140px;
+#figureWrapper div.fullSize {
+    width: 500px;
+}
+#figureWrapper div.halfSize {
+    width: 250px;
+}
+#figureWrapper div.thirdSize {
+    width: 167px;
+}
+#controlWrapper {
+    line-height: 30px;
 }
