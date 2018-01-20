@@ -37,7 +37,7 @@
                 </span>
                 <span class="controlBlock">
                     <label for="epsilon">&epsilon;=</label>
-                    <input id="epsilon" name="epsilon" type="number" min="10" max="30" step="1" value="17"> &middot; 10<sup>-3</sup>
+                    <input id="epsilon" name="epsilon" type="number" min="1" max="100" step="1" value="17"> &middot; 10<sup>-3</sup>
                 </span>
                 <span class="controlBlock">
                     <label for="eta">&eta;=</label>
@@ -71,7 +71,7 @@
                 </span>
                 <span class="controlBlock">
                     <label for="tauS">&tau;<sub>s</sub>=</label>
-                    <input id="tauS" name="tauS" type="number" min="1" max="100" step="1" value="20"> &middot; 10<sup>-5</sup>
+                    <input id="tauS" name="tauS" type="number" min="1" max="1000" step="1" value="20"> &middot; 10<sup>-5</sup>
                 </span>
                 <span class="controlBlock" title="Will take effect after a new realization is obtained.">
                     <input name="lgSeries" id="lgSeries" type="checkbox">
@@ -94,6 +94,7 @@
         $("#getRealization").on("click",function(){
             var params=getParams();
             worker.postMessage({msg: "getRealization", realizationParams: params[2]});
+            $("#getRealization").prop("disabled",true);
         });
         // on "Reset" button click
         $("#reset").on("click",function() {
@@ -219,6 +220,7 @@
                     case "getRealization":
                         averageOverRealizations(data);
                         updatePlots(data);
+                        $("#getRealization").prop("disabled",false);
                         break;
                 }
             });
