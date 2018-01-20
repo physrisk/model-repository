@@ -234,6 +234,16 @@ var commonFunctions={
         var u2=Math.random();
         return Math.sqrt(-2.0*Math.log(u1))*Math.cos(2*Math.PI*u2);
     },
+    qGaussianRandom: function(q,abs) {
+        function qLog(x,qGen) {
+            return (Math.pow(x,1-qGen)-1)/(1-qGen);
+        }
+        var qGen=(1+q)/(3-q);
+        var u1=Math.random();
+        var u2=Math.random();
+        if(abs) return Math.abs(Math.sqrt(-2*qLog(u1,qGen))*Math.sin(2*Math.PI*u2));
+        return Math.sqrt(-2*qLog(u1,qGen))*Math.sin(2*Math.PI*u2);
+    },
     standardDeviation: function(values){
         var avg=this.average(values);
         var squareDiffs=values.map(function(value){var diff=value-avg;return diff*diff;});
