@@ -80,7 +80,7 @@
             </div><!-- end realization parameters -->
             <div class="controlBlockRow">
                 <span class="controlBlock">
-                    <button name="getRealization" id="getRealization" title="Obtain realization with previous parameters.">Get realization</button>
+                    <button name="getRealization" id="getRealization" title="Obtain realization with previous parameters." disabled="disabled">Get realization</button>
                 </span>
                 <span class="controlBlock">
                     <button name="reset" id="reset" title="Reset to apply new parameters.">Reset</button>
@@ -99,6 +99,7 @@
         // on "Reset" button click
         $("#reset").on("click",function() {
             reset();
+            $("#getRealization").prop("disabled",false);
             pdfPlot.reset();
             psdPlot.reset();
             seriesPlot.reset();
