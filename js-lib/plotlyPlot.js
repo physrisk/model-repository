@@ -31,13 +31,18 @@ class plotlyPlot {
         this.reset();
     }
     update(x,y,mode='lines') {
-        var i=0;
+        var i, m;
         var data=[];
         for(i=0;i<x.length;i+=1) {
+            if(typeof mode==="object") {
+                m=mode[i];
+            } else {
+                m=mode;
+            }
             data.push({
                 'x': x[i],
                 'y': y[i],
-                'mode': mode});
+                'mode': m});
         }
         Plotly.newPlot(this.id,data,this.layout,this.additionalParams);
     }
