@@ -7,13 +7,12 @@ importScripts("./returnModel.js");
 var model=new returnModel();
 var realizationParams;
 var busy=false;
-var time=0;
 
 // return array of x and lg(y) values
 function generateSeries() {
     return model.getRealization(realizationParams);
 }
-function getBurstStates(series,thresh) {
+function getBurstStats(series,thresh) {
     var i, isBurst, curDuration, curSize, prevBurstDuration;
     var l=series.length;
     var startsWithBurst=series[0]>thresh;
@@ -69,12 +68,17 @@ function getBurstStates(series,thresh) {
             }
         }
     }
-    return [burstDuration, burstSize, waitingTime, interBurstDuration];
+    return {
+        burstDuration: burstDuration,
+        burstSize: burstSize,
+        waitingTime: waitingTime,
+        interBurstDuration: interBurstDuration,
+    };
 }
 
 // listen, execute and reply
 self.addEventListener("message", function(e) {
-    var tmp, series;
+    var stats, series;
     var data=e.data;
     var rez={msg:data.msg};
     if(busy) {
@@ -87,17 +91,16 @@ self.addEventListener("message", function(e) {
         case "setParams":
             model.setParams(data.sdeParams,data.noiseParams);
             realizationParams=data.realizationParams;
-            time=0;
             break;
         case "getRealization":
             try {
                 series=generateSeries();
-                stats=getBurstStates(series,realizationParams.h);
+                stats=getBurstStats(series,realizationParams.h);
                 series=null;
-                rez.burstDuration=stats[0];
-                rez.burstSize=stats[1];
-                rez.waitingTime=stats[2];
-                rez.interBurstDuration=stats[3];
+                rez.burstDuration=stats.burstDuration.slice(0);
+                rez.burstSize=stats.burstSize.slice(0);
+                rez.waitingTime=stats.waitingTime.slice(0);
+                rez.interBurstDuration=stats.interBurstDuration.slice(0);
             } catch(error) {
                 rez.errorCode=500;
                 rez.errorMsg=error;
