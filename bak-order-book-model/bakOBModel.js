@@ -1,11 +1,12 @@
 class BakOBModel{
-    constructor(nAgents=100,bookSize=21,steps=1) {
+    constructor(nAgents=100,bookSize=21,d=0,steps=1) {
         this.nAgents=nAgents;
         this.nHalf=Math.floor(this.nAgents/2);
         this.nAgents=2*this.nHalf;
-        this.maxPrice=bookSize;
+        this.maxPrice=bookSize-1;
         this.minPrice=0;
         this.zeroPrice=Math.floor(bookSize/2);
+        this.moveToEquilibrium=0.5+d/2;
         this.steps=steps;
         this.obAsk=Array(this.nHalf);// sell
         this.obBid=Array(this.nHalf);// buy
@@ -34,15 +35,16 @@ class BakOBModel{
     internalStep() {
         var ri, dir;
         ri=Math.floor(Math.random()*this.nHalf);// get id of order to move
-        dir=Math.random()<0.5 ? -1 : 1;// in which direction
         // decide on order type
         if(Math.random()<0.5) { // move ask order
+            dir=Math.random()<this.moveToEquilibrium ? -1 : 1;// in which direction
             this.obAsk[ri]+=dir;
             if(this.obAsk[ri]>this.maxPrice) {// do not allow to escape bounds
                 this.obAsk[ri]=this.maxPrice;
             }
             this.sortAsk();
         } else { // move bid order
+            dir=Math.random()<this.moveToEquilibrium ? 1 : -1;// in which direction
             this.obBid[ri]+=dir;
             if(this.obBid[ri]<this.minPrice) {// do not allow to escape bounds
                 this.obBid[ri]=this.minPrice;

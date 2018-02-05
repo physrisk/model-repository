@@ -47,7 +47,7 @@ function plotFigures() {
 }
 
 function setup() {
-    model=new BakOBModel(1000,bookSize,100);
+    model=new BakOBModel(1000,bookSize,0,100);
     price=model.getPrice();
 }
 

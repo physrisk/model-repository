@@ -88,6 +88,7 @@ function setup() {
     model=new BakOBModel(
             parseInt($("#nAgents").val()),
             parseInt($("#bookSize").val()),
+            myParseFloat($("#diff").val()),
             parseInt($("#dt").val())
         );
     seriesSetup();
