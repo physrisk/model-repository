@@ -45,6 +45,23 @@
     <div id="obFig"></div>
 </div><!-- #svgWrap -->
 <div id="controls">
+    <span class="controlBlock">
+        <label for="nAgents">N=</label>
+        <input id="nAgents" name="nAgents" type="number" min="30" max="1000" step="10" value="1000">
+    </span>
+    <span class="controlBlock">
+        <label for="dt">&delta;=</label>
+        <input id="dt" name="dt" type="number" min="30" max="1000" step="10" value="100">
+    </span>
+    <span class="controlBlock">
+        <label for="bookSize">&Delta; P=</label>
+        <input id="bookSize" name="bookSize" type="number" min="11" max="10001" step="10" value="1001">
+    </span>
+    <span class="controlBlock">
+        <label for="diff">D=</label>
+        <input id="diff" name="diff" type="number" min="-1" max="1" step="0.02" value="0.5">
+    </span>
+    <br/>
     <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
     <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
 </div><!-- #controls -->

@@ -59,8 +59,8 @@ class BakOBModel{
             // set current price
             this.currentPrice=this.obAsk[0];
             // reset orders
-            this.obAsk[0]=this.maxPrice;
-            this.obBid[0]=this.minPrice;
+            this.obAsk[0]=Math.floor(Math.random()*(this.maxPrice-this.currentPrice)+this.currentPrice+1);
+            this.obBid[0]=Math.floor(Math.random()*(this.currentPrice-this.minPrice)+this.minPrice);
             this.sortAsk();
             this.sortBid();
         }

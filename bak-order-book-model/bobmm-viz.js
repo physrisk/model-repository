@@ -47,7 +47,14 @@ function plotFigures() {
 }
 
 function setup() {
-    model=new BakOBModel(1000,bookSize,0,100);
+    var d=myParseFloat($("#diff").val());
+    bookSize=parseInt($("#bookSize").val());
+    model=new BakOBModel(
+            parseInt($("#nAgents").val()),
+            bookSize,
+            myParseFloat($("#diff").val()),
+            parseInt($("#dt").val())
+        );
     price=model.getPrice();
 }
 
