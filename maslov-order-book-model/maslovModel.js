@@ -14,6 +14,8 @@ class MaslovModel{
         var i;
         for(i=0;i<this.steps;i+=1) {
             this.internalStep();
+            this.sortBid();
+            this.sortAsk();
         }
         this.updateBests();
         return this.currentPrice;
@@ -36,7 +38,6 @@ class MaslovModel{
                     return true;
                 } else {
                     this.obBid.push(price);
-                    this.sortBid();
                 }
             } else {
                 price+=delta;
@@ -44,7 +45,6 @@ class MaslovModel{
                     return true;
                 } else {
                     this.obAsk.push(price);
-                    this.sortAsk();
                 }
             }
             this.trimBook();
@@ -74,28 +74,10 @@ class MaslovModel{
         return true;
     }
     sortBid() {
-        var i, swap;
-        for(i=this.obBid.length-1;i>-1;i-=1) {
-            if(this.obBid[i]>this.obBid[i-1]) {
-                swap=this.obBid[i];
-                this.obBid[i]=this.obBid[i-1];
-                this.obBid[i-1]=swap;
-            } else {
-                return;
-            }
-        }
+        this.obBid=this.obBid.sort((x1,x2) => x2-x1).slice(0);
     }
     sortAsk() {
-        var i, swap;
-        for(i=this.obAsk.length-1;i>-1;i-=1) {
-            if(this.obAsk[i]<this.obAsk[i-1]) {
-                swap=this.obAsk[i];
-                this.obAsk[i]=this.obAsk[i-1];
-                this.obAsk[i-1]=swap;
-            } else {
-                return;
-            }
-        }
+        this.obAsk=this.obAsk.sort((x1,x2) => x1-x2).slice(0);
     }
     trimBook() {
         if(this.obAsk.length>=this.maxOrders) {

@@ -9,8 +9,6 @@ var model=null;
 var time=0;
 var timeSeries=null;
 var priceSeries=null;
-var bidSeries=null;
-var askSeries=null;
 var retSeries=null;
 
 var pdf=null;
@@ -22,8 +20,6 @@ function play() {
     var i, price, ret;
     timeSeries.splice(0,64);
     priceSeries.splice(0,64);
-    bidSeries.splice(0,64);
-    askSeries.splice(0,64);
     retSeries.splice(0,64);
     for(i=0;i<64;i+=1) {
         time+=1;
@@ -32,8 +28,6 @@ function play() {
 
         timeSeries.push(time);
         priceSeries.push(price);
-        askSeries.push(model.lastBestAsk);
-        bidSeries.push(model.lastBestBid);
         retSeries.push(Math.abs(ret));
         
         var pdfi=Math.floor(Math.abs(ret)*100);
@@ -78,15 +72,11 @@ function seriesSetup() {
     time=0;
     timeSeries=new Array(4096);
     priceSeries=new Array(timeSeries.length);
-    askSeries=new Array(priceSeries.length);
-    bidSeries=new Array(priceSeries.length);
     for(i=0;i<timeSeries.length;i+=1) {
         timeSeries[i]=i-timeSeries.length;
     }
     for(i=0;i<priceSeries.length;i+=1) {
         priceSeries[i]=0;
-        askSeries[i]=0;
-        bidSeries[i]=0;
     }
     retSeries=new Array(32768);
     for(i=0;i<retSeries.length;i+=1) {
