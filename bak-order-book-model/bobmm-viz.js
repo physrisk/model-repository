@@ -8,7 +8,7 @@ var price=0;
 var bookSize=101;
 var xStep=1;
 
-var timeoutID=null
+var timeoutID=null;
 
 function play() {
     price=Math.floor(model.step()/xStep);

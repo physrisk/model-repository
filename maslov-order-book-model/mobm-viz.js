@@ -11,7 +11,7 @@ var lastOrder=0;
 var steps=21;
 var xStep=20/(steps-1.0);
 
-var timeoutID=null
+var timeoutID=null;
 
 function play() {
     price=Math.floor(model.step()/xStep);
