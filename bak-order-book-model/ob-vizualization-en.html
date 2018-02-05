@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Orderbook vizualization | Bak et al. order-book model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <style type="text/css">
+        html,body{margin:0;padding:0;font-size:13px}
+        #wrapper{max-width:510px}
+        #figWrap,#orderIndicator,#obFig{width:100%;text-align:center}
+        #orderIndicator{line-height:1.5}
+        #obFig{height:300px}
+		.controlBlock{display:inline-block;margin-left:5px}
+        #controls{line-height:2}
+        #controls input{width:60px}
+		#controls button{width:140px}
+        .trace:nth-child(1) path {
+            stroke:#f99 !important;
+        }
+        .trace:nth-child(2) path {
+            stroke:#9af !important;
+        }
+        .trace:nth-child(3) path {
+            stroke:#333 !important;
+        }
+        .report-nothing {
+            color:inherit;
+        }
+        .report-bid, .report-exe-bid {
+            color:#d79;
+        }
+        .report-ask, .report-exe-ask {
+            color:#79d;
+        }
+        .report-exe-ask, .report-exe-bid {
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figWrap">
+    <div id="orderIndicator"></div>
+    <div id="obFig"></div>
+</div><!-- #svgWrap -->
+<div id="controls">
+    <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
+    <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
+    <span class="controlBlock"><button name="next" id="next">Next order &gt;</button></span>
+</div><!-- #controls -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./bakOBModel.js"></script>
+<script language="javascript" type="text/javascript" src="./bobmm-viz.js"></script>
+<script language="javascript" type="text/javascript">
+/* bind events and set initial states */
+$("#stop").attr("disabled","disabled");
+$("#next").click(function () {
+    frame();
+});
+$("#restart").click(function () {
+	setup();
+	$("#restart, #next").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart, #next").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart, #next").removeAttr("disabled");
+});
+
+/* onLoad */
+$(function () {
+	setup();
+    plotFigures();
+});
+</script>
+</body>
+</html>
