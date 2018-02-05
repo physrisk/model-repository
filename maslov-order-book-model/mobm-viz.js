@@ -14,7 +14,7 @@ var xStep=20/(steps-1.0);
 var timeoutID=null
 
 function play() {
-    price=model.step();
+    price=Math.floor(model.step()/xStep);
 }
 
 function plotFigures() {
