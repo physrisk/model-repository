@@ -32,8 +32,8 @@ function play() {
         priceSeries.push(price);
         retSeries.push(Math.abs(ret));
         
-        var pdfi=Math.floor(Math.abs(ret));
-        if(pdfi<pdf.length) {
+        var pdfi=Math.floor(Math.abs(ret)-1);
+        if(-1<pdfi && pdfi<pdf.length) {
             pdf[pdfi]+=1;
             pdfLen+=1;
         }
@@ -42,7 +42,7 @@ function play() {
 
 function plotFigures() {
     if(pdfLen>0) {
-        var showPdf=commonFunctions.pdfModification(pdf,true,1e-1,1e3,101,1e-1,1e-1,pdfLen);
+        var showPdf=commonFunctions.pdfModification(pdf,true,1e0,1e4,101,1e0,1e0,pdfLen);
         retPdfPlot.update([commonFunctions.toOneDimensionalArray(showPdf,0)],
                           [commonFunctions.toOneDimensionalArray(showPdf,1)]);
     } else {
