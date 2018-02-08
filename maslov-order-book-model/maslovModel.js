@@ -7,8 +7,6 @@ class MaslovModel{
         this.obAsk=[];// sell
         this.obBid=[];// buy
         this.currentPrice=0;
-        this.lastBestBid=this.currentPrice;
-        this.lastBestAsk=this.currentPrice;
     }
     step() {
         var i;
@@ -17,7 +15,6 @@ class MaslovModel{
             this.sortBid();
             this.sortAsk();
         }
-        this.updateBests();
         return this.currentPrice;
     }
     internalStep() {
@@ -85,14 +82,6 @@ class MaslovModel{
         }
         if(this.obBid.length>=this.maxOrders) {
             this.obBid.splice(-1,1);
-        }
-    }
-    updateBests() {
-        if(this.obAsk.length>0) {
-            this.lastBestAsk=this.obAsk[0];
-        }
-        if(this.obBid.length>0) {
-            this.lastBestBid=this.obBid[0];
         }
     }
 }
