@@ -22,7 +22,7 @@
 </head>
 <body>
 <div id="switchLang"><a id="lt-lang" class="language-switch" href="#lang=Lt">Lietuvių</a> | <a id="en-lang" class="language-switch" href="#lang=En">English</a></div>
-<div id="description">Ši programėlė atvaizduoja valstybių ar regionų nominalų BVP tenkantį vienam gyventojui (angl. nominal GDP per capita) grafikus. Duomenys paimti iš <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.CD">Pasaulio banko</a> (2013-07-26) ir perskaičiuoti į santykinę logaritminę skalę (pirmųjų metų, kuriems žinomas BVP, atžvilgiu, bet visgi programa gali dinamiškai perskaičiuoti duomenis ir kitų metų atžvilgiu).</div>
+<div id="description">Ši programėlė atvaizduoja valstybių ar regionų nominalų BVP tenkantį vienam gyventojui (angl. nominal GDP per capita) grafikus. Duomenys paimti iš <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.CD">Pasaulio banko</a> (2018-02-11) ir perskaičiuoti į santykinę logaritminę skalę (pirmųjų metų, kuriems žinomas BVP, atžvilgiu, bet visgi programa gali dinamiškai perskaičiuoti duomenis ir kitų metų atžvilgiu).</div>
 <div id="plotDiv"></div>
 <div id="controls"><span id="yearBlock"><span id="yearSelection"></span></span></div>
 <div id="credit">Copyright: Ši programa pateikiama vartotojams tokiomis pat sąlygomis kaip ir <a href="http://mokslasplius.lt/rizikos-fizika/">Rizikos fizikos svetainė</a>.</div>
@@ -41,8 +41,8 @@ $('#plotDiv').data('clearLabelLt',"Panaikinti pasirinkimus");
 $('#plotDiv').data('clearLabelEn',"Remove choices");
 $('html').data('titleLt','Santykinio nominalaus BVP vienam gyventojui palyginimas');
 $('html').data('titleEn','Comparison of nominal GDP per capita');
-$('#description').data('translationLt','Ši programėlė atvaizduoja valstybių ar regionų nominalų BVP tenkantį vienam gyventojui (angl. nominal GDP per capita) grafikus. Duomenys paimti iš <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.CD">Pasaulio banko</a> (2013-02-15) ir perskaičiuoti į santykinę logaritminę skalę (pirmųjų metų, kuriems žinomas BVP, atžvilgiu, bet visgi programa gali dinamiškai perskaičiuoti duomenis ir kitų metų atžvilgiu).');
-$('#description').data('translationEn','This program can be used to compare nominal GDP per capita of different countries and regions. Data is taken from the <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.CD">World Bank\'s database</a> (2013-02-15) and then converted to the relative log-scale (where the first known GDP is set to 1 and later ones are calculated in its terms; note that the program can renormalize data in real time).');
+$('#description').data('translationLt','Ši programėlė atvaizduoja valstybių ar regionų nominalų BVP tenkantį vienam gyventojui (angl. nominal GDP per capita) grafikus. Duomenys paimti iš <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.CD">Pasaulio banko</a> (2018-02-11) ir perskaičiuoti į santykinę logaritminę skalę (pirmųjų metų, kuriems žinomas BVP, atžvilgiu, bet visgi programa gali dinamiškai perskaičiuoti duomenis ir kitų metų atžvilgiu).');
+$('#description').data('translationEn','This program can be used to compare nominal GDP per capita of different countries and regions. Data is taken from the <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.CD">World Bank\'s database</a> (2018-02-11) and then converted to the relative log-scale (where the first known GDP is set to 1 and later ones are calculated in its terms; note that the program can renormalize data in real time).');
 $('#credit').data('translationLt','Copyright: Ši programa pateikiama vartotojams tokiomis pat sąlygomis kaip ir <a href="http://mokslasplius.lt/rizikos-fizika/">Rizikos fizikos svetainė</a>.');
 $('#credit').data('translationEn','Copyright: This program is made available under the same conditions as the <a href="http://mokslasplius.lt/rizikos-fizika/en/">Physics of Risk website</a>.');
 
@@ -217,9 +217,9 @@ function onProcessedData() {
 		renormalizeData();
 		replot();
 	} else {
-		showCountryData("89",false);
+		showCountryData("65",false);
 		showCountryData("132",false);
-		showCountryData("138",true);
+		showCountryData("134",true);
 	}
 }
 
