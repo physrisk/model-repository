@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Santykinio nominalaus BVP vienam gyventojui PGS palyginimas | Comparison of nominal GDP per capita PPP</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-08.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery.flot-07.axislabels.js"></script>
+	<style type="text/css">
+		input,select,button{box-sizing:border-box;height:20px;line-height:20px;padding:0 6px;border:1px solid #999;}
+		html,body{margin:0;padding:0}
+		#yearBlock{display:block;margin:10px 0;}
+		.countryBlock{display:inline-block;min-width:180px;max-width:180px;vertical-align:middle;margin-right:15px;margin-bottom:5px;border:1px gray solid;background:transparent;}
+		.checked{background:#ccc;}
+		#description{margin-bottom: 10px;}
+		#switchLang{margin-bottom: 10px;}
+		#plotDiv{width:800px;height:400px;}
+		#controls{width:auto}
+		#credit{font-size:smaller}
+	</style>
+</head>
+<body>
+<div id="switchLang"><a id="lt-lang" class="language-switch" href="#lang=Lt">Lietuvių</a> | <a id="en-lang" class="language-switch" href="#lang=En">English</a></div>
+<div id="description">Ši programėlė atvaizduoja valstybių ar regionų nominalų BVP tenkantį vienam gyventojui PGS (angl. nominal GDP per capita PPP) grafikus. Duomenys paimti iš <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.PP.CD">Pasaulio banko</a> (2018-02-11) ir perskaičiuoti į santykinę logaritminę skalę (pirmųjų metų, kuriems žinomas BVP, atžvilgiu, bet visgi programa gali dinamiškai perskaičiuoti duomenis ir kitų metų atžvilgiu).</div>
+<div id="plotDiv"></div>
+<div id="controls"><span id="yearBlock"><span id="yearSelection"></span></span></div>
+<div id="credit">Copyright: Ši programa pateikiama vartotojams tokiomis pat sąlygomis kaip ir <a href="http://mokslasplius.lt/rizikos-fizika/">Rizikos fizikos svetainė</a>.</div>
+<script type="text/javascript">
+/*language specific*/
+$('html').data('lang','Lt');
+$('#plotDiv').data('tooMuchGraphsLt',"Pasirinkote perdaug šalių!");
+$('#plotDiv').data('tooMuchGraphsEn',"You have selected too many countries!");
+$('#plotDiv').data('yearSelectionLt',"Laiko periodas: <span id=\"year-cont-from\"></span> iki <span id=\"year-cont-to\"></span> (normuoti pagal <span id=\"year-cont-norm\"></span> arba vėlesnius metus).");
+$('#plotDiv').data('yearSelectionEn',"Time interval: from <span id=\"year-cont-from\"></span> to <span id=\"year-cont-to\"></span> (normalize by <span id=\"year-cont-norm\"></span> or a later year).");
+$('#plotDiv').data('xAxisLabelLt',"metai");
+$('#plotDiv').data('xAxisLabelEn',"year");
+$('#plotDiv').data('yAxisLabelLt',"Santykinis nominalus BVP/gyv. PGS");
+$('#plotDiv').data('yAxisLabelEn',"Relative nominal GDP per capita PPP");
+$('#plotDiv').data('clearLabelLt',"Panaikinti pasirinkimus");
+$('#plotDiv').data('clearLabelEn',"Remove choices");
+$('html').data('titleLt','Santykinio nominalaus BVP vienam gyventojui palyginimas PGS');
+$('html').data('titleEn','Comparison of nominal GDP per capita PPP');
+$('#description').data('translationLt','Ši programėlė atvaizduoja valstybių ar regionų nominalų BVP tenkantį vienam gyventojui PGS (angl. nominal GDP per capita PPP) grafikus. Duomenys paimti iš <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.PP.CD">Pasaulio banko</a> (2018-02-11) ir perskaičiuoti į santykinę logaritminę skalę (pirmųjų metų, kuriems žinomas BVP, atžvilgiu, bet visgi programa gali dinamiškai perskaičiuoti duomenis ir kitų metų atžvilgiu).');
+$('#description').data('translationEn','This program can be used to compare nominal GDP per capita PPP of different countries and regions. Data is taken from the <a href="http://data.worldbank.org/indicator/NY.GDP.PCAP.PP.CD">World Bank\'s database</a> (2018-02-11) and then converted to the relative log-scale (where the first known GDP is set to 1 and later ones are calculated in its terms; note that the program can renormalize data in real time).');
+$('#credit').data('translationLt','Copyright: Ši programa pateikiama vartotojams tokiomis pat sąlygomis kaip ir <a href="http://mokslasplius.lt/rizikos-fizika/">Rizikos fizikos svetainė</a>.');
+$('#credit').data('translationEn','Copyright: This program is made available under the same conditions as the <a href="http://mokslasplius.lt/rizikos-fizika/en/">Physics of Risk website</a>.');
+
+function getLanguage() {
+	return $('html').data('lang');
+}
+
+function switchLanguage(sw) {
+	sw=((typeof sw)!=='undefined' ? sw : false);
+	if(sw===true) {
+		if($('html').data('lang')=="Lt") {
+			$('html').data('lang','En');
+		} else {
+			$('html').data('lang','Lt');
+		}
+	} else if(sw.length==2) {
+		$('html').data('lang',sw);
+	}
+	var plotOptions=$('#plotDiv').data('plotOptions');
+	plotOptions.xaxis.axisLabel=$('#plotDiv').data('xAxisLabel'+getLanguage());
+	plotOptions.yaxis.axisLabel=$('#plotDiv').data('yAxisLabel'+getLanguage());
+	var yf=$('#year-from').val();
+	var yt=$('#year-to').val();
+	var yn=$('#year-norm').val();
+	$('#plotDiv').data('plotOptions',plotOptions);
+	$("#clear").val($('#plotDiv').data('clearLabel'+getLanguage()));
+	$("#yearSelection").html($('#plotDiv').data('yearSelection'+getLanguage()));
+	$("#description").html($('#description').data('translation'+getLanguage()));
+	$("#credit").html($('#credit').data('translation'+getLanguage()));
+	document.title=$('html').data('title'+getLanguage());
+	makeYearSelections();
+	$(".yearSelect").change(function() {onYearChange();});
+	if(!(typeof yf==="undefined")) {
+		$('#year-from').val(yf);
+		$('#year-to').val(yt);
+		$('#year-norm').val(yn);
+	}
+	replot();
+}
+
+/*options and settings*/
+$('#plotDiv').data('maxNumberGraphs',10);
+$('#plotDiv').data('oldNormBy',-9999);
+$('#plotDiv').data('timeSeries',[]);
+$('#plotDiv').data('countries',[]);
+$('#plotDiv').data('showData',[]);
+$('#plotDiv').data('preLoadedYears',[-9999,-9999,-9999]);
+$('#plotDiv').data('preLoadedIds',[]);
+$('#plotDiv').data('loadedIds',[]);
+$('#plotDiv').data('plotOptions', {
+	series: {
+		lines: { show: true },
+		points: { show: true }
+	} ,
+	legend: {
+		position: "nw"
+	} ,
+	xaxis: {
+		axisLabel: $('#plotDiv').data('xAxisLabel'+getLanguage()),
+		min: null,
+		max: null,
+		tickDecimals: 0
+	} ,
+	yaxis: {
+		axisLabel: $('#plotDiv').data('yAxisLabel'+getLanguage()),
+		min: null,
+		max: null,
+		tickDecimals: null,
+		ticks: function (axis) {
+			var matlog10=Math.log(10);
+			var etalon=[1,2,4,7,10];
+			var decMin=Math.pow(10,axis.min);
+			var mult=Math.pow(10,Math.floor(axis.min));
+			var found=-1;
+			for(var i=1;i<etalon.length && found<0;i++) {
+				if(etalon[i-1]*mult<decMin && etalon[i]*mult>decMin) found=i-1;
+			}
+			if(found==-1) found=0;
+			var minMult=mult;
+			decMin=etalon[found]*mult;
+			axis.min=Math.log(etalon[found]*mult)/Math.log(10);
+			var decMax=Math.pow(10,axis.max);
+			mult=Math.pow(10,Math.floor(axis.max));
+			found=-1;
+			for(var i=1;i<etalon.length && found<0;i++) {
+				if(etalon[i-1]*mult<decMax && etalon[i]*mult>decMax) found=i;
+			}
+			if(found==-1) found=0;
+			var maxMult=mult;
+			decMax=etalon[found]*mult;
+			axis.max=Math.log(etalon[found]*mult)/matlog10;
+			var rez=[];
+			mult=minMult;
+			var i=0;
+			var x=mult*etalon[i];
+			while(x<decMin) {
+				x=mult*etalon[i];
+				i++;
+				if(i>=etalon.length) {
+					i=0;
+					mult*=10;
+				}
+			}
+			rez.push(Math.log(x)/matlog10);
+			while(x<decMax) {
+				x=mult*etalon[i];
+				rez.push(Math.log(x)/matlog10);
+				i++;
+				if(i>=etalon.length) {
+					i=0;
+					mult*=10;
+				}
+			}
+			return rez;
+		} ,
+		tickFormatter: function (val,axis) {
+			var mult=Math.floor(val);
+			val=Math.pow(10,val);
+			if(val>=1.0) return val.toFixed(0);
+			return val.toFixed(-mult);
+		}
+	}
+});
+
+/*loading and processing data*/
+function processData(allText) {
+	var allTextLines=allText.split(/\r\n|\n/);
+	var headers=allTextLines[0].split(/\t/);
+	var timeSeries=$('#plotDiv').data('timeSeries');
+	var countries=$('#plotDiv').data('countries');
+	for(var i=1;i<allTextLines.length;i++) {
+		var data=allTextLines[i].split(/\t/);
+		if(data.length==headers.length) {
+			var tarr=[];
+			for(var j=1;j<headers.length;j++) {
+				if(!(data[j]=="")) {
+					var pos=[];pos.push(headers[j]);pos.push(data[j]);
+					tarr.push(pos);
+				}
+			}
+			timeSeries.push(tarr);
+			countries.push(data[0]);
+			$("<span></span>",{'class': "countryBlock"}).appendTo("#controls");
+			$("<input>",{'class': "countryCheck", type: "checkbox", name: "count"+(i-1), id: "count"+(i-1), value: 1}).appendTo("#controls > span.countryBlock:last");
+			$("#controls > span.countryBlock:last").append(data[0]);
+		}
+	}
+	$('#plotDiv').data('timeSeries',timeSeries);
+	$('#plotDiv').data('countries',countries);
+	onProcessedData();
+}
+
+function onProcessedData() {
+	$(".countryCheck").change(function () {
+		var i=($(this).attr("id")).substr(5);
+		if($(this).attr("checked")) showCountryData(i);
+		else hideCountryData(i);
+	});
+	var preLoadedYears=$('#plotDiv').data('preLoadedYears');
+	if(preLoadedYears[0]>0 || preLoadedYears[1]>0 || preLoadedYears[2]>0) {
+		$("#year-from").val(parseInt(preLoadedYears[0]));
+		$("#year-to").val(parseInt(preLoadedYears[1]));
+		$("#year-norm").val(parseInt(preLoadedYears[2]));
+		onYearChange();
+	} else {
+		$("#year-norm").val(1995);
+		onYearChange();
+	}
+	var preLoadedIds=$('#plotDiv').data('preLoadedIds');
+	if(preLoadedIds.length>0) {
+		for(var i=0;i<preLoadedIds.length;i++) showCountryData(""+preLoadedIds[i],false);
+		renormalizeData();
+		replot();
+	} else {
+		showCountryData("65",false);
+		showCountryData("132",false);
+		showCountryData("134",true);
+	}
+}
+
+/*show and hide country data from the plot*/
+function showCountryData(i,showRes) {
+	i=parseInt(i);
+	showRes=((typeof showRes)!=='undefined' ? showRes : true);
+	var maxGraphs=parseInt($('#plotDiv').data('maxNumberGraphs'));
+	var timeSeries=$('#plotDiv').data('timeSeries');
+	var countries=$('#plotDiv').data('countries');
+	var showData=$('#plotDiv').data('showData');
+	var loadedIds=$('#plotDiv').data('loadedIds');
+	if(loadedIds.length<maxGraphs) {
+		showData.push({
+			label: countries[i],
+			data: timeSeries[i]
+		});
+		loadedIds.push(i);
+		$('#plotDiv').data('showData',showData);
+		$('#plotDiv').data('loadedIds',loadedIds);
+		if(showRes) {
+			renormalizeData();
+			replot();
+		}
+		$("#count"+i).attr("checked","checked").closest(".countryBlock").addClass("checked");
+	} else {
+		$("#count"+i).removeAttr("checked").closest(".countryBlock").removeClass("checked");
+		alert($('#plotDiv').data('tooMuchGraphs'+getLanguage()));
+	}
+}
+
+function hideCountryData(i,showRes) {
+	i=parseInt(i);
+	showRes=((typeof showRes)!=='undefined' ? showRes : true);
+	var loadedIds=$('#plotDiv').data('loadedIds');
+	var showData=$('#plotDiv').data('showData');
+	var found=loadedIds.indexOf(i);
+	if(found>=0) {
+		showData.splice(found,1);
+		loadedIds.splice(found,1);
+		$('#plotDiv').data('showData',showData);
+		$('#plotDiv').data('loadedIds',loadedIds);
+	}
+	$("#count"+i).removeAttr("checked").closest(".countryBlock").removeClass("checked");
+	if(showRes) replot();
+}
+
+function hideAllCountryData() {
+	var loadedIds=$('#plotDiv').data('loadedIds');
+	while(loadedIds.length>0) {
+		var tind=loadedIds[0];
+		hideCountryData(tind,false);
+	}
+	replot();
+}
+
+/*GUI*/
+function makeYearSelect(id,from,to,chosen) {
+	$("<select></select>",{'class': "yearSelect", id: "year-"+id, name: "year-"+id }).appendTo("#year-cont-"+id);
+	var sel=$("<option></option>",{value: -9999}).html("auto").appendTo("#year-"+id);
+	for(var i=from;i<=to;i++) {
+		sel=$("<option></option>",{ value: i}).html(""+i).appendTo("#year-"+id);
+	}
+	$("#year-"+id).val(chosen);
+}
+
+function makeYearSelections() {
+	makeYearSelect("from",1960,2010,-9999);
+	makeYearSelect("to",1960,2012,-9999);
+	makeYearSelect("norm",1960,2011,-9999);
+}
+
+function onYearChange() {
+	var value=parseInt($("#year-from").val());
+	var minValue=value;
+	var plotOptions=$('#plotDiv').data('plotOptions');
+	if(value==-9999) value=null;
+	plotOptions.xaxis.min=value;
+	value=parseInt($("#year-to").val());
+	if(value<=minValue && value!=-9999) {
+		value=minValue+1;
+		$("#year-to").val(value);
+	}
+	if(value==-9999) value=null;
+	plotOptions.xaxis.max=value;
+	$('#plotDiv').data('plotOptions',plotOptions);
+	value=parseInt($("#year-norm").val());
+	if(!(value==parseInt($('#plotDiv').data('oldNormBy')))) {
+		renormalizeData();
+	}
+	replot();
+}
+
+/*data operations*/
+function renormalizeData() {
+	var value=parseInt($("#year-norm").val());
+	var showData=[];
+	var timeSeries=$('#plotDiv').data('timeSeries');
+	var countries=$('#plotDiv').data('countries');
+	var loadedIds=$('#plotDiv').data('loadedIds');
+	for(var i=0;i<loadedIds.length;i++) {
+		var tindex=loadedIds[i];
+		var normalizeBy=null;
+		for(var j=1;j<timeSeries[tindex].length && normalizeBy==null;j++){
+			if(timeSeries[tindex][j-1][0]<=value && timeSeries[tindex][j][0]>value) normalizeBy=timeSeries[tindex][j-1][1];
+		}
+		if(value==timeSeries[tindex][timeSeries[tindex].length-1][0]) normalizeBy=timeSeries[tindex][timeSeries[tindex].length-1][1];
+		if(normalizeBy==null) normalizeBy=0;
+		var tmp=[];
+		for(var j=0;j<timeSeries[tindex].length;j++){
+			var point=[];point.push(timeSeries[tindex][j][0]);point.push(timeSeries[tindex][j][1]-normalizeBy);
+			tmp.push(point);
+		}
+		showData.push({
+			label: countries[tindex],
+			data: tmp
+		});
+	}
+	$('#plotDiv').data('showData',showData);
+	$('#plotDiv').data('oldNormBy',value);
+}
+
+/*Address operations*/
+function refreshHash() {
+	var lang=$('html').data('lang');
+	var loadedIds=$('#plotDiv').data('loadedIds');
+	location.hash="#lang="+lang+".countries="+loadedIds.join(",")+".fromy="+$("#year-from").val()+".toy="+$("#year-to").val()+".normy="+$("#year-norm").val();
+}
+
+/*ploting*/
+function cropViewPort() {
+	var plotOptions=$('#plotDiv').data('plotOptions');
+	var maxValue=9999;var minValue=-9999;
+	if(plotOptions.xaxis.max!==null) maxValue=plotOptions.xaxis.max;
+	if(plotOptions.xaxis.min!==null) minValue=plotOptions.xaxis.min;
+	var yMaxValue=-9999;var yMinValue=9999;
+	var showData=$('#plotDiv').data('showData');
+	for(var i=0;i<showData.length;i++) {
+		for(var j=0;j<showData[i].data.length;j++) {
+			if(minValue<=showData[i].data[j][0] && showData[i].data[j][0]<=maxValue) {
+				yMaxValue=Math.max(yMaxValue,showData[i].data[j][1]);
+				yMinValue=Math.min(yMinValue,showData[i].data[j][1]);
+			}
+		}
+	}
+	if(yMaxValue>yMinValue) {
+		plotOptions.yaxis.min=yMinValue-0.1;
+		plotOptions.yaxis.max=yMaxValue+0.1;
+	} else {
+		plotOptions.yaxis.min=null;
+		plotOptions.yaxis.max=null;
+	}
+	$('#plotDiv').data('plotOptions',plotOptions);
+}
+
+function replot() {
+	cropViewPort();
+	refreshHash();
+	$.plot($("#plotDiv"),$('#plotDiv').data('showData'),$('#plotDiv').data('plotOptions'));
+}
+
+/*main*/
+$(function () {
+	var lang="Lt";
+	var preLoadedIds=[];
+	var preLoadedYears=[-9999,-9999,-9999];
+
+	var cmdHash=location.hash.substr(1);
+	var commands=cmdHash.split(".");
+	for(var i=0;i<commands.length;i++) {
+		var subCommand=commands[i].split("=");
+		var what=subCommand[0].toLowerCase();
+		if(what=="lang") lang=subCommand[1];
+		else if(what=="countries") preLoadedIds=subCommand[1].split(",");
+		else if(what=="fromy") preLoadedYears[0]=parseInt(subCommand[1]);
+		else if(what=="toy") preLoadedYears[1]=parseInt(subCommand[1]);
+		else if(what=="normy") preLoadedYears[2]=parseInt(subCommand[1]);
+	}
+	$('#plotDiv').data('preLoadedIds',preLoadedIds);
+	$('#plotDiv').data('preLoadedYears',preLoadedYears);
+	
+	if(lang.length==2) {
+		lang=lang.charAt(0).toUpperCase()+lang.charAt(1).toLowerCase();
+	} else {
+		lang="Lt";
+	}
+	$('html').data('lang',lang);
+	$("<button>",{id: "clear", name: "clear"}).text($("#plotDiv").data("clearLabel"+getLanguage())).css({'margin-left': "5px"}).appendTo("#yearBlock");
+	$("#clear").click(function() {hideAllCountryData(); return false;});
+	$("#lt-lang").click(function() {switchLanguage("Lt"); return false;});
+	$("#en-lang").click(function() {switchLanguage("En"); return false;});
+	switchLanguage();
+	$.ajax({
+		type: "GET", url: "ny-gdp-pcap-ppp-cd.csv", dataType: "text",
+		success: function(data) {processData(data);}
+	});
+});
+</script>
+</body>
+</html>
