@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Preis order-book model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+    <style type="text/css">
+        html,body{margin:0;padding:0;font-size:13px}
+        #wrapper{max-width:510px}
+        #figWrap{width:100%;text-align:center}
+        .statPlot{display:inline-block;width:250px;height:200px}
+        .timePlot{display:inline-block;width:250px;height:200px}
+		.controlBlock{display:inline-block;margin-left:5px}
+        #controls{line-height:2}
+        #controls input{width:60px}
+		#controls button{width:140px}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figWrap">
+    <div id="retPdf" class="statPlot"></div>
+    <div id="retSpec" class="statPlot"></div>
+    <div id="pSeries" class="timePlot"></div>
+    <div id="retSeries" class="timePlot"></div>
+</div><!-- #svgWrap -->
+<div id="controls">
+    <span class="controlBlock">
+        <label for="nAgents">N<sub>a</sub>=</label>
+        <input id="nAgents" name="nAgents" type="number" min="50" max="400" step="10" value="120">
+    </span>
+    <span class="controlBlock">
+        <label for="limitRate">&alpha;=</label>
+        <input id="limitRate" name="limitRate" type="number" min="0" max="0.5" step="0.005" value="0.15">
+    </span>
+    <span class="controlBlock">
+        <label for="marketRate">&mu;=</label>
+        <input id="marketRate" name="marketRate" type="number" min="0" max="0.5" step="0.005" value="0.1">
+    </span>
+    <span class="controlBlock">
+        <label for="cancelRate">&delta;=</label>
+        <input id="cancelRate" name="cancelRate" type="number" min="0" max="0.5" step="0.005" value="0.025">
+    </span>
+    <span class="controlBlock">
+        <label for="limitBuyP">q<sub>provider</sub>=</label>
+        <input id="limitBuyP" name="limitBuyP" type="number" min="0.01" max="0.99" step="0.01" value="0.5">
+    </span>
+    <span class="controlBlock">
+        <label for="marketBuyP">q<sub>taker</sub>=</label>
+        <input id="marketBuyP" name="marketBuyP" type="number" min="0.01" max="0.99" step="0.01" value="0.5">
+    </span>
+    <span class="controlBlock">
+        <label for="invDepthRate">&lambda;<sub>0</sub>=</label>
+        <input id="invDepthRate" name="invDepthRate" type="number" min="1" max="100" step="1" value="10">
+    </span>
+    <br/>
+    <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
+    <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
+</div><!-- #controls -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./preisModel.js"></script>
+<script language="javascript" type="text/javascript" src="./pobm-main.js"></script>
+<script language="javascript" type="text/javascript">
+/* bind events and set initial states */
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function () {
+	setup();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+
+/* onLoad */
+$(function () {
+	setup();
+    plotFigures();
+});
+</script>
+</body>
+</html>
