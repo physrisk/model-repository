@@ -42,8 +42,9 @@ function plotFigures() {
             pdfAsk[findIndex(model.obAsk[i])]+=1;
         }
     }
+    var max=Math.max(...pdfBid,...pdfAsk);
     obFigPlot.update([pdfBidX,pdfAskX,[price,price]],
-                     [pdfBid,pdfAsk,[-5,35]]);
+                     [pdfBid,pdfAsk,[-0.5,max+0.5]]);
 }
 
 function setup() {

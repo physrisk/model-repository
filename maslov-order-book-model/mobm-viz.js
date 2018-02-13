@@ -67,9 +67,10 @@ function plotFigures() {
         lastOrder=2;
     }
     oldAskLength=l;
-    obFigPlot.update([pdfBidX,pdfAskX,[price]],
-                     [pdfBid,pdfAsk,[0.5]],
-                     "markers");
+    var max=Math.max(...pdfBid,...pdfAsk);
+    obFigPlot.update([pdfBidX,pdfAskX,[price,price]],
+                     [pdfBid,pdfAsk,[-0.5,max+0.5]],
+                     ["markers","markers","lines"]);
 }
 
 function updateIndicator() {

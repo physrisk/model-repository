@@ -76,8 +76,9 @@ function plotFigures() {
             }
         }
     }
+    var max=Math.max(...pdfBid,...pdfAsk);
     obFigPlot.update([pdfBidX,pdfAskX,[price,price]],
-                     [pdfBid,pdfAsk,[-0.5,10.5]],
+                     [pdfBid,pdfAsk,[-0.5,max+0.5]],
                      "lines");
 }
 
