@@ -12,8 +12,6 @@ function play() {
 }
 
 function getSteps() {
-    var al=model.obAsk.length;
-    var bl=model.obBid.length;
     return [41,price-0.5-20];
 }
 

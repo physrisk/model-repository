@@ -30,7 +30,7 @@ class PreisModel{
         this.lastPrice=0;
         this.initializeBook();
     }
-    initializeBook(spread=6,deals=50) {
+    initializeBook(deals=50) {
         var i;
         this.time=-deals;
         for(i=0;i<deals;i+=1) {
