@@ -1,13 +1,16 @@
 class EmmModel{
     constructor(marketBuyRate=1,marketSellRate=1,sameSideProb=0.5,reportTick=1) {
-        this.totalMarketRate=marketBuyRate+marketSellRate;
-        this.totalBuyProb=marketBuyRate/this.totalMarketRate;
+        this.setRates(marketBuyRate,marketSellRate);
         this.sameSideProb=sameSideProb;
         this.time=0;
         this.reportAt=0;
         this.reportTick=reportTick;
         this.bestSell=0;
         this.lastPrice=-0.5;
+    }
+    setRates(marketBuyRate=1,marketSellRate=1) {
+        this.totalMarketRate=marketBuyRate+marketSellRate;
+        this.totalBuyProb=marketBuyRate/this.totalMarketRate;
     }
     step() {
         this.reportAt+=this.reportTick;
