@@ -53,4 +53,20 @@ class plotlyPlot {
         this.layout.xaxis.title=labels[0];
         this.layout.yaxis.title=labels[1];
     }
+    setRanges(xrange,yrange) {
+        if(xrange !== true) {
+            this.layout.xaxis.autorange=false;
+            this.layout.xaxis.range=xrange;
+        } else {
+            this.layout.xaxis.autorange=true;
+            delete this.layout.xaxis.range;
+        }
+        if(yrange !== true) {
+            this.layout.yaxis.autorange=false;
+            this.layout.yaxis.range=yrange;
+        } else {
+            this.layout.yaxis.autorange=true;
+            delete this.layout.yaxis.range;
+        }
+    }
 }
