@@ -2,33 +2,23 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Bak et al. order-book model</title>
+    <title>Bak et al. order book model</title>
     <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
 	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
     <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
     <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
 	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
-    <style type="text/css">
-        html,body{margin:0;padding:0;font-size:13px}
-        #wrapper{max-width:510px}
-        #figWrap{width:100%;text-align:center}
-        .statPlot{display:inline-block;width:250px;height:200px}
-        .timePlot{display:inline-block;width:250px;height:200px}
-		.controlBlock{display:inline-block;margin-left:5px}
-        #controls{line-height:2}
-        #controls input{width:60px}
-		#controls button{width:140px}
-    </style>
 </head>
 <body>
 <div id="wrapper">
-<div id="figWrap">
-    <div id="retPdf" class="statPlot"></div>
-    <div id="retSpec" class="statPlot"></div>
-    <div id="pSeries" class="timePlot"></div>
-    <div id="retSeries" class="timePlot"></div>
-</div><!-- #svgWrap -->
-<div id="controls">
+<div id="figureWrapper">
+    <div id="retPdf" class="halfSize"></div>
+    <div id="retSpec" class="halfSize"></div>
+    <div id="pSeries" class="halfSize"></div>
+    <div id="retSeries" class="halfSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
     <span class="controlBlock">
         <label for="nAgents">N=</label>
         <input id="nAgents" name="nAgents" type="number" min="30" max="1000" step="10" value="1000">
@@ -48,7 +38,7 @@
     <br/>
     <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
     <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
-</div><!-- #controls -->
+</div><!-- #controlWrapper -->
 </div><!-- #wrapper -->
 <script language="javascript" type="text/javascript" src="./bakOBModel.js"></script>
 <script language="javascript" type="text/javascript" src="./bobmm-main.js"></script>
