@@ -57,7 +57,10 @@ label {
     width: 250px;
 }
 #figureWrapper div.thirdSize {
-    width: 167px;
+    width: 165px;
+}
+#figureWrapper div.twoThirdSize {
+    width: 330px;
 }
 #controlWrapper {
     line-height: 30px;
