@@ -1,7 +1,7 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 
 var fqtauPlot=new plotlyPlot("fqtauPlot",["lg[s]","lg[Fq(s)]"]);
-var hqPlot=new plotlyPlot("hqPlot",["q","H(q)"]);
+var hqPlot=new plotlyPlot("hqPlot",["q","h(q)"]);
 var holderPlot=new plotlyPlot("holderPlot",["α","f(α)"]);
 
 var stopped=true;
