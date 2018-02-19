@@ -253,5 +253,16 @@ var commonFunctions={
     },
     average: function(values){
         return values.reduce(function(c,v){return c+v;},0)/values.length;
-    }
+    },
+    shuffleArray: function(arr) {
+        var i, j;
+        var rarr=new Array(arr.length);
+        for(i=rarr.length-1;i>0;i-=1) {
+            j=Math.floor(Math.random()*(i+1));
+            rarr[i]=arr[j];
+            arr[j]=arr[i];
+        }
+        rarr[0]=arr[0];
+        return rarr;
+    },
 };
