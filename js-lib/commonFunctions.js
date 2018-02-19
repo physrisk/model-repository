@@ -265,4 +265,46 @@ var commonFunctions={
         rarr[0]=arr[0];
         return rarr;
     },
+    linearFit1D: function(arry) {
+        var i, tx, ty, invDelta;
+        var l=arry.length;
+        var xtot=0, ytot=0, x2tot=0, xytot=0;
+        var rez=new Array(2);
+        for(i=0;i<l;i+=1) {
+            tx=i;
+            ty=arry[i];
+            xtot+=tx;
+            ytot+=ty;
+            x2tot+=(tx*tx);
+            xytot+=(tx*ty);
+        }
+        invDelta=1.0/(l*x2tot-xtot*xtot);
+        rez[0]=invDelta*(l*xytot-xtot*ytot);
+        rez[1]=invDelta*(x2tot*ytot-xtot*xytot);
+        return rez;
+    },
+    linearFit: function(arr,from,to) {
+        var i, tx, ty, invDelta;
+        var l=0;
+        var xtot=0, ytot=0, x2tot=0, xytot=0;
+        var rez=new Array(2);
+        for(i=0;i<arr.length;i+=1) {
+            tx=arr[i][0];
+            ty=arr[i][1];
+            if(from<=tx && tx<=to) {
+                xtot+=tx;
+                ytot+=ty;
+                x2tot+=(tx*tx);
+                xytot+=(tx*ty);
+                l+=1;
+            }
+        }
+        if(l==0) {
+            return -1;
+        }
+        invDelta=1.0/(l*x2tot-xtot*xtot);
+        rez[0]=invDelta*(l*xytot-xtot*ytot);
+        rez[1]=invDelta*(x2tot*ytot-xtot*xytot);
+        return rez;
+    },
 };
