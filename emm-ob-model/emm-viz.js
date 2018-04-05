@@ -12,7 +12,7 @@ function play() {
 }
 
 function plotFigures() {
-    var i, l, pdfBidX, pdfAskX, pdfBid, pdfAsk, findIndex, fi;
+    var i, pdfBidX, pdfAskX, pdfBid, pdfAsk;
     pdfBidX=Array(41);
     pdfAskX=Array(41);
     pdfBid=Array(41);
