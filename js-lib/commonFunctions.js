@@ -1,7 +1,7 @@
 var commonFunctions={
     matlog2: Math.log(2),
     matlog10: Math.log(10),
-    LogBase10: function(x) {return Math.log(x)/commonFunctions.matlog10;},
+    LogBase10: function(x) {return Math.log(x)/this.matlog10;},
     pdfModification: function(pdf, log, llim, rlim, outPoints, xlim, xstep, ntrials) {
         if(!log) xlim=typeof xlim!=="undefined" ? xlim : 0;
         else xlim=typeof xlim!=="undefined" ? xlim : 1;
@@ -20,22 +20,22 @@ var commonFunctions={
             nueita++;
         }
         if(log) {
-            llim=commonFunctions.LogBase10(llim);
-            rlim=commonFunctions.LogBase10(rlim);
+            llim=this.LogBase10(llim);
+            rlim=this.LogBase10(rlim);
             lstep=(rlim-llim)/(outPoints-1.0);
             used=0;
             while((llim<=rlim)&&(used<outPoints)) {
                 integralas=0;
                 llim+=lstep;
-                while((commonFunctions.LogBase10(curlim)<llim)&&(nueita<pdf.length)) {
+                while((this.LogBase10(curlim)<llim)&&(nueita<pdf.length)) {
                     curlim+=xstep;
                     integralas+=(pdf[nueita]/ntrials);
                     nueita++;
                 }
                 if(integralas>0) {
                     rez[used][0]=llim-0.5*lstep;
-                    if(used>0) rez[used][1]=commonFunctions.LogBase10(integralas/(Math.pow(10,rez[used][0])-Math.pow(10,rez[used-1][0])));
-                    else rez[used][1]=commonFunctions.LogBase10(integralas/(Math.pow(10,rez[used][0])-Math.pow(10,rez[used][0]-lstep)));
+                    if(used>0) rez[used][1]=this.LogBase10(integralas/(Math.pow(10,rez[used][0])-Math.pow(10,rez[used-1][0])));
+                    else rez[used][1]=this.LogBase10(integralas/(Math.pow(10,rez[used][0])-Math.pow(10,rez[used][0]-lstep)));
                     used++;
                 }
             }
@@ -222,6 +222,27 @@ var commonFunctions={
             }
         }
         return rez2;
+    },
+    autocorrelation: function(series,tauInt) {
+        var i, tau, numer;
+        var cor=new Array(Math.floor((tauInt[1]-tauInt[0])/tauInt[2]));
+        var mu=this.average(series);
+        var sigma=this.standardDeviation(series);
+        var denom=sigma*sigma;
+        series=series.map(x=>x-mu);
+        cor[0]=1;
+        for(i=1;i<cor.length;i+=1) {
+            tau=i*tauInt[2];
+            numer=series.map((cv,id,arr)=>{
+                if(id+tau>=arr.length) {
+                    return Number.NaN;
+                }
+                return arr[id]*arr[id+tau];
+            });
+            numer=numer.filter(cv=>!isNaN(cv));
+            cor[i]=this.average(numer)/denom;
+        }
+        return cor;
     },
     toOneDimensionalArray: function(arr,i) {
         if(typeof i=="undefined") i=0;
