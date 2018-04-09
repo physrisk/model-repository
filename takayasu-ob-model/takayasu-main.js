@@ -106,7 +106,9 @@ function setup() {
         myParseFloat(document.querySelector("#spreadScale").value),
         myParseFloat(document.querySelector("#trendFollowSens").value),
         myParseFloat(document.querySelector("#trendFollowSatur").value),
-        myParseFloat(document.querySelector("#trendFollowStd").value)
+        myParseFloat(document.querySelector("#trendFollowStd").value),
+        0.01,
+        myParseFloat(document.querySelector("#timeTick").value)
     );
     seriesSetup();
     pdfSetup();
