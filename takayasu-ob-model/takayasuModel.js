@@ -216,13 +216,10 @@ class takayasuModel{
     // Model specific functions
     step() {
         this.reportAt+=this.reportTick;
-        if(this.time>this.reportAt) {
-            return this.previousPrice;
-        }
         while(this.time<this.reportAt) {
             this.internalStep();
         }
-        return this.previousPrice;
+        return this.lastPrice;
     }
     internalStep() {
         var timeTick=this.sdeTick;
