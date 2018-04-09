@@ -8,6 +8,7 @@ var retSeriesPlot=new plotlyPlot("retSeries",["time","price change"]);
 
 var model=null;
 var time=0;
+var timeTick=1;
 var timeSeries=null;
 var priceSeries=null;
 var retSeries=null;
@@ -26,7 +27,7 @@ function play() {
     priceSeries.splice(0,64);
     retSeries.splice(0,64);
     for(i=0;i<64;i+=1) {
-        time+=1;
+        time+=timeTick;
         price=model.step();
         ret=(price-priceSeries[priceSeries.length-1])/priceTick;
 
@@ -62,7 +63,7 @@ function plotFigures() {
         var autoCorX=new Array(autoCorY.length);
         autoCorX[0]=0;
         for(i=1;i<autoCorX.length;i+=1) {
-            autoCorX[i]=autoCorX[i-1]+1;
+            autoCorX[i]=autoCorX[i-1]+timeTick;
         }
         retCorPlot.update([autoCorX,autoCorX],[autoCorY,autoCorY2]);
     } else {
@@ -88,7 +89,7 @@ function seriesSetup() {
     timeSeries=new Array(4096);
     priceSeries=new Array(timeSeries.length);
     for(i=0;i<timeSeries.length;i+=1) {
-        timeSeries[i]=i-timeSeries.length;
+        timeSeries[i]=timeTick*(i-timeSeries.length);
     }
     for(i=0;i<priceSeries.length;i+=1) {
         priceSeries[i]=0;
@@ -100,6 +101,7 @@ function seriesSetup() {
 }
 
 function setup() {
+    timeTick=myParseFloat(document.querySelector("#timeTick").value)
     model=new takayasuModel(
         myParseFloat(document.querySelector("#nAgents").value),
         myParseFloat(document.querySelector("#spreadShape").value),
@@ -108,7 +110,7 @@ function setup() {
         myParseFloat(document.querySelector("#trendFollowSatur").value),
         myParseFloat(document.querySelector("#trendFollowStd").value),
         0.01,
-        myParseFloat(document.querySelector("#timeTick").value)
+        timeTick
     );
     seriesSetup();
     pdfSetup();
