@@ -1,5 +1,4 @@
 class takayasuModel{
-    // trendFollowStd=14.5
     constructor(nAgents=100,spreadShape=4,spreadScale=15.5,trendFollowSens=6,trendFollowSatur=7.5,trendFollowStd=3.8,sdeTick=0.01,reportTick=1) {
         this.rng=new Random();
         // universal time tracking variables
@@ -26,6 +25,9 @@ class takayasuModel{
         this.obAskWhich=null;// which orders agent placed (agent => order ids)
         this.obBidWhich=null;// which orders agent placed (agent => order ids)
         this.initOrderBook();
+    }
+    getCTilde() {
+        return Math.sqrt((this.spreadShape-1)*(this.spreadShape-2)/(2*this.nAgents))*(this.c*this.spreadScale)/(this.sigma*this.sigma);
     }
     // Order-book specific functions
     initOrderBook() {

@@ -54,6 +54,7 @@ function setup() {
         0.01,
         myParseFloat(document.querySelector("#timeTick").value)
     );
+    document.querySelector("#cTilde").value=model.getCTilde();
     price=model.lastPrice;
 }
 

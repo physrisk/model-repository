@@ -112,6 +112,7 @@ function setup() {
         0.01,
         timeTick
     );
+    document.querySelector("#cTilde").value=model.getCTilde();
     seriesSetup();
     pdfSetup();
 }
