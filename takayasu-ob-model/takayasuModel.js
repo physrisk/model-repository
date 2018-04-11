@@ -225,7 +225,7 @@ class takayasuModel{
         var timeTick=this.sdeTick;
         this.doMoveAllBids(timeTick);
         this.doSortOrderBook();
-        if(this.canDeal()) {
+        while(this.canDeal()) {
             var asker=this.obAskWho[0];
             var bidder=this.obBidWho[0];
             this.doDeal(asker,bidder);
