@@ -88,7 +88,6 @@ var restartButton=document.querySelector("#restart");
 stopButton.disabled=true;
 restartButton.addEventListener("click",function () {
 	setup();
-    restartButton.disabled=true;
     stopButton.disabled=false;
     stopButton.dispatchEvent(new Event("click"));
 });
@@ -96,13 +95,14 @@ restartButton.addEventListener("click",function () {
 function continueClickEvent() {
 	resumeGame();
 	stopButton.textContent="Stop";
-    restartButton.disabled=false;
+    restartButton.disabled=true;
     stopButton.removeEventListener("click",continueClickEvent);
     stopButton.addEventListener("click",stopClickEvent);
 }
 function stopClickEvent() {
 	stopGame();
 	stopButton.textContent="Continue";
+    restartButton.textContent="Restart";
     restartButton.disabled=false;
     stopButton.removeEventListener("click",stopClickEvent);
     stopButton.addEventListener("click",continueClickEvent);
