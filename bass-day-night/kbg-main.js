@@ -6,24 +6,23 @@ let newCPlot=new plotlyPlot("newC",["t (min)","ΔN"]);
 let model=null;
 let time=0;
 let timeSeries=[0];
-let oldCustomer=0;
-let customerSeries=[0];
-let newCustomerSeries=[0];
+let oldCommenter=0;
+let commenterSeries=[0];
+let newCommenterSeries=[0];
 let awakeSeries=[0];
 
 let timeoutID=null;
 
 function play() {
-    let i, price, ret;
-    time+=15;
-    let state=model.step();
-
+    time+=15;// model proceeds in 15 minute ticks
+    let state=model.step();// iterate the model
+    // update series
     timeSeries.push(time);
-    customerSeries.push(state[0]);
-    newCustomerSeries.push(state[0]-oldCustomer);
+    commenterSeries.push(state[0]);
+    newCommenterSeries.push(state[0]-oldCommenter);
     awakeSeries.push(state[1]+state[3]);
-    
-    oldCustomer=state[0];
+    // store current number of commenters
+    oldCommenter=state[0];
 }
 
 function plotFigures() {
@@ -32,8 +31,8 @@ function plotFigures() {
         totalCPlot.update([[0]],[[0]],"lines",colors);
         newCPlot.update([[0]],[[0]],"lines",colors);
     } else {
-        totalCPlot.update([timeSeries,timeSeries],[customerSeries,awakeSeries],"lines",colors);
-        newCPlot.update([timeSeries],[newCustomerSeries],"lines",colors[0]);
+        totalCPlot.update([timeSeries,timeSeries],[commenterSeries,awakeSeries],"lines",colors);
+        newCPlot.update([timeSeries],[newCommenterSeries],"lines",colors[0]);
     }
 }
 
@@ -49,16 +48,16 @@ function setup() {
     );
     time=0;
     timeSeries=[0];
-    oldCustomer=0;
-    customerSeries=[0];
-    newCustomerSeries=[0];
+    oldCommenter=0;
+    commenterSeries=[0];
+    newCommenterSeries=[0];
     awakeSeries=[0];
 }
 
 function frame() {
     play();
     plotFigures();
-    if(model.totalAgents==model.customers) {
+    if(model.totalAgents==model.commenters) {
         $("#stop").click();
     }
 }
