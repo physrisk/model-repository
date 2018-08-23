@@ -30,19 +30,29 @@ class plotlyPlot {
         };
         this.reset();
     }
-    update(x,y,mode='lines') {
-        var i, m;
-        var data=[];
+    update(x,y,mode='lines',colors=null) {
+        let i, c, dataObj;
+        let data=[];
         for(i=0;i<x.length;i+=1) {
+            dataObj={'x': x[i],'y': y[i]};
             if(typeof mode==="object") {
-                m=mode[i];
+                dataObj["mode"]=mode[i];
             } else {
-                m=mode;
+                dataObj["mode"]=mode;
             }
-            data.push({
-                'x': x[i],
-                'y': y[i],
-                'mode': m});
+            if(colors!==null) {
+                if(typeof colors==="object") {
+                    c=colors[i];
+                } else {
+                    c=colors;
+                }
+                if(dataObj["mode"]=="markers") {
+                    dataObj["marker"]={"color":c};
+                } else {
+                    dataObj["line"]={"color":c};
+                }
+            }
+            data.push(dataObj);
         }
         Plotly.newPlot(this.id,data,this.layout,this.additionalParams);
     }
