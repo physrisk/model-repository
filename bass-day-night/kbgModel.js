@@ -14,6 +14,10 @@ class kbgModel {
         this.sleepRate=sleepRate;
         this.wakeupFrom=wakeupFrom;
         this.sleepFrom=sleepFrom;
+        if(this.wakeupFrom>=this.sleepFrom) {
+            this.wakeupFrom=this.sleepFrom-30;
+            this.sleepFrom+=30;
+        }
         this.updateState();
         this.updateRates();
     }
