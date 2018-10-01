@@ -43,8 +43,8 @@ function setup() {
         myParseFloat($("#herding").val())/60,
         myParseFloat($("#wakeupRate").val())/60,
         myParseFloat($("#sleepRate").val())/60,
-        $("#wakeupFrom").val(),
-        $("#sleepFrom").val()
+        parseInt($("#wakeupFrom").val()),
+        parseInt($("#sleepFrom").val())
     );
     time=0;
     timeSeries=[0];

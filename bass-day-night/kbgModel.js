@@ -2,6 +2,7 @@ class kbgModel {
     constructor(nAgents=100,sigma=0.01,herding=0.275,wakeupRate=0.1,
                 sleepRate=0.1,wakeupFrom=360,sleepFrom=1020) {
         this.time=0;
+        this.dayTime=0;
         this.reportAt=0;
         this.commenters=0;
         this.awakeCommenters=0;
