@@ -1,6 +1,6 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 
-let obFigPlot=new plotlyPlot("obFig",["relative price","orders"],[10,10,40,40]);
+let obFigPlot=new plotlyPlot("obFig",["price","orders"],[10,10,40,40]);
 
 let model=null;
 let price=0;
