@@ -35,6 +35,18 @@ label {
     display:inline-block;
     margin-left:5px;
 }
+.controlBlock.singleWidth {
+    width:100px;
+}
+.controlBlock.doubleWidth {
+    width:210px;
+}
+.controlBlock.singleWidth label,
+.controlBlock.doubleWidth label {
+    width:30px;
+    text-align:right;
+    display:inline-block;
+}
 .controlBlockTitle {
     font-weight:bold;
 }
