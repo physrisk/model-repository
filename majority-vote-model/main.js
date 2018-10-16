@@ -74,7 +74,7 @@ function seriesSetup() {
     magSeries=new Array(4096);
     for(i=0;i<timeSeries.length;i+=1) {
         timeSeries[i]=i-timeSeries.length;
-        magSeries[i]=Math.abs(model.globalSpin);
+        magSeries[i]=model.globalSpin/total;
     }
 }
 
