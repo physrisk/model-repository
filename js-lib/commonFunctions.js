@@ -57,7 +57,7 @@ var commonFunctions={
                 llim+=lstep;
                 while((curlim<llim)&&(nueita<pdf.length)) {
                     curlim+=xstep;
-                    integralas+=pdf[nueita];
+                    integralas+=(pdf[nueita]/ntrials);
                     nueita++;
                 }
                 rez[i][0]=llim-0.5*lstep;
