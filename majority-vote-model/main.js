@@ -28,7 +28,7 @@ function play() {
         mag=model.step(total);
 
         timeSeries.push(time);
-        magSeries.push(mag);
+        magSeries.push(mag/total);
         
         pdf[mag+total]+=1;
         pdfLen+=1;
@@ -38,7 +38,7 @@ function play() {
 function plotFigures() {
     timeSeriesPlot.update([timeSeries],[magSeries]);
     if(pdfLen>128) {
-        let showPdf=commonFunctions.pdfModification(pdf,false,-total,total,101,-total,1,pdfLen);
+        let showPdf=commonFunctions.pdfModification(pdf,false,-1,1,101,-1,1/total,pdfLen);
         magPdfPlot.update([commonFunctions.toOneDimensionalArray(showPdf,0)],
                           [commonFunctions.toOneDimensionalArray(showPdf,1)]);
     } else {
