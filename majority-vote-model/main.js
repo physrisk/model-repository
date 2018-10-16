@@ -1,7 +1,7 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 
 let timeSeriesPlot=new plotlyPlot("timeSeries",["t","M(t)"]);
-let magPdfPlot=new plotlyPlot("magPdf",["M","lg[p(M)]"]);
+let magPdfPlot=new plotlyPlot("magPdf",["M","p(M)"]);
 
 let height=50;
 let width=125;
@@ -39,10 +39,8 @@ function plotFigures() {
     timeSeriesPlot.update([timeSeries],[magSeries]);
     if(pdfLen>128) {
         let showPdf=commonFunctions.pdfModification(pdf,false,-total,total,101,-total,1,pdfLen);
-        let showPdfLogY=commonFunctions.toOneDimensionalArray(showPdf,1);
-        showPdfLogY=showPdfLogY.map(y=>Math.log10(y));
         magPdfPlot.update([commonFunctions.toOneDimensionalArray(showPdf,0)],
-                          [showPdfLogY]);
+                          [commonFunctions.toOneDimensionalArray(showPdf,1)]);
     } else {
         magPdfPlot.reset();
     }
