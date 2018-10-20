@@ -36,7 +36,8 @@ function play() {
         while(bPos.indexOf(npos)>=0) npos=Math.floor(NParticles*Math.random());
         bPos.push(npos);
     }
-    bPos=bPos.sort(function(a,b){return a>b;});
+    bPos=bPos.sort((a,b)=>a-b);
+    console.log(bPos);
     var rez=0;
     for(i=0;i<bPos.length-1;i++) {
         rez+=(2.0*(i % 2)-1)*(bPos[i+1]-bPos[i]);

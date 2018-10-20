@@ -47,10 +47,12 @@ function generateBoundaries() {
     bPos=[0,NParticles];
     for(var i=0;i<boundaries;i+=1) {
         var npos=Math.floor(NParticles*Math.random());
-        while(bPos.indexOf(npos)>=0) npos=Math.floor(NParticles*Math.random());
+        while(bPos.indexOf(npos)>=0) {
+            npos=Math.floor(NParticles*Math.random());
+        }
         bPos.push(npos);
     }
-    bPos=bPos.sort(function(a,b){return a>b;});
+    bPos=bPos.sort((a,b)=>a-b);
 }
 
 function drawBoundaries() {
