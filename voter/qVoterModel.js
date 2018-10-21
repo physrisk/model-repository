@@ -33,8 +33,10 @@ class QVoterModel {
     }
     singleStep() {
         let x,y,spinZero,qi,united;
+        // pick random agent
         x=Math.floor(Math.random()*this.width);
         y=Math.floor(Math.random()*this.height);
+        // check if neighbors are united in opinion
         united=true;
         spinZero=this.getSpin(x,y,this.getRandomDirection());
         for(qi=1;(qi<this.q) && (united);qi+=1) {
@@ -42,8 +44,10 @@ class QVoterModel {
         }
         this.globalSpin-=this.spinArray[y][x];
         if(united) {
+            // if they are united, then adopt their opinion
             this.spinArray[y][x]=spinZero;
         } else if(Math.random()<this.epsilon) {
+            // if they are not united, then flip randomly
             this.spinArray[y][x]=-this.spinArray[y][x];
         }
         this.globalSpin+=this.spinArray[y][x];
