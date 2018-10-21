@@ -34,8 +34,10 @@ class SznajdModel {
     singleStep() {
         let x,y,r,dx,dy,dspin;
         dspin=0;
+        // pick random agent
         x=Math.floor(Math.random()*this.width);
         y=Math.floor(Math.random()*this.height);
+        // pick random neighbor
         r=Math.floor(4*Math.random());
         dx=1;dy=0;
         if(r==1) {
@@ -46,13 +48,13 @@ class SznajdModel {
             dx=0;dy=1;
         }
         if(this.getSpin(x,y)==this.getSpin(x+dx,y+dy)) {
+            // apply united we stand rule
             if(this.unitedRule) {
-                // united we stand
                 dspin=this.setNeighborsSpin(x,y,1);
                 dspin+=this.setNeighborsSpin(x+dx,y+dy,1);
             }
         } else {
-            // divided we fall
+            // apply divided we fall rule
             if(this.dividedRule) {
                 dspin=this.setNeighborsSpin(x,y,-1);
                 dspin+=this.setNeighborsSpin(x+dx,y+dy,-1);
