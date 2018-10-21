@@ -70,4 +70,19 @@ class QVoterModel {
         ny=y+dir[1]+this.height;
         return this.spinArray[(ny) % this.height][(nx) % this.width];
     }
+    getCriticals(q=-1) {
+        let e1,e2;
+        if(q<0) {
+            q=this.q;
+        }
+        if(q<=1) {
+            return ["?","?"];
+        }
+        e1=(q-1)/(Math.pow(2,q)-2);
+        e2=(q*(17/3+q*(q/3-2))-4)/(Math.pow(2,q+2)-2*(4+q*(q-1)));
+        if(e1<e2) {
+            return [e1,e2];
+        }
+        return [e2,e1];
+    }
 }

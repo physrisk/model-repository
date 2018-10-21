@@ -60,6 +60,22 @@ function plotField() {
     }
 }
 
+function plotCrits() {
+    let crits;
+    if(timeoutID==null) {
+        crits=model.getCriticals(parseInt($("#neighbors").val()));
+    } else {
+        crits=model.getCriticals();
+    }
+    try {
+        $("#crit1").val(crits[0].toFixed(2));
+        $("#crit2").val(crits[1].toFixed(2));
+    } catch(e) {
+        $("#crit1").val(crits[0]);
+        $("#crit2").val(crits[1]);
+    }
+}
+
 function pdfSetup() {
     let i;
     pdf=new Array(2*total+1);
@@ -83,7 +99,7 @@ function seriesSetup() {
 function setup() {
     g=$("#plotDiv")[0].getContext("2d");
     model=new QVoterModel(height,width,
-        myParseFloat($("#neighbors").val()),
+        parseInt($("#neighbors").val()),
         myParseFloat($("#flip").val()),
         myParseFloat($("#fillProb").val())
     );
