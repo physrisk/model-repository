@@ -26,9 +26,6 @@ function play() {
         timeSeries.push(time);
         magSeries.push(mag/total);
     }
-    if(model.globalSpin==total || model.globalSpin==-total) {
-        $("#stop").click();
-    }
 }
 
 function plotFigures() {
