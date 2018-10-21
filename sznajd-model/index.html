@@ -42,17 +42,17 @@
 $("#stop").attr("disabled","disabled");
 $("#restart").click(function () {
 	setup();
-	$("#restart, #step").attr("disabled","disabled");
+	$("#restart").attr("disabled","disabled");
 	$("#stop").removeAttr("disabled").click();
 });
 $("#stop").toggle(function() {
 	resumeGame();
 	$("#stop").text("Stop");
-	$("#restart, #step").attr("disabled","disabled");
+	$("#restart").attr("disabled","disabled");
 },function() {
 	stopGame();
 	$("#stop").text("Continue");
-	$("#restart, #step").removeAttr("disabled");
+	$("#restart").removeAttr("disabled");
 });
 
 /* onLoad */
