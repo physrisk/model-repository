@@ -19,6 +19,8 @@ let g;
 
 function play() {
     let i, mag;
+    timeSeries.splice(0,64);
+    magSeries.splice(0,64);
     for(i=0;i<64;i+=1) {
         time+=timeStep;
         mag=model.step(timeStep);
@@ -50,10 +52,10 @@ function plotField() {
 function seriesSetup() {
     let i;
     time=0;
-    timeSeries=new Array(1);
-    magSeries=new Array(1);
+    timeSeries=new Array(4096);
+    magSeries=new Array(4096);
     for(i=0;i<timeSeries.length;i+=1) {
-        timeSeries[i]=i-timeSeries.length;
+        timeSeries[i]=(i-timeSeries.length)*timeStep;
         magSeries[i]=model.globalSpin/total;
     }
 }
