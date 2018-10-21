@@ -13,9 +13,6 @@ let timeSeries=null;
 let timeStep=100;
 let magSeries=null;
 
-let pdf=null;
-let pdfLen=0;
-
 let timeoutID=null;
 
 let g;
@@ -28,9 +25,6 @@ function play() {
 
         timeSeries.push(time);
         magSeries.push(mag/total);
-        
-        pdf[mag+total]+=1;
-        pdfLen+=1;
     }
     if(model.globalSpin==total || model.globalSpin==-total) {
         $("#stop").click();
@@ -53,15 +47,6 @@ function plotField() {
     }
 }
 
-function pdfSetup() {
-    let i;
-    pdf=new Array(2*total+1);
-    for(i=0;i<pdf.length;i+=1) {
-        pdf[i]=0;
-    }
-    pdfLen=0;
-}
-
 function seriesSetup() {
     let i;
     time=0;
@@ -81,7 +66,6 @@ function setup() {
         $("#dRule").is(":checked")
     );
     seriesSetup();
-    pdfSetup();
 }
 
 function frame() {
