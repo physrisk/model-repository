@@ -14,7 +14,8 @@
 <div id="wrapper">
 <div id="figureWrapper">
     <canvas id="plotDiv" width="500" height="200" class="fullSize"></canvas>
-    <div id="timeSeries" class="fullSize"></div>
+    <div id="timeSeries" class="halfSize"></div>
+    <div id="magPdf" class="halfSize"></div>
 </div><!-- #figureWrapper -->
 <div id="controlWrapper">
     <span class="controlBlock">
@@ -32,6 +33,7 @@
     <br>
     <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
     <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
+    <span class="controlBlock"><button name="hide" id="hide">Hide PDF</button></span>
 </div><!-- #controlWrapper -->
 </div><!-- #wrapper -->
 <script language="javascript" type="text/javascript" src="./qVoterModel.js"></script>
@@ -41,17 +43,28 @@
 $("#stop").attr("disabled","disabled");
 $("#restart").click(function () {
 	setup();
-	$("#restart, #step").attr("disabled","disabled");
+	$("#restart").attr("disabled","disabled");
 	$("#stop").removeAttr("disabled").click();
 });
 $("#stop").toggle(function() {
 	resumeGame();
 	$("#stop").text("Stop");
-	$("#restart, #step").attr("disabled","disabled");
+	$("#restart").attr("disabled","disabled");
 },function() {
 	stopGame();
 	$("#stop").text("Continue");
-	$("#restart, #step").removeAttr("disabled");
+	$("#restart").removeAttr("disabled");
+});
+$("#hide").toggle(function() {
+    $("#magPdf").hide();
+    $("#timeSeries").removeClass("halfSize").addClass("fullSize");
+    $("#hide").text("Show PDF");
+    plotFigures();
+},function(){
+    $("#magPdf").show();
+    $("#timeSeries").removeClass("fullSize").addClass("halfSize");
+    $("#hide").text("Hide PDF");
+    plotFigures();
 });
 
 /* onLoad */
