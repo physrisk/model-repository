@@ -3,7 +3,6 @@ let timeSeriesPlot=new plotlyPlot("timeSeries",["t","M(t)"]);
 let height=40;
 let width=100;
 let sqSize=5;
-let total=height*width;
 
 let model=null;
 let time=0;
@@ -82,7 +81,6 @@ function setup() {
     pUp[2]/=pUp[4];
     pUp[3]/=pUp[4];
     pUp[4]=1;
-    console.log(pUp);
     g=$("#plotDiv")[0].getContext("2d");
     model=new Stauffer4SznajdModel(height,width,pUp);
     seriesSetup();

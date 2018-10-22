@@ -3,7 +3,6 @@ let timeSeriesPlot=new plotlyPlot("timeSeries",["t","M(t)"]);
 let height=40;
 let width=100;
 let sqSize=5;
-let total=height*width;
 
 let model=null;
 let time=0;
