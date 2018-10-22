@@ -1,5 +1,3 @@
-function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
-
 let timeSeriesPlot=new plotlyPlot("timeSeries",["t","M(t)"]);
 
 let height=40;
@@ -74,11 +72,11 @@ function seriesSetup() {
 
 function setup() {
     let pUp=new Array(5);
-    pUp[0]=myParseFloat($("#fillProb0").val());
-    pUp[1]=pUp[0]+myParseFloat($("#fillProb1").val());
-    pUp[2]=pUp[1]+myParseFloat($("#fillProb2").val());
-    pUp[3]=pUp[2]+myParseFloat($("#fillProb3").val());
-    pUp[4]=pUp[3]+myParseFloat($("#fillProb4").val());
+    pUp[0]=parseInt($("#fillProb0").val());
+    pUp[1]=pUp[0]+parseInt($("#fillProb1").val());
+    pUp[2]=pUp[1]+parseInt($("#fillProb2").val());
+    pUp[3]=pUp[2]+parseInt($("#fillProb3").val());
+    pUp[4]=pUp[3]+parseInt($("#fillProb4").val());
     pUp[0]/=pUp[4];
     pUp[1]/=pUp[4];
     pUp[2]/=pUp[4];
