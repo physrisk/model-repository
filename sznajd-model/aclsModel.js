@@ -104,11 +104,11 @@ class ACLSModel {
         // update economics according to Sznajd model if agreed on social
         // otherwise update economics according to SM with probability of pTollerance
         if(this.getSocSpin(x,y)==this.getSocSpin(x+dx,y+dy)) {
-            this.setNeighborsEcoSpin(x,y);
-            this.setNeighborsEcoSpin(x+dx,y+dy);
+            this.setNeighborsEcoSpin(x,y,x+dx,y+dy);
+            this.setNeighborsEcoSpin(x+dx,y+dy,x,y);
         } else if(Math.random()<this.pTollerance) {
-            this.setNeighborsEcoSpin(x,y);
-            this.setNeighborsEcoSpin(x+dx,y+dy);
+            this.setNeighborsEcoSpin(x,y,x+dx,y+dy);
+            this.setNeighborsEcoSpin(x+dx,y+dy,x,y);
         }
     }
     getIdeology(x,y) {
@@ -145,7 +145,7 @@ class ACLSModel {
         ny=y+this.height;
         this.socArray[(ny) % this.height][(nx) % this.width]=val;
     }
-    setNeighborsEcoSpin(x,y) {
+    setNeighborsEcoSpin(x,y,ix,iy) {
         let model=this;
         function ecoFlip(nx,ny,spin) {
             let ideo;
@@ -161,9 +161,9 @@ class ACLSModel {
 
         let spin=this.getEcoSpin(x,y);
 
-        ecoFlip(x-1,y,spin);
-        ecoFlip(x+1,y,spin);
-        ecoFlip(x,y-1,spin);
-        ecoFlip(x,y+1,spin);
+        if(!(x-1==ix && y==iy)) ecoFlip(x-1,y,spin);
+        if(!(x+1==ix && y==iy)) ecoFlip(x+1,y,spin);
+        if(!(x==ix && y-1==iy)) ecoFlip(x,y-1,spin);
+        if(!(x==ix && y+1==iy)) ecoFlip(x,y+1,spin);
     }
 }
