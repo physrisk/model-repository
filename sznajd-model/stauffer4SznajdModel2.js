@@ -90,8 +90,8 @@ class Stauffer4SznajdModel {
             dx=0;dy=1;
         }
         if(this.getSpin(x,y)==this.getSpin(x+dx,y+dy)) {
-            this.setNeighborsSpin(x,y,1);
-            this.setNeighborsSpin(x+dx,y+dy,1);
+            this.setNeighborsSpin(x,y);
+            this.setNeighborsSpin(x+dx,y+dy);
         }
     }
     getSpin(x,y) {
