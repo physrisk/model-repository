@@ -1,4 +1,4 @@
-class QVoterModel {
+class QAVoterModel {
     constructor(height=100,width=200,q=2,pA=0.5,pUp=0.5) {
         this.width=width;
         this.height=height;

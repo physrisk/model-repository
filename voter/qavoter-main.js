@@ -84,7 +84,7 @@ function seriesSetup() {
 
 function setup() {
     g=$("#plotDiv")[0].getContext("2d");
-    model=new QVoterModel(height,width,
+    model=new QAVoterModel(height,width,
         parseInt($("#neighbors").val()),
         myParseFloat($("#anticonform").val()),
         myParseFloat($("#fillProb").val())
