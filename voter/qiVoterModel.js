@@ -1,11 +1,12 @@
 class QIVoterModel {
-    constructor(height=100,width=200,q=2,pI=0.5,pUp=0.5) {
+    constructor(height=100,width=200,q=2,pI=0.5,pUp=0.5,cg=true) {
         this.width=width;
         this.height=height;
         this.q=q;
         this.pIndependence=pI;
         this.globalSpin=0;
         this.initializeSpinArray(pUp);
+        this.completeGraph=cg;
     }
     initializeSpinArray(pUp) {
         let i,j,tmp;
@@ -59,7 +60,17 @@ class QIVoterModel {
         }
     }
     getRandomDirection() {
-        let r=Math.floor(4*Math.random());
+        let r,x,y;
+        if(this.completeGraph) {
+            x=Math.floor(Math.random()*this.width);
+            y=Math.floor(Math.random()*this.height);
+            while(x==0 && y==0) {
+                x=Math.floor(Math.random()*this.width);
+                y=Math.floor(Math.random()*this.height);
+            }
+            return [x,y];
+        }
+        r=Math.floor(4*Math.random());
         if(r==0) {
             return [1,0];
         }
@@ -79,5 +90,14 @@ class QIVoterModel {
         nx=x+dir[0]+this.width;
         ny=y+dir[1]+this.height;
         return this.spinArray[(ny) % this.height][(nx) % this.width];
+    }
+    getCriticals(q=-1) {
+        if(!this.completeGraph) {
+            return "?";
+        }
+        if(q<0) {
+            q=this.q;
+        }
+        return (q-1)/(q-1+Math.pow(2,q-1));
     }
 }

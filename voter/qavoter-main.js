@@ -87,7 +87,8 @@ function setup() {
     model=new QAVoterModel(height,width,
         parseInt($("#neighbors").val()),
         myParseFloat($("#anticonform").val()),
-        myParseFloat($("#fillProb").val())
+        myParseFloat($("#fillProb").val()),
+        $("#completeGraph").is(":checked")
     );
     seriesSetup();
     pdfSetup();

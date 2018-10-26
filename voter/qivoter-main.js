@@ -87,7 +87,8 @@ function setup() {
     model=new QIVoterModel(height,width,
         parseInt($("#neighbors").val()),
         myParseFloat($("#independence").val()),
-        myParseFloat($("#fillProb").val())
+        myParseFloat($("#fillProb").val()),
+        $("#completeGraph").is(":checked")
     );
     seriesSetup();
     pdfSetup();
