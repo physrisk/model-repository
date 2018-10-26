@@ -91,12 +91,15 @@ class QIVoterModel {
         ny=y+dir[1]+this.height;
         return this.spinArray[(ny) % this.height][(nx) % this.width];
     }
-    getCriticals(q=-1) {
-        if(!this.completeGraph) {
-            return "?";
-        }
+    getCriticals(q=-1,cg=null) {
         if(q<0) {
             q=this.q;
+        }
+        if(cg===null) {
+            cg=this.completeGraph;
+        }
+        if(!cg) {
+            return "?";
         }
         return (q-1)/(q-1+Math.pow(2,q-1));
     }

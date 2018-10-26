@@ -62,6 +62,23 @@ function plotField() {
     }
 }
 
+function plotCrits() {
+    let crits;
+    if(timeoutID==null) {
+        crits=model.getCriticals(
+                        parseInt($("#neighbors").val()),
+                        $("#completeGraph").is(":checked")
+                       );
+    } else {
+        crits=model.getCriticals();
+    }
+    try {
+        $("#crit").val(crits.toFixed(2));
+    } catch(e) {
+        $("#crit").val(crits);
+    }
+}
+
 function pdfSetup() {
     let i;
     pdf=new Array(2*total+1);

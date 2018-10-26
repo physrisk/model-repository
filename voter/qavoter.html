@@ -35,6 +35,11 @@
         <input id="fillProb" name="fillProb" type="number" min="0.01" max="0.99" step="0.01" value="0.5">
     </span>
     <br>
+    <span class="controlBlock">
+        <label for="crit">p<sup>*</sup>=</label>
+        <input id="crit" name="crit" value="0.1" disabled>
+    </span>
+    <br>
     <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
     <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
     <span class="controlBlock"><button name="hide" id="hide">Hide PDF</button></span>
@@ -47,6 +52,7 @@
 $("#stop").attr("disabled","disabled");
 $("#restart").click(function () {
 	setup();
+    plotCrits();
 	$("#restart").attr("disabled","disabled");
 	$("#stop").removeAttr("disabled").click();
 });
@@ -70,11 +76,15 @@ $("#hide").toggle(function() {
     $("#hide").text("Hide PDF");
     plotFigures();
 });
+$("#neighbors, #completeGraph").change(function(){
+    plotCrits();
+});
 
 /* onLoad */
 $(function () {
 	setup();
     plotFigures();
+    plotCrits();
 });
 </script>
 </body>
