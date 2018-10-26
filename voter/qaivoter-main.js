@@ -15,7 +15,8 @@ let modelI=null;
 let time=0;
 let timeSeries=null;
 let timeStep=100;
-let magSeries=null;
+let magSeriesA=null;
+let magSeriesI=null;
 
 let pdfA=null;
 let pdfI=null;
