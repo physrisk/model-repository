@@ -65,16 +65,20 @@ label {
     display: inline-block;
     height: 200px;
 }
-#figureWrapper div.fullSize {
+#figureWrapper div.label {
+    display: inline-block;
+    height: auto;
+}
+#figureWrapper .fullSize {
     width: 500px;
 }
-#figureWrapper div.halfSize {
+#figureWrapper .halfSize {
     width: 250px;
 }
-#figureWrapper div.thirdSize {
+#figureWrapper .thirdSize {
     width: 165px;
 }
-#figureWrapper div.twoThirdSize {
+#figureWrapper .twoThirdSize {
     width: 330px;
 }
 #controlWrapper {
