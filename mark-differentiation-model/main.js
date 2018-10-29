@@ -6,7 +6,6 @@ let nAgents=50;
 let sqSize=5;
 
 let model=null;
-let time=0;
 let timeTick=0.1;
 let timeSeries=null;
 let groupSeries=null;
@@ -20,8 +19,7 @@ function play() {
     let detect;
     model.step(timeTick);
     model.clearFacts();
-    time+=timeTick;
-    timeSeries.push(time);
+    timeSeries.push(model.time);
     detect=detectGroups();
     groupSeries.push(detect["unique"].length);
     maxSeries.push(detect["maxSize"]);
@@ -88,7 +86,6 @@ function detectGroups() {
 }
 
 function seriesSetup() {
-    time=0;
     timeSeries=[];
     groupSeries=[];
     maxSeries=[];
