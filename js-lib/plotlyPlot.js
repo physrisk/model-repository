@@ -33,8 +33,17 @@ class plotlyPlot {
     update(x,y,mode='lines',colors=null) {
         let i, c, dataObj;
         let data=[];
-        for(i=0;i<x.length;i+=1) {
-            dataObj={'x': x[i],'y': y[i]};
+        let xl=x.length;
+        let yl=y.length;
+        let maxl=Math.max(xl,yl);
+        for(i=0;i<maxl;i+=1) {
+            if(xl==maxl && yl==maxl) {
+                dataObj={'x': x[i],'y': y[i]};
+            } else if(xl==maxl) {
+                dataObj={'x': x[i],'y': y[0]};
+            } else if(yl==maxl) {
+                dataObj={'x': x[0],'y': y[i]};
+            }
             if(typeof mode==="object") {
                 dataObj["mode"]=mode[i];
             } else {
