@@ -1,7 +1,7 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 function hexToDec(val) {return parseInt(val.toString(16),16);}
 
-let magPdfPlot=new plotlyPlot("magPdf",["v","p(v)"]);
+let magPdfPlot=new plotlyPlot("magPdf",["v","ln[p(v)]"]);
 
 let height=20;
 let width=25;
