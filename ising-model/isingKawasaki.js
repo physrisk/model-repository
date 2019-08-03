@@ -5,6 +5,7 @@ let const_j=1;
 let jarr=new Array();
 let gaussianJ=true;
 let const_h=0;
+let const_moveMode=1;
 let const_dEnTe=0.4;
 let timeoutID=null;
 let field=new Array();
@@ -25,6 +26,7 @@ function setup() {
 
 function getParameterValues() {
     let i,j,tjarr,ttjarr,r1,r2;
+    const_moveMode=parseInt($("#controlT").val());
     const_j=myParseFloat($("#controlJ").val());
     jarr=new Array();
     if(const_j==-99999) {
@@ -69,15 +71,36 @@ function start() {
 }
 
 function step() {
-    let i,x,y,s,x2,y2,s2,curEnergy,newEnergy,delEnergy,prob;
+    let i,r,x,y,s,x2,y2,s2,curEnergy,newEnergy,delEnergy,prob;
     time+=1;
     for(i=0;i<interactions;i+=1) {
         x=Math.floor(Math.random()*fieldL);
         y=Math.floor(Math.random()*fieldL);
         s=getSpin(x,y);
 
-        x2=Math.floor(Math.random()*fieldL);
-        y2=Math.floor(Math.random()*fieldL);
+        if(const_moveMode==0) {
+            x2=Math.floor(Math.random()*fieldL);
+            y2=Math.floor(Math.random()*fieldL);
+        } else {
+            x2=x;
+            y2=y;
+            r=Math.floor(4*Math.random());
+            switch(r) {
+                default:
+                case 0:
+                    x2+=1;
+                    break;
+                case 1:
+                    x2-=1;
+                    break;
+                case 2:
+                    y2+=1;
+                    break;
+                case 3:
+                    y2-=1;
+                    break;
+            }
+        }
         s2=getSpin(x2,y2);
 
         curEnergy=getBondEnergy(x,y,s)+getBondEnergy(x2,y2,s2);

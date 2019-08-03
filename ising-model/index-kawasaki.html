@@ -14,7 +14,7 @@
 		.flotPlot{max-width:200px;display:inline-block;}
 		.flotLabel{width:200px;height:20px;font-size:14px;margin-bottom:0;display:inline-block;text-align:center;}
 		#energyDiv{width:200px;height:180px;display:inline-block;}
-		#controlJ{width:80px;}
+		#controlT,#controlJ{width:80px;}
 		#controlDEKT,#controlH{width:80px;}
 		.controlBlock{display:inline-block;margin-left:5px;margin-bottom:5px}
 		#controls button{width:80px;}
@@ -26,6 +26,12 @@
     <div class="flotPlot"><div class="flotLabel">Energy</div><div id="energyDiv"></div></div>
 </div>
 <div id="controls">
+    <span class="controlBlock">
+        <select name="controlT" id="controlT">
+            <option value="1" selected="selected">local transportation</option>
+            <option value="0">global transportation</option>
+        </select>
+    </span>
     <span class="controlBlock">
         <select name="controlJ" id="controlJ">
             <option value="1" selected="selected">J=1</option>
