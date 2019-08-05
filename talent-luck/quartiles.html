@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Quartiles of Talent vs Luck model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/random-026.min.js"></script>
+    <style>
+        table.qTable {
+            width:100%;
+            height:100%;
+            border:1px solid #999;
+        }
+        #redistMode{
+            width:120px;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <canvas id="plotDiv" width="250" height="200" class="halfSize"></canvas>
+    <div id="qLuckTal" class="halfSize">
+        <table class="qTable">
+            <tr>
+                <td colspan="6">Talent \ Luck %</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>all</td>
+                <td>Q1</td>
+                <td>Q2</td>
+                <td>Q3</td>
+                <td>Q4</td>
+            </tr>
+            <tr>
+                <td>all</td>
+                <td></td>
+                <td class="q1qa">0</td>
+                <td class="q2qa">0</td>
+                <td class="q3qa">0</td>
+                <td class="q4qa">0</td>
+            </tr>
+            <tr>
+                <td>Q1</td>
+                <td class="qaq1">0</td>
+                <td class="q1q1">0</td>
+                <td class="q2q1">0</td>
+                <td class="q3q1">0</td>
+                <td class="q4q1">0</td>
+            </tr>
+            <tr>
+                <td>Q2</td>
+                <td class="qaq2">0</td>
+                <td class="q1q2">0</td>
+                <td class="q2q2">0</td>
+                <td class="q3q2">0</td>
+                <td class="q4q2">0</td>
+            </tr>
+            <tr>
+                <td>Q3</td>
+                <td class="qaq3">0</td>
+                <td class="q1q3">0</td>
+                <td class="q2q3">0</td>
+                <td class="q3q3">0</td>
+                <td class="q4q3">0</td>
+            </tr>
+            <tr>
+                <td>Q4</td>
+                <td class="qaq4">0</td>
+                <td class="q1q4">0</td>
+                <td class="q2q4">0</td>
+                <td class="q3q4">0</td>
+                <td class="q4q4">0</td>
+            </tr>
+        </table>
+    </div>
+    <div id="qTalCap" class="halfSize">
+        <table class="qTable">
+            <tr>
+                <td colspan="6">Capital \ Talent %</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>all</td>
+                <td>Q1</td>
+                <td>Q2</td>
+                <td>Q3</td>
+                <td>Q4</td>
+            </tr>
+            <tr>
+                <td>all</td>
+                <td></td>
+                <td class="q1qa">0</td>
+                <td class="q2qa">0</td>
+                <td class="q3qa">0</td>
+                <td class="q4qa">0</td>
+            </tr>
+            <tr>
+                <td>Q1</td>
+                <td class="qaq1">0</td>
+                <td class="q1q1">0</td>
+                <td class="q2q1">0</td>
+                <td class="q3q1">0</td>
+                <td class="q4q1">0</td>
+            </tr>
+            <tr>
+                <td>Q2</td>
+                <td class="qaq2">0</td>
+                <td class="q1q2">0</td>
+                <td class="q2q2">0</td>
+                <td class="q3q2">0</td>
+                <td class="q4q2">0</td>
+            </tr>
+            <tr>
+                <td>Q3</td>
+                <td class="qaq3">0</td>
+                <td class="q1q3">0</td>
+                <td class="q2q3">0</td>
+                <td class="q3q3">0</td>
+                <td class="q4q3">0</td>
+            </tr>
+            <tr>
+                <td>Q4</td>
+                <td class="qaq4">0</td>
+                <td class="q1q4">0</td>
+                <td class="q2q4">0</td>
+                <td class="q3q4">0</td>
+                <td class="q4q4">0</td>
+            </tr>
+        </table>
+    </div>
+    <div id="qLuckCap" class="halfSize">
+        <table class="qTable">
+            <tr>
+                <td colspan="6">Capital \ Luck %</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>all</td>
+                <td>Q1</td>
+                <td>Q2</td>
+                <td>Q3</td>
+                <td>Q4</td>
+            </tr>
+            <tr>
+                <td>all</td>
+                <td></td>
+                <td class="q1qa">0</td>
+                <td class="q2qa">0</td>
+                <td class="q3qa">0</td>
+                <td class="q4qa">0</td>
+            </tr>
+            <tr>
+                <td>Q1</td>
+                <td class="qaq1">0</td>
+                <td class="q1q1">0</td>
+                <td class="q2q1">0</td>
+                <td class="q3q1">0</td>
+                <td class="q4q1">0</td>
+            </tr>
+            <tr>
+                <td>Q2</td>
+                <td class="qaq2">0</td>
+                <td class="q1q2">0</td>
+                <td class="q2q2">0</td>
+                <td class="q3q2">0</td>
+                <td class="q4q2">0</td>
+            </tr>
+            <tr>
+                <td>Q3</td>
+                <td class="qaq3">0</td>
+                <td class="q1q3">0</td>
+                <td class="q2q3">0</td>
+                <td class="q3q3">0</td>
+                <td class="q4q3">0</td>
+            </tr>
+            <tr>
+                <td>Q4</td>
+                <td class="qaq4">0</td>
+                <td class="q1q4">0</td>
+                <td class="q2q4">0</td>
+                <td class="q3q4">0</td>
+                <td class="q4q4">0</td>
+            </tr>
+        </table>
+    </div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock">
+        <label for="nAgents">N=</label>
+        <input id="nAgents" name="nAgents" type="number" min="1" max="2000" step="1" value="1000">
+    </span>
+    <span class="controlBlock">
+        <label for="nEvents">N<sub>e</sub>=</label>
+        <input id="nEvents" name="nEvents" type="number" min="1" max="2000" step="1" value="500">
+    </span>
+    <span class="controlBlock">
+        <label for="pLuck">p<sub>l</sub>=</label>
+        <input id="pLuck" name="pLuck" type="number" min="0" max="1" step="0.1" value="0.5">
+    </span>
+    <span class="controlBlock">
+        <label for="tAlpha">&alpha;<sub>t</sub>=</label>
+        <input id="tAlpha" name="tAlpha" type="number" min="0.1" step="0.1" value="3">
+    </span>
+    <span class="controlBlock">
+        <label for="tBeta">&beta;<sub>t</sub>=</label>
+        <input id="tBeta" name="tBeta" type="number" min="0.1" step="0.1" value="3">
+    </span>
+    <span class="controlBlock">
+        <label for="redistTax">R=</label>
+        <input id="redistTax" name="redistTax" type="number" min="0" max="1" step="0.1" value="0.1">
+    </span>
+    <span class="controlBlock">
+        <label for="redistFreq">F<sub>r</sub>=</label>
+        <input id="redistFreq" name="redistFreq" type="number" min="0.5" step="0.5" value="1">
+    </span>
+    <span class="controlBlock">
+        <label for="redistMode">Redistribution: </label>
+        <select id="redistMode" name="redistMode">
+            <option value="0" selected="selected">no redistribution</option>
+            <option value="1">flat tax, uniform redistribution</option>
+            <option value="2">flat tax, give to 10% best</option>
+            <option value="3">progressive tax, uniform redistribution</option>
+        </select>
+    </span>
+    <br>
+    <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
+    <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./talentModel.js"></script>
+<script language="javascript" type="text/javascript" src="./redist.js"></script>
+<script language="javascript" type="text/javascript" src="./quart-main.js"></script>
+<script language="javascript" type="text/javascript">
+/* bind events and set initial states */
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function () {
+	setup();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+
+/* onLoad */
+$(function () {
+	setup();
+    plotFigures();
+    plotField();
+});
+</script>
+</body>
+</html>
