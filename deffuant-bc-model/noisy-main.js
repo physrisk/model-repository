@@ -1,69 +1,84 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 
-let timeSeriesPlot=new plotlyPlot("timeSeries",["t",false]);
-timeSeriesPlot.setRanges(true,[0,1]);
-let pdfPlot=new plotlyPlot("pdf",["x","p(x)"]);
-pdfPlot.setRanges([0,1],true);
-
-let nAgents=100;
+let nAgents=1000;
 
 let model=null;
 
-let timeSeries=null;
-let opinionSeries=null;
-let opinionPdfX=null;
-let pdfStep=0.01;
+let pdf=null;
+let pdfSteps=100;
 
 let timeoutID=null;
 
+let sqSize=5;
+let nTicks=9;
+
+let g;
+
 function play() {
-    let i;
+    let i,t;
     if(model.step(nAgents)==0) {
         $("#stop").click();
     }
-    if(timeSeries.length>30) {
-        timeSeries.splice(0,1);
-    }
-    timeSeries.push(model.time);
+    pdf.splice(0,1);
+    t=new Array(pdfSteps);
+    t.fill(0);
+    pdf.push(t);
     for(i=0;i<nAgents;i+=1) {
-        if(opinionSeries[i].length>30) {
-            opinionSeries[i].splice(0,1);
-        }
-        opinionSeries[i].push(model.opinions[i]);
+        pdf[pdfSteps-1][Math.floor(model.opinions[i]*(pdfSteps-1))]+=1;
     }
+}
+
+function trans(x) {
+    return 1-Math.log(Math.max(x,0.01))/Math.log(0.01);
 }
 
 function plotFigures() {
-    let opinionPdf=commonFunctions.makePdf(model.opinions,0,nAgents*pdfStep,nAgents,false);
-    pdfPlot.update([opinionPdfX],[opinionPdf]);
-    timeSeriesPlot.update([timeSeries],opinionSeries);
-}
-
-function seriesSetup() {
-    let i;
-    timeSeries=[];
-    opinionSeries=new Array(nAgents);
-    for(i=0;i<nAgents;i+=1) {
-        opinionSeries[i]=[model.opinions[i]];
+    let i,j,c;
+    // data plotting
+    for(i=0;i<pdfSteps;i+=1) {
+        for(j=0;j<pdfSteps;j+=1) {
+            c=255-Math.floor(200*trans(pdf[i][j]/nAgents));
+            g.fillStyle="rgb("+c+","+c+","+c+")";
+            g.fillRect(i*sqSize,j*sqSize,sqSize,sqSize);
+        }
+    }
+    // frame
+    g.strokeStyle="rgb(0,0,0)";
+    g.strokeRect(0,0,pdfSteps*sqSize,pdfSteps*sqSize);
+    // ticks
+    for(i=1;i<=nTicks;i+=1) {
+        c=Math.floor(pdfSteps*sqSize*i/(nTicks+1));
+        g.beginPath();
+        g.moveTo(0,c);
+        g.lineTo(sqSize,c);
+        g.stroke();
+        g.beginPath();
+        g.moveTo(pdfSteps*sqSize,c);
+        g.lineTo(pdfSteps*sqSize-sqSize,c);
+        g.stroke();
     }
 }
 
 function pdfSetup() {
-    let i;
-    opinionPdfX=new Array(nAgents+1);
-    for(i=0;i<nAgents+1;i+=1) {
-        opinionPdfX[i]=i*pdfStep;
+    let i,j,t;
+    pdf=[];
+    for(i=0;i<pdfSteps;i+=1) {
+        t=[];
+        for(j=0;j<pdfSteps;j+=1) {
+            t.push(1);
+        }
+        pdf.push(t);
     }
 }
 
 function setup() {
+    g=$("#plotDiv")[0].getContext("2d");
     model=new DeffuantBCModel(nAgents,
             myParseFloat($("#mu").val()),
             myParseFloat($("#epsilon").val()),
             0,0,0,
             myParseFloat($("#probNoise").val())
         );
-    seriesSetup();
     pdfSetup();
 }
 

@@ -9,17 +9,19 @@
     <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
     <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
 	<script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+    <style>
+        #probNoise {width:70px}
+    </style>
 </head>
 <body>
 <div id="wrapper">
 <div id="figureWrapper">
-    <div id="timeSeries" class="fullSize"></div>
-    <div id="pdf" class="fullSize"></div>
+    <canvas id="plotDiv" width="500" height="500" class="fullSize"></canvas>
 </div><!-- #figureWrapper -->
 <div id="controlWrapper">
     <span class="controlBlock">
         <label for="epsilon">&epsilon;=</label>
-        <input id="epsilon" name="epsilon" type="number" min="0.01" max="1" step="0.01" value="0.25">
+        <input id="epsilon" name="epsilon" type="number" min="0.01" max="1" step="0.01" value="0.32">
     </span>
     <span class="controlBlock">
         <label for="mu">&mu;=</label>
@@ -35,12 +37,13 @@
 </div><!-- #controlWrapper -->
 </div><!-- #wrapper -->
 <script language="javascript" type="text/javascript" src="./deffuantBCModel.js"></script>
-<script language="javascript" type="text/javascript" src="./noisy-main.js"></script>
+<script language="javascript" type="text/javascript" src="./noisy2-main.js"></script>
 <script language="javascript" type="text/javascript">
 /* bind events and set initial states */
 $("#stop").attr("disabled","disabled");
 $("#restart").click(function () {
 	setup();
+    plotFigures();
 	$("#restart").attr("disabled","disabled");
 	$("#stop").removeAttr("disabled").click();
 });
