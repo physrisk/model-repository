@@ -16,7 +16,7 @@ let g;
 
 function play() {
     let i,t;
-    if(model.step(nAgents)==0) {
+    if(model.step(nAgents)==0 && model.probNoise<=0) {
         $("#stop").click();
     }
     pdf.splice(0,1);
