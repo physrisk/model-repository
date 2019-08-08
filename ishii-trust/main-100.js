@@ -14,7 +14,7 @@ let sqSize=5;
 let g;
 
 function play() {
-    let t;
+    let i,t;
 
     model.step();
 
@@ -72,7 +72,7 @@ function pdfSetup() {
 }
 
 function setup() {
-    let i, j, k, sigma, probSusp, rng, alpha;
+    let i, j, k, sigma, probSusp, rng, alpha,t;
     sigma=myParseFloat($("#sigma").val());
     probSusp=myParseFloat($("#probSusp").val());
     rng=new Random();
