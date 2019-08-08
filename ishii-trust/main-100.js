@@ -72,7 +72,7 @@ function pdfSetup() {
 }
 
 function setup() {
-    let i, j, k, sigma, probSusp, rng;
+    let i, j, k, sigma, probSusp, rng, alpha;
     sigma=myParseFloat($("#sigma").val());
     probSusp=myParseFloat($("#probSusp").val());
     rng=new Random();
@@ -93,8 +93,13 @@ function setup() {
         }
         trust.push(t);
     }
+    if(parseInt($("#modelType").val())==1) {
+        alpha=[1,0];
+    } else {
+        alpha=[0,1];
+    }
     model=new IshiiTrustModel(
-        parseInt($("#modelType").val()),
+        alpha,
         nAgents,
         myParseFloat($("#epsilon").val()),
         trust

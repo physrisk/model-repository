@@ -39,7 +39,7 @@ function seriesSetup() {
 }
 
 function setup() {
-    let i,j,t;
+    let i,j,t,alpha;
     let trust=[];
     for(i=0;i<nAgents;i+=1) {
         t=[];
@@ -52,8 +52,13 @@ function setup() {
         }
         trust.push(t);
     }
+    if(parseInt($("#modelType").val())==1) {
+        alpha=[1,0];
+    } else {
+        alpha=[0,1];
+    }
     model=new IshiiTrustModel(
-        parseInt($("#modelType").val()),
+        alpha,
         nAgents,
         myParseFloat($("#epsilon").val()),
         trust

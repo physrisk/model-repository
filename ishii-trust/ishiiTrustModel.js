@@ -1,9 +1,9 @@
 class IshiiTrustModel {
-    constructor(type=1,nAgents=100,epsilon=0.25,trust=null) {
+    constructor(alpha=[1,0],nAgents=100,epsilon=0.25,trust=null) {
         this.rng=new Random();
         this.time=0;
         this.dt=1/nAgents;
-        this.type=type;
+        this.alpha=alpha;
         this.nAgents=nAgents;
         this.epsilon=epsilon;
         this.opinionBounds=[-1e3,1e3];
@@ -25,11 +25,8 @@ class IshiiTrustModel {
         for(i=0;i<this.nAgents;i+=1) {
             if(i!=agent1Id) {
                 diff=this.opinions[i]-this.opinions[agent1Id];
-                if(this.type==1) {
-                    totalDiff+=this.trust[agent1Id][i]*this.opinions[i];
-                } else {
-                    totalDiff+=this.trust[agent1Id][i]*this.indifference(diff)*diff;
-                }
+                totalDiff+=this.alpha[0]*this.trust[agent1Id][i]*this.opinions[i];
+                totalDiff+=this.alpha[1]*this.trust[agent1Id][i]*this.indifference(diff)*diff;
             }
         }
         totalDiff*=this.dt;
