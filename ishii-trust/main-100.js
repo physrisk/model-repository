@@ -72,9 +72,8 @@ function pdfSetup() {
 }
 
 function setup() {
-    let i, j, k, sigma, type, probSusp, rng;
+    let i, j, k, sigma, probSusp, rng;
     sigma=myParseFloat($("#sigma").val());
-    type=parseInt($("#modelType").val());
     probSusp=myParseFloat($("#probSusp").val());
     rng=new Random();
     g=$("#plotDiv")[0].getContext("2d");
@@ -85,12 +84,8 @@ function setup() {
             if(i==j) {
                 t.push(0);
             } else if(i<j) {
-                if(type==1) {
-                    k=(rng.random() < probSusp ? -1 : 1);
-                } else {
-                    k=Math.abs(rng.normal(0,sigma));
-                    k*=(rng.random() < probSusp ? -1 : 1);
-                }
+                k=Math.abs(rng.normal(0,sigma));
+                k*=(rng.random() < probSusp ? -1 : 1);
                 t.push(k);
             } else {// i>j
                 t.push(trust[j][i]);
@@ -99,7 +94,7 @@ function setup() {
         trust.push(t);
     }
     model=new IshiiTrustModel(
-        type,
+        parseInt($("#modelType").val()),
         nAgents,
         myParseFloat($("#epsilon").val()),
         trust
