@@ -6,6 +6,7 @@ class IshiiTrustModel {
         this.type=type;
         this.nAgents=nAgents;
         this.epsilon=epsilon;
+        this.opinionBounds=[-1e3,1e3];
         this.initializeOpinions();
         this.initializeTrust(trust);
     }
@@ -34,6 +35,9 @@ class IshiiTrustModel {
         totalDiff*=this.dt;
         // update opinion
         this.opinions[agent1Id]+=totalDiff;
+        // limit opinions
+        this.opinions[agent1Id]=Math.max(this.opinions[agent1Id],this.opinionBounds[0]);
+        this.opinions[agent1Id]=Math.min(this.opinions[agent1Id],this.opinionBounds[1]);
         // update time
         this.time+=this.dt;
     }
