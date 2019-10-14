@@ -7,6 +7,8 @@ class PartisanModel {
         this.globalExt=0;
         this.globalInt=0;
         this.disonant=0;
+        this.disR=0;
+        this.disB=0;
         this.initializeArrays(pExtUp,pIntUp);
     }
     initializeArrays(pExtUp,pIntUp) {
@@ -33,6 +35,11 @@ class PartisanModel {
                 }
                 if(extTmp[extTmp.length-1]*intTmp[intTmp.length-1]<0) {
                     this.disonant+=1;
+                    if(intTmp[intTmp.length-1]<0) {
+                        this.disB+=1;
+                    } else {
+                        this.disR+=1;
+                    }
                 }
             }
             this.extArray.push(extTmp);
@@ -47,7 +54,7 @@ class PartisanModel {
         return this.globalExt;
     }
     singleStep() {
-        let x,y,meOp,miOp,nOp,rate,dDis;
+        let x,y,meOp,miOp,nOp,rate,dDis,dDisR,dDisB;
         // pick random agent
         x=Math.floor(Math.random()*this.width);
         y=Math.floor(Math.random()*this.height);
@@ -62,12 +69,24 @@ class PartisanModel {
         // otherwise determine flipping rate 
         rate=1;
         dDis=0;
+        dDisR=0;
+        dDisB=0;
         if(miOp==nOp) {// if internal opinion matches
             rate+=this.epsilon;
             dDis=-1;
+            if(miOp<0) {
+                dDisB=-1;
+            } else {
+                dDisR=-1;
+            }
         } else {// if internal opinion doesn't match
             rate-=this.epsilon;
             dDis=1;
+            if(miOp<0) {
+                dDisB=1;
+            } else {
+                dDisR=1;
+            }
         }
         // translate into flipping probability and execute
         if(this.invDt*Math.random()<rate) {
@@ -75,6 +94,8 @@ class PartisanModel {
             this.extArray[y][x]=-this.extArray[y][x];
             this.globalExt+=this.extArray[y][x];
             this.disonant+=dDis;
+            this.disB+=dDisB;
+            this.disR+=dDisR;
         }
     }
     getRandomDirection() {

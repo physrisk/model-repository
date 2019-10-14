@@ -15,6 +15,9 @@ let timeStep=1;
 let extSeries=null;
 let intSeries=null;
 let disSeries=null;
+let disBSeries=null;
+let disRSeries=null;
+let fReds=0;
 
 let timeoutID=null;
 
@@ -25,13 +28,18 @@ function play() {
     timeSeries.splice(0,64);
     extSeries.splice(0,64);
     disSeries.splice(0,64);
+    disBSeries.splice(0,64);
+    disRSeries.splice(0,64);
     for(i=0;i<64;i+=1) {
         time+=timeStep;
-        mag=model.step(timeStep*total);
+        mag=model.step(timeStep*total)/total;
 
         timeSeries.push(time);
-        extSeries.push(mag/total);
+        extSeries.push(mag);
         disSeries.push(model.disonant/total);
+
+        disBSeries.push(model.disB/total/(1-fReds));
+        disRSeries.push(model.disR/total/fReds);
     }
 }
 
@@ -39,7 +47,9 @@ function plotFigures() {
     timeSeriesPlot.update([timeSeries,timeSeries],
         [extSeries,intSeries],"lines",
         ["rgb(100,70,150)","rgb(80,80,80)"]);
-    disonancePlot.update([timeSeries],[disSeries],"lines","rgb(210,120,50)");
+    disonancePlot.update([timeSeries,timeSeries,timeSeries],
+        [disSeries,disBSeries,disRSeries],"lines",
+        ["rgb(80,80,80)","rgb(60,100,180)","rgb(200,40,40)"]);
     plotField();
 }
 
@@ -72,11 +82,16 @@ function seriesSetup() {
     extSeries=new Array(4096);
     intSeries=new Array(4096);
     disSeries=new Array(4096);
+    disBSeries=new Array(4096);
+    disRSeries=new Array(4096);
+    fReds=(1-model.globalInt/total)/2;
     for(i=0;i<timeSeries.length;i+=1) {
         timeSeries[i]=(i-timeSeries.length)*timeStep;
         extSeries[i]=model.globalExt/total;
         intSeries[i]=model.globalInt/total;
         disSeries[i]=model.disonant/total;
+        disBSeries[i]=model.disB/total/(1-fReds);
+        disRSeries[i]=model.disR/total/fReds;
     }
 }
 
