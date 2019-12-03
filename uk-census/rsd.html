@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Rank-share distributions in UK census 2011 data set</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <style>
+        #loader{margin-top:84px}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="loader" class="fullSize"><img src="../js-lib/ajax-loader-130315.gif"></div>
+    <div id="rsPlot" class="fullSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlockTitle">Graph settings:</span><br/>
+    <span class="controlBlock doubleWidth"><input id="logXAxis" type="checkbox"> logarithmic rank axis</span>
+    <span class="controlBlock doubleWidth"><input id="logYAxis" type="checkbox"> logarithmic fraction axis</span>
+    <br/>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./rsd-main.js"></script>
+<script language="javascript" type="text/javascript">
+$("#rsPlot, #controlWrapper").hide();
+$("#logXAxis, #logYAxis").click(function(){
+    logState=[$("#logXAxis").prop("checked"),$("#logYAxis").prop("checked")];
+    plotFigures();
+});
+
+/* onLoad */
+$(function () {
+    $.getJSON("./data.json",function(data) {
+        $("#loader").hide();
+        $("#rsPlot, #controlWrapper").show();
+        setup(data);
+        plotFigures();
+    });
+});
+</script>
+</body>
+</html>
