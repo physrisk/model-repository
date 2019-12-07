@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Agent-based cobweb model</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <style>
+        #stabilityIndicator{font-weight:bold}
+        #stabIndBlock{text-align:center}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="sdSeries" class="halfSize"></div>
+    <div id="pSeries" class="halfSize"></div>
+    <div id="cobwebSeries" class="fullSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock singleWidth">
+        <label for="supplyLaw">&alpha;<sub>s</sub>=</label>
+        <input id="supplyLaw" name="supplyLaw" type="number" min="0.3" max="3" step="0.1" value="1">
+    </span>
+    <span class="controlBlock singleWidth">
+        <label for="demandLaw">&alpha;<sub>d</sub>=</label>
+        <input id="demandLaw" name="demandLaw" type="number" min="0.3" max="3" step="0.1" value="0.5">
+    </span>
+    <span class="controlBlock singleWidth">
+        <label for="conversionRate">&beta;=</label>
+        <input id="conversionRate" name="conversionRate" type="number" min="0.1" max="9" step="0.1" value="0.5">
+    </span>
+    <span id="stabIndBlock" class="controlBlock singleWidth">
+        <span id="stabilityIndicator"></span>
+    </span>
+    <br/>
+    <span class="controlBlock doubleWidth">
+        <label for="quantityEqui">Q<sub>eq</sub>=</label>
+        <input id="quantityEqui" name="quantityEqui" type="number" min="0.01" max="100" step="0.01" value="1"> &times; 10<sup>3</sup>
+    </span>
+    <span class="controlBlock singleWidth">
+        <label for="priceEqui">P<sub>eq</sub>=</label>
+        <input id="priceEqui" name="priceEqui" type="number" min="-999" max="999" step="1" value="0">
+    </span>
+    <br/>
+    <span class="controlBlock"><button name="restart" id="restart">Setup</button></span>
+    <span class="controlBlock"><button name="stop" id="stop">Start</button></span>
+    <span class="controlBlock"><button name="step" id="step">Step</button></span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./cobwebABM.js"></script>
+<script language="javascript" type="text/javascript" src="./abm-main.js"></script>
+</body>
+</html>
