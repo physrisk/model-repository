@@ -54,3 +54,26 @@ function stop() {
 function resume() {
     timeoutID=window.setInterval("frame()",100.0);
 }
+
+/* bind events and set initial GUI states */
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function () {
+	setup();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	resume();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stop();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+
+/* onLoad */
+$(function () {
+	setup();
+    plotFigures();
+});

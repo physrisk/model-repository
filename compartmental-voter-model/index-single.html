@@ -44,29 +44,5 @@
 </div><!-- #wrapper -->
 <script language="javascript" type="text/javascript" src="./compVoterModel.js"></script>
 <script language="javascript" type="text/javascript" src="./main-single.js"></script>
-<script language="javascript" type="text/javascript">
-/* bind events and set initial states */
-$("#stop").attr("disabled","disabled");
-$("#restart").click(function () {
-	setup();
-	$("#restart").attr("disabled","disabled");
-	$("#stop").removeAttr("disabled").click();
-});
-$("#stop").toggle(function() {
-	resume();
-	$("#stop").text("Stop");
-	$("#restart").attr("disabled","disabled");
-},function() {
-	stop();
-	$("#stop").text("Continue");
-	$("#restart").removeAttr("disabled");
-});
-
-/* onLoad */
-$(function () {
-	setup();
-    plotFigures();
-});
-</script>
 </body>
 </html>
