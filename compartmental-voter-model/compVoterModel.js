@@ -45,6 +45,11 @@ class compVoterModel {
     gillespieStep() {
         let dt,q,from,to;
 
+        if(this.totalSum<1e-14) {
+            this.time+=1e3;
+            return;
+        }
+
         dt=this.rng.exponential(this.totalSum);
         q=this.rng.uniform(0,this.totalSum);
 
