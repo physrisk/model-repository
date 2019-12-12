@@ -1,28 +1,70 @@
 function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 
-let rsPlot=new plotlyPlot("rsPlot",["r","N[r]"]);
+let pdfPlot=new plotlyPlot("pdfPlot",["X","p(X)"],[10,10,40,60]);
+let rsPlot=new plotlyPlot("rsPlot",["r","X[r]"]);
 
 let model;
 let nAgents=[20];
 let nComps=100;
 let capacity=2000;
 let epsilon=[2];
+let alpha=2;
+let beta=198;
 
-let showX=[];
-let showY=[];
-let showTheory=[];
+let showRSDX=[];
+let showRSDY=[];
+let showRSDTheory=[];
+let showPDFX=[];
+let showPDFTheory=[];
+
+let pdf=[];
+let pdfLen=0;
+let pdfMax=0;
+let pdfNewMax=true;
 
 let runFlag=false;
 
 function play() {
     model.step(3e-6);
-    showY=model.nAgents.slice();
+    
+    pdf[model.nAgents[0]]+=1;
+    pdfLen+=1;
+    if(pdfMax<model.nAgents[0]) {
+        pdfMax=model.nAgents[0];
+        pdfNewMax=true;
+    }
+    
+    showRSDY=model.nAgents.slice();
 }
 
 function plotFigures() {
-    let showRSD=showY.sort((a,b) => a<b);
+    let showRSD=showRSDY.sort((a,b) => a<b);
     rsPlot.setRanges([1,nComps],[0,showRSD[0]]);
-    rsPlot.update([showX,showX],[showRSD,showTheory],["markers","lines"],["#cc2525","#505050"]);
+    rsPlot.update([showRSDX,showRSDX],[showRSD,showRSDTheory],["markers","lines"],["#cc2525","#505050"]);
+    
+    let n=Math.min(nAgents[0]*nComps,capacity);
+    if(pdfLen>0) {
+        let showPDF=commonFunctions.pdfModification(pdf,false,1,
+            Math.min(pdfMax+5,capacity),Math.min(pdfMax+6,101),1,1,pdfLen);
+        showPDFX=commonFunctions.toOneDimensionalArray(showPDF,0);
+        let showPDFY=commonFunctions.toOneDimensionalArray(showPDF,1);
+        showPDF=null;
+        if(pdfNewMax) {
+            showPDFTheory=showPDFX.map(v => jStat.beta.pdf(v/n,alpha,beta)/n);
+            pdfNewMax=false;
+        }
+        pdfPlot.update([showPDFX,showPDFX],
+                       [showPDFY,showPDFTheory],
+                       ["markers","lines"],
+                       ["#cc2525","#505050"]);
+    } else {
+        showPDFX=(new Array(101)).fill(null).map((v,i) => capacity*(i/100));
+        if(pdfNewMax) {
+            showPDFTheory=showPDFX.map(v => jStat.beta.pdf(v/n,alpha,beta)/n);
+            pdfNewMax=false;
+        }
+        pdfPlot.update([showPDFX],[showPDFTheory],["lines"],["#505050"]);
+    }
 }
 
 function getParams() {
@@ -32,17 +74,21 @@ function getParams() {
     capacity=parseInt($("#capacity").val());
 }
 
+function pdfSetup() {
+    pdf=(new Array(capacity+1)).fill(0);
+    pdfLen=0;
+    pdfMax=0;
+    pdfNewMax=true;
+}
+
 function setup() {
-    let i;
     getParams();
-    showX=new Array(nComps);
-    for(i=0;i<nComps;i+=1) {
-        showX[i]=i+1;
-    }
+    showRSDX=(new Array(nComps)).fill(null).map((v,i) => i+1);
     if(capacity>=nAgents[0]*nComps) {
         $("#alpha").val(epsilon[0]);
         $("#beta").val((nComps-1)*epsilon[0]);
-    } 
+    }
+    pdfSetup();
     onUpdateDistParams();
     model=new compVoterModel(nAgents,1,epsilon,nComps,capacity);
 }
@@ -84,9 +130,9 @@ function onUpdateEpsilon() {
 
 function onUpdateDistParams() {
     getParams();
-    let a=myParseFloat($("#alpha").val());
-    let b=myParseFloat($("#beta").val());
-    showTheory=showX.map(v => capacity*jStat.ibetainv(v/nComps,a,b)).reverse();
+    alpha=myParseFloat($("#alpha").val());
+    beta=myParseFloat($("#beta").val());
+    showRSDTheory=showRSDX.map(v => capacity*jStat.ibetainv(v/nComps,alpha,beta)).reverse();
     plotFigures();
 }
 

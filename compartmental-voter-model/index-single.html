@@ -10,15 +10,17 @@
     <script language="javascript" type="text/javascript" src="../js-lib/jstat-192.min.js"></script>
     <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
     <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
 </head>
 <body>
 <div id="wrapper">
 <div id="figureWrapper">
-    <div id="rsPlot" class="fullSize"></div>
+    <div id="pdfPlot" class="halfSize"></div>
+    <div id="rsPlot" class="halfSize"></div>
 </div><!-- #figureWrapper -->
 <div id="controlWrapper">
     <span class="controlBlock">
-        <label for="nAgents">N<sub>i</sub>(0)=</label>
+        <label for="nAgents">X<sub>i</sub>(0)=</label>
         <input id="nAgents" name="nAgents" type="number" min="1" step="1" value="20">
     </span>
     <span class="controlBlock">
@@ -38,7 +40,7 @@
         <input id="capacity" name="capacity" type="number" min="1" step="1" value="2000">
     </span>
     <br>
-    <span class="controlBlockTitle">Fitting curve parameters:</span>
+    <span class="controlBlockTitle">Fitting parameters:</span>
     <span class="controlBlock">
         <label for="alpha">&alpha;=</label>
         <input id="alpha" name="alpha" type="number" min="0.1" step="0.1" value="2">
