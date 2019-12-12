@@ -3,28 +3,33 @@ function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 let rsPlot=new plotlyPlot("rsPlot",["r","f[r]"]);
 
 let model;
-let nAgents=[13,13];
-let nTypes=2;
+let nAgents=[20,16,10,6];
+let nTypes=4;
 let nComps=100;
-let capacity=30;
-let epsilon=[2,2];
+let capacity=60;
+let epsilon=[0.2,2,0.5,1];
 
 let showX=[];
 let showY=[];
 
-let timeoutID=null;
+let runFlag=false;
 
 function play() {
     showY=model.step(3e-6).slice();
 }
 
 function plotFigures() {
-    let sy1,sy2;
+    let sy1,sy2,sy3,sy4;
 
-    sy1=showY.slice(0,nComps).sort((a,b) => a<b);
-    sy2=showY.slice(nComps,2*nComps).sort((a,b) => a<b);            
+    sy1=showY.slice(0,nComps).sort((a,b) => b-a);
+    sy2=showY.slice(nComps,2*nComps).sort((a,b) => b-a);            
+    sy3=showY.slice(2*nComps,3*nComps).sort((a,b) => b-a);            
+    sy4=showY.slice(3*nComps,4*nComps).sort((a,b) => b-a);            
 
-    rsPlot.update([showX,showX],[sy1,sy2],"lines",["#396ab1","#cc2529"]);
+    rsPlot.update([showX,showX,showX,showX],
+                  [sy1,sy2,sy3,sy4],
+                  "markers",
+                  ["#396ab1","#cc2529","#3e9651","#da7c30"]);
 }
 
 function setup() {
@@ -51,15 +56,18 @@ function setup() {
 function frame() {
     play();
     plotFigures();
+    if(runFlag) {
+        setTimeout("frame()",30.0);
+    }
 }
 
 function stop() {
-    window.clearInterval(timeoutID);
-    timeoutID=null;
+    runFlag=false;
 }
 
 function resume() {
-    timeoutID=window.setInterval("frame()",100.0);
+    setTimeout("frame()",30.0);
+    runFlag=true;
 }
 
 /* bind events and set initial GUI states */
