@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Compartmental voter model (variable types)</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/random-026.min.js"></script>
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/commonFunctions.js"></script>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="pdfPlot" class="fullSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock">
+        <label for="nAgents">X<sub>i</sub><sup>(k)</sup>(0)=</label>
+        <input id="nAgents" name="nAgents" type="number" min="1" step="1" value="25">
+    </span>
+    <span class="controlBlock">
+        <label for="nTypes">T=</label>
+        <input id="nTypes" name="nTypes" type="number" min="1" max="5" step="1" value="1">
+    </span>
+    <span class="controlBlock">
+        <label for="epsilon">&varepsilon;=</label>
+        <input id="epsilon" name="epsilon1" type="number" min="0.01" step="0.01" value="0.03">
+    </span>
+    <span class="controlBlock">
+        <label for="nComps">M=</label>
+        <input id="nComps" name="nComps" type="number" min="2" max="5" step="1" value="3">
+    </span>
+    <span class="controlBlock">
+        <label for="capacity">C=</label>
+        <input id="capacity" name="capacity" type="number" min="1" max="100" step="1" value="60">
+    </span>
+    <br>
+    <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
+    <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./compVoterModel.js"></script>
+<script language="javascript" type="text/javascript" src="./main-caps.js"></script>
+</body>
+</html>
