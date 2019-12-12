@@ -27,7 +27,6 @@ function play() {
 }
 
 function plotFigures() {
-    let n=Math.min(nAgents[0]*nComps,capacity);
     if(pdfLen>0) {
         let showPDF=commonFunctions.pdfModification(pdf,false,1,
             Math.min(pdfMax,capacity),Math.min(pdfMax+1,101),1,1,pdfLen);
