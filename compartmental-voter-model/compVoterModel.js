@@ -61,8 +61,8 @@ class compVoterModel {
         this.nAgents[from]-=1;
         this.nAgents[to]+=1;
 
-        this.pops[from % this.nComps]-=1;
-        this.pops[to % this.nComps]+=1;
+        this.updatePopulation(from,-1);
+        this.updatePopulation(to,1);
 
         this.updateTransitionRateMatrix(from % this.nComps);
         this.updateTransitionRateMatrix(to % this.nComps);
@@ -117,11 +117,17 @@ class compVoterModel {
             return 0;
         }
         // it is forbidden to go over capacity
-        if(this.pops[to % this.nComps]>=this.capacity) {
+        if(this.getPopulation(to)>=this.capacity) {
             return 0;
         }
         // calculate rate based on homophily formula
         return this.nAgents[from]*(this.epsilon[typeFrom]+100*this.nAgents[to]);
+    }
+    getPopulation(i) {
+        return this.pops[i % this.nComps];
+    }
+    updatePopulation(i,u) {
+        this.pops[i % this.nComps]+=u;
     }
     setObservables() {
         let model=this;
