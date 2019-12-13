@@ -28,6 +28,7 @@ function setup() {
     repel=myParseFloat($("#prepel").val());
     worker.postMessage({
         "action": "setup",
+        "nAgents": nAgents,
         "convince": convince,
         "doubt": doubt,
         "repel": repel,
@@ -81,9 +82,7 @@ function step() {
 }
 
 function getMessage(msg) {
-    if(msg.reply===false) {
-        console.error("Worker has failed to deal with requested action \""+msg.action+"\"");
-    } else {
+    if(msg.reply===true) {
         if(msg.action=="update") {
             updatePlots(msg.data);
         }
