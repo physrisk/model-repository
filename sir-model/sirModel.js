@@ -5,7 +5,7 @@ class sirModel {
         this.gamma=gamma;
         this.isolation=isolation; // isolation flag
         this.nAgents=nAgents; // total number of agents in the simulation
-        this.nSus=nAgents-nInfected; // number of suspectible agents
+        this.nSus=nAgents-nInfected; // number of susceptible agents
         this.nInf=nInfected; // number of infected agents
         this.nSick=0; // number of all who got sick
         this.nRec=0; // number of recovered agents
@@ -23,7 +23,7 @@ class sirModel {
         }
     }
     step(toTime) {
-        // rate at which suspectibles become infected
+        // rate at which susceptibles become infected
         let rateSI=this.getBeta()*this.nSus*this.nInf/this.nAgents;
         // rate at which infected become recovered
         let rateIR=this.gamma*this.nInf;
