@@ -56,8 +56,6 @@ function setup(d) {
         });
     });
     $("#controlWrapper").css("line-height","15px");
-
-    X = d["postcode areas"].map((val,idx) => idx+1);
 }
 
 function dataUpdate(obj) {
