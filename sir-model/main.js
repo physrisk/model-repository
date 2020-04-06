@@ -10,10 +10,13 @@ let time=0;
 let timeSeries=null;
 let infSeries=null;
 let sickSeries=null;
+let oldTimeSeries=null;
+let oldInfSeries=null;
+let oldSickSeries=null;
 
 function plotFigures() {
-    infPlot.update([timeSeries],[infSeries]);
-    sickPlot.update([timeSeries],[sickSeries]);
+    infPlot.update([timeSeries,oldTimeSeries],[infSeries,oldInfSeries],"lines",["#cc2222","#555555"]);
+    sickPlot.update([timeSeries,oldTimeSeries],[sickSeries,oldSickSeries],"lines",["#cc2222","#555555"]);
 }
 
 function play() {
@@ -57,6 +60,11 @@ function setup() {
     );
     toggleIsolationBtn();
     runFlag=true;
+    if(timeSeries!==null) {
+        oldTimeSeries=timeSeries.slice();
+        oldInfSeries=infSeries.slice();
+        oldSickSeries=sickSeries.slice();
+    }
     timeSeries=[];
     infSeries=[];
     sickSeries=[];
