@@ -3,7 +3,7 @@ function myParseFloat(val) {return parseFloat((""+val).replace(",","."));}
 let rng = new Random();
 
 let mainPlot = new plotlyPlot("mainPlot",
-    ["lg[x], lg[y]","lg[p(x)], lg[p(y)]"],
+    ["lg[τ], lg[I]","lg[p(τ)], lg[p(I)]"],
     [5,5,40,60]);
 
 let colors = ["#396ab1","#cc2529"];
