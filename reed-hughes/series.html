@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Power-law in exponential growth</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
+	<script language="javascript" type="text/javascript" src="../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/random-026.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="logPlot" class="halfSize"></div>
+    <div id="loglogPlot" class="halfSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock"><label for="nSamples">N =</label> <input id="nSamples" name="nSamples" type="number" min="1" value="400" step="1"></span>
+    <span class="controlBlock"><label for="mu">&mu; =</label> <input id="mu" name="mu" type="number" min="0.01" value="1" step="0.01"></span>
+    <span class="controlBlock"><label for="nu">&nu; =</label> <input id="nu" name="nu" type="number" min="0.0" value="1" step="0.01"></span>
+    <br>
+    <span class="controlBlock"><button name="plot" id="plot">Plot</button></span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./series-main.js"></script>
+</body>
+</html>
