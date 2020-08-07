@@ -11,7 +11,6 @@ let mainPlot = new plotlyPlot("mainPlot",
 
 let colors = ["#cc2529","#396ab1"];
 
-let empirical_data = null;
 let time_vals = null;
 let confirmed_vals = null;
 let recovered_vals = null;
@@ -46,9 +45,8 @@ function plot() {
 /* onLoad */
 $(function () {
     $.getJSON("./data.json",(data) => {
-        empirical_data = data;
-        confirmed_vals = Object.values(empirical_data["confirmed"]);
-        recovered_vals = Object.values(empirical_data["recovered"]);
+        confirmed_vals = Object.values(data["confirmed"]);
+        recovered_vals = Object.values(data["recovered"]);
         time_vals = Array.from({length:confirmed_vals.length}, (v,i) => i);
         getParams();
         plot();

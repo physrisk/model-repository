@@ -12,7 +12,6 @@ let colors = ["#cc2529","#396ab1","#666666"];
 
 let rng = new Random();
 
-let empirical_data = null;
 let time_vals = null;
 let new_confirmed_vals = null;
 let confirmed_vals = null;
@@ -75,10 +74,9 @@ function execute() {
 /* onLoad */
 $(function () {
     $.getJSON("./data.json",(data) => {
-        empirical_data = data;
-        new_confirmed_vals = Object.values(empirical_data["new confirmed"]);
-        confirmed_vals = Object.values(empirical_data["confirmed"]);
-        recovered_vals = Object.values(empirical_data["recovered"]);
+        new_confirmed_vals = Object.values(data["new confirmed"]);
+        confirmed_vals = Object.values(data["confirmed"]);
+        recovered_vals = Object.values(data["recovered"]);
         time_vals = Array.from({length:confirmed_vals.length}, (v,i) => i);
         model_vals = Array.from({length:confirmed_vals.length}, () => 0);
         execute();
