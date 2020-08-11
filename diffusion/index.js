@@ -69,7 +69,7 @@ $(function () {
     timeMSDValsLog = Array.from({length:desiredMSDLen}, (v,i) => msdCoeff*i);
     timeMSDVals = Array.from({length:desiredMSDLen}, (v,i) => {
         return Math.round(Math.pow(10,timeMSDValsLog[i]));
-    })
+    });
     timeMSDValsLog = timeMSDValsLog.filter((v,i) => {
         return (i==0) || (timeMSDVals[i]>timeMSDVals[i-1]);
     });
