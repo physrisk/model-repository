@@ -9,7 +9,7 @@ let msdPlot = new plotlyPlot("msdPlot",
 
 let rng = new Random();
 
-let gamma = 2.5;
+let gamma = 1.5;
 
 let nSeries = 10;
 let seriesLength = 1001;
