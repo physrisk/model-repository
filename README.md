@@ -1,10 +1,6 @@
 # Physics of Risk model repository
 
-This repository stores development code for the models that are, or will be, featured on [Physics of Risk](http://rf.mokslasplius.lt/) blog. All of the respective descriptions of the models will be published on [Physics of Risk](http://rf.mokslasplius.lt/) blog.
-
-Raw markdown files behind the posts and pages on Physics of Risk are stored in another GitHub repository: [https://github.com/akononovicius/physRisk-content-repository](https://github.com/akononovicius/physRisk-content-repository).
-
-Images and other external files are not uploaded to any GitHub repository.
+This repository stores development code for the models that are, or will be, featured on [Physics of Risk](http://rf.mokslasplius.lt/) blog. All of the respective descriptions of the models will be published on [Physics of Risk](http://rf.mokslasplius.lt/) blog. These are available from another GitHub repository: [https://github.com/akononovicius/physRisk-content-repository](https://github.com/akononovicius/physRisk-content-repository).
 
 ## Dependencies
 
@@ -15,12 +11,12 @@ Here, in this repository, we have only included the commonly reused code develop
 These well-known libraries include:
 * [d3](https://d3js.org/) 4.12 (stored as [js-lib/d3-v4.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/d3-v4.min.js))
 * [JIT](https://philogb.github.io/jit/) 2.0.1 (stored as [js-lib/jit-201.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jit-201.min.js))
+* [jStat](https://github.com/jstat/jstat) 1.9.2 (stored as [js-lib/jstat-192.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jstat-192.min.js)
 * [jQuery](https://jquery.com/) 1.8.3 (stored as [js-lib/jquery-183.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jquery-183.min.js))
 * [flot-axislabels](https://github.com/markrcote/flot-axislabels) (stored as [js-lib/jquery.flot-07.axislabels.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jquery.flot-07.axislabels.js))
 * [Flot](http://www.flotcharts.org/) 0.8 (stored as [js-lib/jquery.flot-08.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jquery.flot-08.min.js))
 * [Normalize CSS](https://necolas.github.io/normalize.css/) 7.0.0 (stored as [js-lib/normalize.css](http://rf.mokslasplius.lt/uploads/models/js-lib/normalize.css))
 * [Plotly](https://plot.ly/) 1.3.1 (stored as [js-lib/plotly-131.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/plotly-131.min.js))
-
 
 **Why don't we use CDN ourselves?** Because once a CDN went under and we have noticed it only after a really long time :)
 
