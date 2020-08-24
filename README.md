@@ -11,7 +11,7 @@ Here, in this repository, we have only included the commonly reused code develop
 These well-known libraries include:
 * [d3](https://d3js.org/) 4.12 (stored as [js-lib/d3-v4.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/d3-v4.min.js))
 * [JIT](https://philogb.github.io/jit/) 2.0.1 (stored as [js-lib/jit-201.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jit-201.min.js))
-* [jStat](https://github.com/jstat/jstat) 1.9.2 (stored as [js-lib/jstat-192.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jstat-192.min.js)
+* [jStat](https://github.com/jstat/jstat) 1.9.2 (stored as [js-lib/jstat-192.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jstat-192.min.js))
 * [jQuery](https://jquery.com/) 1.8.3 (stored as [js-lib/jquery-183.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jquery-183.min.js))
 * [flot-axislabels](https://github.com/markrcote/flot-axislabels) (stored as [js-lib/jquery.flot-07.axislabels.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jquery.flot-07.axislabels.js))
 * [Flot](http://www.flotcharts.org/) 0.8 (stored as [js-lib/jquery.flot-08.min.js](http://rf.mokslasplius.lt/uploads/models/js-lib/jquery.flot-08.min.js))
