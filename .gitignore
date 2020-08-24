@@ -11,11 +11,6 @@
 /js-lib/plotly-131.min.js
 
 ##
-## Folder with unpublished models
-/unpublished
-/unpublished/*
-
-##
 ## Folder with old java applets
 ##
 /old-java
