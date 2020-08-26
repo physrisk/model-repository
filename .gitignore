@@ -11,12 +11,6 @@
 /js-lib/plotly-131.min.js
 
 ##
-## Folder with old java applets
-##
-/old-java
-/old-java/*
-
-##
 ## Folders with non-javascript models
 ##
 /penn-europe-en
