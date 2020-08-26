@@ -11,16 +11,6 @@
 /js-lib/plotly-131.min.js
 
 ##
-## Folders with non-javascript models
-##
-/penn-europe-en
-/penn-europe-en/*
-/penn-world-en
-/penn-world-en/*
-/statplanet-gdp
-/statplanet-gdp/*
-
-##
 ## temporary files
 ##
 *.swp
