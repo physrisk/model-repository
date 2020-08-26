@@ -9,8 +9,3 @@
 /js-lib/jquery.flot-08.min.js
 /js-lib/normalize.css
 /js-lib/plotly-131.min.js
-
-##
-## temporary files
-##
-*.swp
