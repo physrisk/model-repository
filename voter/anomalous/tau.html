@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Anomalous diffusion in non-linear timescale transformation of voter model</title>
+    <link rel="stylesheet" type="text/css" href="../../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../js-lib/universal-style.css">
+	<script language="javascript" type="text/javascript" src="../../js-lib/jquery-183.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/jstat-192.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotlyPlot.js"></script>
+    <style>
+        #X0{width:80px;}
+        #nBlock,#e1Block,#e2Block{width:90px;}
+        #nABlock{width:180px;}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="meanPlot" class="halfSize"></div>
+    <div id="varPlot" class="halfSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span id="nBlock" class="controlBlock">
+        <label for="eta">&eta;=</label>
+        <input id="eta" name="eta" type="number" min="-4" max="1" step="0.1" value="0.5">
+    </span>
+    <span id="e1Block" class="controlBlock">
+        <label for="epsi1">&epsilon;<sub>1</sub>=</label>
+        <input id="epsi1" name="epsi1" type="number" min="2" max="15" step="0.1" value="3">
+    </span>
+    <span id="e2Block" class="controlBlock">
+        <label for="epsi2">&epsilon;<sub>2</sub>=</label>
+        <input id="epsi2" name="epsi2" type="number" min="2" max="15" step="0.1" value="3">
+    </span>
+    <span id="nABlock" class="controlBlock">
+        <label for="nAgents">x(0)=</label>
+        <input id="X0" name="X0" type="number" min="10" max="100000" step="10" value="10"> / <span id="nAgents">100000</span>
+    </span>
+    <br>
+    <span class="controlBlock"><button name="restart" id="restart">Start</button></span>
+    <span class="controlBlock"><button name="stop" id="stop">Stop</button></span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./tauModel.js"></script>
+<script language="javascript" type="text/javascript" src="./tau.js"></script>
+<script language="javascript" type="text/javascript">
+/* bind events and set initial states */
+$("#stop").attr("disabled","disabled");
+$("#restart").click(function () {
+	setup();
+	$("#restart").attr("disabled","disabled");
+	$("#stop").removeAttr("disabled").click();
+});
+$("#stop").toggle(function() {
+	resumeGame();
+	$("#stop").text("Stop");
+	$("#restart").attr("disabled","disabled");
+},function() {
+	stopGame();
+	$("#stop").text("Continue");
+	$("#restart").removeAttr("disabled");
+});
+
+/* onLoad */
+$(function () {
+	setup();
+    plotFigures();
+});
+</script>
+</body>
+</html>
