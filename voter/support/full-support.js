@@ -5,7 +5,7 @@ timeSeriesPlot.setRanges(true, [0, 1]);
 timeSeriesPlot.reset();
 
 let ratePlot = new plotlyPlot("ratePlot", ["x", "λ(x)"]);
-rateData = {
+let rateData = {
     x: [(new Array(101)).fill(null)],
     lambda: null,
     colors: ["#080", "#f00"],
