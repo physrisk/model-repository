@@ -5,6 +5,10 @@ class FullSupportModel {
         this.herd = Math.pow(nAgents, -alpha);
         this.supp = supp / Math.pow(nAgents, beta);
         this.nAgents = nAgents;
+        this.distParams = [
+            (this.sigma1 - this.supp*this.nAgents) / (this.herd + this.supp),
+            (this.sigma0 - this.supp*this.nAgents) / (this.herd + this.supp),
+        ];
         this.initialize(X0);
     }
     initialize(X0) {
