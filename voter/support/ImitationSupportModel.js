@@ -12,19 +12,25 @@ class ImitationSupportModel {
         this.X = X0;
         this.t = 0;
     }
-    birthRate() {
-        let nOthers = this.nAgents - this.X;
-        let herdTerm = this.herd*this.X;
+    birthRate(X=null) {
+        if(X === null) {
+            X = this.X;
+        }
+        let nOthers = this.nAgents - X;
+        let herdTerm = this.herd*X;
         let suppTerm = this.supp*nOthers;
         let interactionTerm = Math.max(herdTerm - suppTerm, 0);
         return nOthers*(this.sigma1 + interactionTerm);
     }
-    deathRate() {
-        let nOthers = this.nAgents - this.X;
+    deathRate(X=null) {
+        if(X === null) {
+            X = this.X;
+        }
+        let nOthers = this.nAgents - X;
         let herdTerm = this.herd*nOthers;
-        let suppTerm = this.supp*this.X;
+        let suppTerm = this.supp*X;
         let interactionTerm = Math.max(herdTerm - suppTerm, 0);
-        return this.X*(this.sigma0 + interactionTerm);
+        return X*(this.sigma0 + interactionTerm);
     }
     step(untilTime) {
         while(this.t < untilTime) {

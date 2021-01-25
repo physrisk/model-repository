@@ -12,17 +12,23 @@ class FullSupportModel {
         this.X = X0;
         this.t = 0;
     }
-    birthRate() {
-        let nOthers = this.nAgents - this.X;
-        let herdTerm = this.herd*this.X;
+    birthRate(X = null) {
+        if(X === null) {
+            X = this.X;
+        }
+        let nOthers = this.nAgents - X;
+        let herdTerm = this.herd*X;
         let suppTerm = this.supp*nOthers;
         return nOthers*Math.max(this.sigma1 + herdTerm - suppTerm, 0);
     }
-    deathRate() {
-        let nOthers = this.nAgents - this.X;
+    deathRate(X = null) {
+        if(X === null) {
+            X = this.X;
+        }
+        let nOthers = this.nAgents - X;
         let herdTerm = this.herd*nOthers;
-        let suppTerm = this.supp*this.X;
-        return this.X*Math.max(this.sigma0 + herdTerm - suppTerm, 0);
+        let suppTerm = this.supp*X;
+        return X*Math.max(this.sigma0 + herdTerm - suppTerm, 0);
     }
     step(untilTime) {
         while(this.t < untilTime) {

@@ -4,6 +4,14 @@ let timeSeriesPlot = new plotlyPlot("timeSeries", ["t", "x(t)"]);
 timeSeriesPlot.setRanges(true, [0, 1]);
 timeSeriesPlot.reset();
 
+let ratePlot = new plotlyPlot("ratePlot", ["x", "λ(x)"]);
+rateData = {
+    x: [(new Array(101)).fill(null)],
+    lambda: null,
+    colors: ["#080", "#f00"],
+}
+rateData.x[0] = rateData.x[0].map((v,i) => i/100);
+
 let stopButton = document.getElementById("stop");
 stopButton.addEventListener("click", () => onStopButtonClick());
 stopButton.disabled = true;
@@ -39,6 +47,27 @@ function onStartButtonClick() {
     onStopButtonClick();
     startButton.disabled = true;
     stopButton.disabled = false;
+}
+
+let paramFields = document.querySelectorAll("input[type=number]");
+paramFields.forEach(v => {
+    v.addEventListener("change", () => onParamChange());
+});
+
+function onParamChange() {
+    let sigma0 = myParseFloat(document.getElementById("sigma0").value);
+    let sigma1 = myParseFloat(document.getElementById("sigma1").value);
+    let supp = myParseFloat(document.getElementById("supp").value);
+    let alpha = myParseFloat(document.getElementById("alpha").value);
+    let beta = myParseFloat(document.getElementById("beta").value);
+    
+    let tmp = new MultiModel(1, ImitationSupportModel, sigma0, sigma1, supp, alpha, beta, 0, nAgents);
+    rateData.lambda = [
+        rateData.x[0].map(v => tmp.models[0].birthRate(v*nAgents)),
+        rateData.x[0].map(v => tmp.models[0].deathRate(v*nAgents)),
+    ];
+    
+    ratePlot.update(rateData.x, rateData.lambda, "lines", rateData.colors);
 }
 
 let models = null;
@@ -92,6 +121,7 @@ function setup() {
     time = time.fill((1-timePoints)*timeStep).map((v,i) => i*timeStep + v);
     lastTime = 0;
     series = series.fill(models.step(-1));
+
 }
 
 // on window load
