@@ -41,7 +41,8 @@ function onStartButtonClick() {
     stopButton.disabled = false;
 }
 
-let model = null;
+let models = null;
+let nModels = 10;
 let timePoints = 128;
 let timeStep = 1/64;
 let time = new Array(timePoints);
@@ -61,7 +62,7 @@ function frame() {
 
 function simulate() {
     lastTime = lastTime + timeStep;
-    return model.step(lastTime);
+    return models.step(lastTime);
 }
 
 function appendData(t, x) {
@@ -72,7 +73,7 @@ function appendData(t, x) {
 }
 
 function plotFigures() {
-    timeSeriesPlot.update([time],[series]);
+    timeSeriesPlot.update([time], jStat.transpose(series));
 }
 
 function setup() {
@@ -81,14 +82,16 @@ function setup() {
     let supp = myParseFloat(document.getElementById("supp").value);
     let alpha = myParseFloat(document.getElementById("alpha").value);
     let beta = myParseFloat(document.getElementById("beta").value);
-    let x0 = myParseFloat(document.getElementById("x0").value);
-    let X0 = Math.round(x0*nAgents);
 
-    model = new ImitationSupportModel(sigma0, sigma1, supp, alpha, beta, X0, nAgents);
+    models = new MultiModel(nModels, ImitationSupportModel, sigma0, sigma1, supp, alpha, beta, 0, nAgents);
+    models.models.forEach((v,i) => {
+        let X0 = Math.round(nAgents*(i+0.5)/nModels);
+        v.initialize(X0);
+    });
     
     time = time.fill((1-timePoints)*timeStep).map((v,i) => i*timeStep + v);
     lastTime = 0;
-    series = series.fill(x0);
+    series = series.fill(models.step(-1));
 }
 
 // on window load
