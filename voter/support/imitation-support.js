@@ -127,5 +127,6 @@ function setup() {
 // on window load
 window.addEventListener("load", () => {
     setup();
+    onParamChange();
     plotFigures();
 });
