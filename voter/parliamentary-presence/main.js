@@ -95,7 +95,7 @@ function frame() {
     plotFigures();
     plotField();
     if(continueFlag) {
-        window.setTimeout("frame()",100.0);
+        window.setTimeout("frame()",30.0);
     } else {
         $("#restart, #stop").removeAttr("disabled");
     }
@@ -107,7 +107,7 @@ function stopGame() {
 
 function resumeGame() {
     continueFlag=true;
-    window.setTimeout("frame()",100.0);
+    window.setTimeout("frame()",30.0);
 }
 
 /* bind events and set initial states */
