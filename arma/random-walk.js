@@ -41,9 +41,9 @@ function evaluate_acf() {
         [data.acf.map(v => v[1])]);
 }
 
-function generate(gen, eval) {
+function generate(gen, eva) {
     if(gen) generate_timeseries();
-    if(eval) evaluate_acf();
+    if(eva) evaluate_acf();
 }
 document.getElementById("generate").addEventListener("click", () => generate(true, true));
 document.getElementById("distribution").addEventListener("change", () => generate(true, true));
