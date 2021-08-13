@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Autocorrelation function of random walk</title>
+    <link rel="stylesheet" type="text/css" href="../../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../js-lib/universal-style.css">
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/big-313.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/ssci-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/jstat-192.min.js"></script>
+    <style>
+        #distribution{width:120px;}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="timeSeries" class="halfSize"></div>
+    <div id="acfPlot" class="halfSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock">
+        <label for="distribution">Distribution to use:</label>
+        <select id="distribution" name="distribution">
+            <option value="0" selected>normal</option>
+            <option value="1">Cauchy</option>
+        </select>
+    </span>
+    <br>
+    <span class="controlBlock">
+        <label for="diff">Apply differencing?</label>
+        <select id="diff" name="diff">
+            <option value="0" selected>No</option>
+            <option value="1">Yes</option>
+        </select>
+    </span>
+    <br>
+    <span class="controlBlock"><button name="start" id="generate">Regenerate</button></span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./random-walk.js"></script>
+</body>
+</html>
