@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>AR(5) demo</title>
+    <link rel="stylesheet" type="text/css" href="../../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../js-lib/universal-style.css">
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/big-313.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/ssci-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/jstat-192.min.js"></script>
+    <style>
+        #distribution{width:120px}
+        #alpha input[type="number"]{width:75px}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="timeSeries" class="fullSize"></div>
+    <br>
+    <div id="acfPlot" class="halfSize"></div>
+    <div id="pacfPlot" class="halfSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock">
+        <label for="alpha">&alpha; =</label>
+        <fieldset id="alpha">
+            [
+            <input id="alpha1" name="alpha1" type="number" step="0.01" value="0.5">,
+            <input id="alpha2" name="alpha2" type="number" step="0.01" value="0.25">,
+            <input id="alpha3" name="alpha3" type="number" step="0.01" value="0.25">,
+            <input id="alpha4" name="alpha4" type="number" step="0.01" value="0">,
+            <input id="alpha5" name="alpha5" type="number" step="0.01" value="0">
+            ]
+        </fieldset>
+    </span>
+    <br>
+    <span class="controlBlock">
+        <label for="distribution">Distribution to use:</label>
+        <select id="distribution" name="distribution">
+            <option value="0" selected>normal</option>
+            <option value="1">Cauchy</option>
+        </select>
+    </span>
+    <br>
+    <span class="controlBlock"><button name="start" id="generate">Generate</button></span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./ar5.js"></script>
+</body>
+</html>
