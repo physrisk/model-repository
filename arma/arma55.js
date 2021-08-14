@@ -90,12 +90,38 @@ function evaluate_pacf() {
     );
 }
 
+function update_stationarity_label(ar_coeffs) {
+    let stationarity_label = document.getElementById("stationary");
+    if(is_stationary(ar_coeffs)) {
+        stationarity_label.innerHTML = "Parameters indicate stationary regime.";
+        stationarity_label.style.background = "#bfb";
+    } else {
+        stationarity_label.innerHTML = "Parameters indicate non-stationary regime!";
+        stationarity_label.style.background = "#fbb";
+    }
+}
+
+function is_stationary(ar_coeffs) {
+    if(typeof ar_coeffs == "undefined") {
+        ar_coeffs = [];
+        for(let idx=1; idx<=5; idx+=1) {
+            ar_coeffs.push(my_parse_float(document.getElementById(`alpha${idx}`).value));
+        }
+    }
+    return (!ar_coeffs.some(v => Math.abs(v) > 1)) && (ar_coeffs.reduce((acc, v) => acc + v) <= 1);
+}
+
 function generate(gen, eva) {
     generate_timeseries();
     evaluate_acf();
     evaluate_pacf();
+    update_stationarity_label(data.ar_coeffs);
 }
 document.getElementById("generate").addEventListener("click", () => generate());
+
+document.querySelectorAll("#alpha input[type='number']").forEach(elem => {
+    elem.addEventListener("change", () => update_stationarity_label());
+});
 
 // on load
 generate();
