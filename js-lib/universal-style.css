@@ -13,6 +13,12 @@ sup {
 sup.overhead {
     left:6px;
 }
+fieldset {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    display: inline-block;
+}
 input, select, button {
     height: 24px;
     width: 60px;
