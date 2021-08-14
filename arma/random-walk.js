@@ -38,7 +38,9 @@ function evaluate_acf() {
 
     acfPlot.update(
         [data.acf.map(v => v[0])],
-        [data.acf.map(v => v[1])]);
+        [data.acf.map(v => v[1])],
+        "markers",
+    );
 }
 
 function generate(gen, eva) {
