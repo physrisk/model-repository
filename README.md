@@ -18,7 +18,7 @@ These well-known libraries include:
 * [Normalize CSS](https://necolas.github.io/normalize.css/) 7.0.0 (stored as [js-lib/normalize.css](https://rf.mokslasplius.lt/uploads/models/js-lib/normalize.css))
 * [Plotly](https://plot.ly/) 1.3.1 (stored as [js-lib/plotly-131.min.js](https://rf.mokslasplius.lt/uploads/models/js-lib/plotly-131.min.js))
 * [SSCI JavaScript Library](http://www.surveyscience.co.uk/html/ssci/ssci_js.html) 1.3.1 (stored as [js-lib/ssci-131.min.js](https://rf.mokslasplius.lt/uploads/models/js-lib/ssci-131.min.js))
-* [big.js](https://github.com/MikeMcl/big.js/) 3.1.3 (stored as [js-lib/big-313.min.js](https://rf.mokslasplius.lt/uploads/models/js-lib/big-313.min.js), which is a dependency of SSCI library)
+* [big.js](https://github.com/MikeMcl/big.js/) 3.1.3 (stored as [js-lib/big-313.min.js](https://rf.mokslasplius.lt/uploads/models/js-lib/big-313.min.js); is a dependency of SSCI library)
 
 **Why don't we use CDN ourselves?** Because once a CDN went under and we have noticed it only after a really long time :)
 
