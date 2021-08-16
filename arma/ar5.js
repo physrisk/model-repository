@@ -100,7 +100,7 @@ function is_stationary(ar_coeffs) {
             ar_coeffs.push(my_parse_float(document.getElementById(`alpha${idx}`).value));
         }
     }
-    return (!ar_coeffs.some(v => Math.abs(v) > 1)) && (ar_coeffs.reduce((acc, v) => acc + v) <= 1);
+    return (!ar_coeffs.some(v => Math.abs(v) > 1)) && (ar_coeffs.reduce((acc, v) => acc + v) < 1);
 }
 
 function generate(gen, eva) {
