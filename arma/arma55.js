@@ -81,7 +81,7 @@ function evaluate_pacf() {
         .maxlag(data.max_lag)
         .diff(diff_order);
     pacf_obj();
-    data.pacf = pacf_obj.output();
+    data.pacf = pacf_obj.output().slice(1);
 
     pacfPlot.update(
         [data.pacf.map(v => v[0])],
