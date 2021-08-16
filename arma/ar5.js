@@ -107,6 +107,7 @@ function generate(gen, eva) {
     generate_timeseries();
     evaluate_acf();
     evaluate_pacf();
+    update_stationarity_label(data.ar_coeffs);
 }
 document.getElementById("generate").addEventListener("click", () => generate());
 
