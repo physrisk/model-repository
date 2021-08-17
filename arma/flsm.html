@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>FLSM demo</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/big-313.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/ssci-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/jstat-192.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/fft.nayuki.js"></script>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="timeSeries" class="fullSize"></div>
+    <br>
+    <div id="acfPlot" class="halfSize"></div>
+    <div id="pacfPlot" class="halfSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock singleWidth">
+        <label for="diff_order">d =</label>
+        <input id="diff_order" name="diff_order" type="number" min="-0.5" step="0.1" max="0.5" value="0.3">
+    </span>
+    <span class="controlBlock singleWidth">
+        <label for="alpha">&alpha; =</label>
+        <input id="alpha" name="alpha" type="number" min="1" step="0.05" max="2" value="1.5">
+    </span>
+    <span class="controlBlock singleWidth">
+        <input id="use_flsn" name="use_flsn" type="checkbox">
+        <label for="use_flsn">FLSN</label>
+    </span>
+    <br>
+    <span class="controlBlock"><button name="start" id="generate">Generate</button></span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./flsm.js"></script>
+</body>
+</html>
