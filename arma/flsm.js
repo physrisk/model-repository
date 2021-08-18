@@ -103,7 +103,7 @@ function evaluate_pacf() {
     );
 }
 
-function generate(gen, eva) {
+function generate() {
     generate_timeseries();
     evaluate_acf();
     evaluate_pacf();

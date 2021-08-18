@@ -103,7 +103,7 @@ function is_stationary(ar_coeffs) {
     return (!ar_coeffs.some(v => Math.abs(v) > 1)) && (ar_coeffs.reduce((acc, v) => acc + v) < 1);
 }
 
-function generate(gen, eva) {
+function generate() {
     generate_timeseries();
     evaluate_acf();
     evaluate_pacf();
