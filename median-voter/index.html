@@ -9,14 +9,14 @@
     <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
     <script language="javascript" type="text/javascript" src="../js-lib/jstat-192.min.js"></script>
     <style>
-        #player_votes,#ai_votes{font-weight:bold;color:#cc2222;}
-        #ai_votes{color:#3366bb;}
+        #votes_p1,#votes_p2{font-weight:bold;color:#cc2222;}
+        #votes_p2{color:#3366bb;}
     </style>
 </head>
 <body>
 <div id="wrapper">
 <div id="figureWrapper">
-    <div id="title" class="label"><span id="player_votes"></span>% votes / <span id="ai_votes"></span>% votes</div>
+    <div id="title" class="label"><span id="votes_p1"></span>% votes / <span id="votes_p2"></span>% votes</div>
     <div id="opinionPlot" class="fullSize"></div>
 </div><!-- #figureWrapper -->
 <div id="controlWrapper">
@@ -29,12 +29,12 @@
         <input id="sigma" name="sigma" type="number" min="0.03" max="0.3" step="0.01" value="0.1">
     </span>
     <span class="controlBlock singleWidth">
-        <label for="pos">x<sub>1</sub> =</label>
-        <input id="pos" name="sigma" type="number" min="0" step="0.01" max="1" value="0.2">
+        <label for="position_p1">x<sub>1</sub> =</label>
+        <input id="position_p1" name="position_p1" type="number" min="0" step="0.01" max="1" value="0.2">
     </span>
     <span class="controlBlock singleWidth">
-        <label for="ai_pos">x<sub>2</sub> =</label>
-        <input id="ai_pos" name="ai_pas" type="number" min="0" max="1" value="0.8" disabled>
+        <label for="position_p2">x<sub>2</sub> =</label>
+        <input id="position_p2" name="position_p2" type="number" min="0" max="1" value="0.8" disabled>
     </span>
     <br>
     <span class="controlBlock singleWidth">
