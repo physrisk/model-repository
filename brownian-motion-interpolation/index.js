@@ -1,6 +1,6 @@
 const my_parse_float = (val) => parseFloat((""+val).replace(",","."));
 
-let series_plot = new plotlyPlot("seriesPlot", ["t","x(t)"], [10,15,40,60]);
+let series_plot = new plotlyPlot("seriesPlot", ["t","x(t)"], [10,15,40,50]);
 
 let rng = new Random();
 

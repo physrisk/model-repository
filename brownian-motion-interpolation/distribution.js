@@ -1,4 +1,4 @@
-let dist_plot = new plotlyPlot("distPlot", ["Δx","p(Δx)"], [10,15,40,60]);
+let dist_plot = new plotlyPlot("distPlot", ["Δx","p(Δx)"], [10,15,40,50]);
 
 let dist_shown = false;
 
