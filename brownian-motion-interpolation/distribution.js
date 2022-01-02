@@ -23,6 +23,7 @@ function plot_increment_pdf() {
     pdf = pdf.map(v => v/0.2);
     
     let obs = jStat.arange(-5+mean, 5.1+mean, 0.2);
+    obs = obs.map(v => v + 0.1);
 
     let teor_pdf = obs.map(v => jStat.normal.pdf(v, mean, 1));
 
