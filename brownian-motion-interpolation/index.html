@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Interpolation with Brownian motion</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/random-026.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div id="seriesPlot" class="fullSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock">
+        <label for="sigma">&sigma; =</label>
+        <input id="sigma" type="number" value="1" disabled="disabled">
+    </span>
+    <span class="controlBlock">
+        <label for="xstart">x(0) =</label>
+        <input id="xstart" type="number" value="0" min="-128" max="128" step="1">
+    </span>
+    <span class="controlBlock">
+        <label for="xend">x(256) =</label>
+        <input id="xend" type="number" value="0" min="-128" max="128" step="1">
+    </span>
+    <br>
+    <span class="controlBlock">
+        <button id="generate">Generate</button>
+    </span>
+    <span class="controlBlock">
+        <button id="stop">Stop</button>
+    </span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./index.js"></script>
+</body>
+</html>
