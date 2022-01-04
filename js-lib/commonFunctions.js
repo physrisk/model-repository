@@ -350,4 +350,16 @@ var commonFunctions={
         let t = Array(steps+1).fill(null).map((v, i) => t_start + i*h);
         return { "t": t, "y": y };
     },
+    eulerODE: function(equation, initial, t_start, t_end, steps) {
+        const h = (t_end - t_start) / steps;
+        let k = 0;
+        let idx = 0;
+        let y = [initial, ...Array(steps).fill(0)];
+        for(;idx<steps;idx+=1) {
+            k = equation(y[idx]);
+            y[idx+1] = y[idx] + h*k;
+        }
+        let t = Array(steps+1).fill(null).map((v, i) => t_start + i*h);
+        return { "t": t, "y": y };
+    },
 };
