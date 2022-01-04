@@ -328,4 +328,26 @@ var commonFunctions={
         rez[1]=invDelta*(x2tot*ytot-xtot*xytot);
         return rez;
     },
+    rungeKutta4: function(equation, initial, t_start, t_end, steps) {
+        const h = (t_end - t_start) / steps;
+
+        let k1 = 0;
+        let k2 = 0;
+        let k3 = 0;
+        let k4 = 0;
+
+        let idx = 0;
+        let y = [initial, ...Array(steps).fill(0)];
+        for(;idx<steps;idx+=1) {
+            k1 = equation(y[idx]);
+            k2 = equation(y[idx] + (0.5 * h * k1));
+            k3 = equation(y[idx] + (0.5 * h * k2));
+            k4 = equation(y[idx] + (h * k3));
+
+            y[idx+1] = y[idx] + h*(k1+(2*k2)+(2*k3)+k4)/6;
+        }
+
+        let t = Array(steps+1).fill(null).map((v, i) => t_start + i*h);
+        return { "t": t, "y": y };
+    },
 };
