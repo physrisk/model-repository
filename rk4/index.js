@@ -19,13 +19,14 @@ function equation(x, a) {
 }
 
 function run_model(method, a, t_step, t_max) {
-    let steps = Math.round(t_max / t_step) + 1;
+    let steps = Math.floor(t_max / t_step) + 1;
+    let t_final = (steps - 1) * t_step;
     if(method == 0) {
         return commonFunctions.eulerODE(v => equation(v, a),
-                                        1, 0, t_max, steps);
+                                        1, 0, t_final, steps);
     }
     return commonFunctions.rungeKutta4(v => equation(v, a),
-                                       1, 0, t_max, steps);
+                                       1, 0, t_final, steps);
 }
 
 function plot_figure() {
