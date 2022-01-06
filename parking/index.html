@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Parking</title>
+    <link rel="stylesheet" type="text/css" href="../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../js-lib/universal-style.css">
+    <script language="javascript" type="text/javascript" src="../js-lib/jstat-192.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../js-lib/random-026.min.js"></script>
+    <style>
+        select { background: white; width: 100px }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <canvas id="parking" width="500" height="200" class="fullSize"></canvas>
+    <div id="ncarsPlot" class="halfSize"></div>
+    <div id="costPlot" class="halfSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock">
+        <label for="arrival_rate">&lambda; = </label>
+        <input id="arrival_rate" type="number" min="10" max="400" step="10" value="250">
+    </span>
+    <span class="controlBlock">
+        <label for="departure_rate">&mu; = </label>
+        <input id="departure_rate" type="number" value="1" disabled="disabled">
+    </span>
+    <span class="controlBlock">
+        <label for="walk_cost">W = </label>
+        <input id="walk_cost" type="number" min="0" step="0.1" value="4">
+    </span>
+    <span class="controlBlock">
+        <label for="drive_cost">D = </label>
+        <input id="drive_cost" type="number" value="1" disabled="disabled">
+    </span>
+    <br>
+    <span class="controlBlock">
+        <label for="drive_cost">Strategy: </label>
+        <select id="strategy">
+            <option value="0" selected="selected">Meek</option>
+            <option value="1">Prudent</option>
+            <option value="2">Optimist</option>
+            <option value="3">1/2 rule</option>
+        </select>
+    </span>
+    <br>
+    <span class="controlBlock">
+        <button id="start">Start</button>
+    </span>
+    <span class="controlBlock">
+        <button id="stop">Stop</button>
+    </span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./parkingModel.js"></script>
+<script language="javascript" type="text/javascript" src="./strategies.js"></script>
+<script language="javascript" type="text/javascript" src="./index.js"></script>
+</body>
+</html>
