@@ -1,7 +1,7 @@
 const my_parse_float = (val) => parseFloat((""+val).replace(",","."));
 
 let ncars_plot = new plotlyPlot("ncarsPlot", ["events", "Total, Last"], [10,15,40,50]);
-let cost_plot = new plotlyPlot("costPlot", ["events", "avg. norm. Cost"], [10,15,40,50]);
+let cost_plot = new plotlyPlot("costPlot", ["events", "norm. avg. Cost"], [10,15,40,50]);
 
 let canvas = document.getElementById("parking");
 let update_interval = 100;
