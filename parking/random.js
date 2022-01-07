@@ -175,7 +175,7 @@ function validate_probs(changed) {
     ps.push(my_parse_float(document.getElementById("prob_half").value));
     ps[changed] = Math.min(Math.max(ps[changed], 0), 1);
     let dp = jStat.sum(ps) - 1;
-    if(ps[3] > dp) {
+    if(ps[3] >= dp) {
         ps[3] -= dp;
     } else {
         ps[changed] -= dp;
