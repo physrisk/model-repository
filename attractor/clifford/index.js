@@ -14,6 +14,8 @@ let search_interval = 1000; // setTimeout(..., search_interval)
 let density_plot = null;
 let attractor = null;
 
+let max_iters = 1e6; // allow for maximum of 1 million iterations
+
 let bad_threshold = 0.01; // density > bad_threshold is BAD!
 let bad_limit = 1e4; // check density after bad_limit points are generated
 
@@ -118,7 +120,7 @@ function run() {
         last_points = last_points.slice(-n_last_points);
     }
     density_plot.update();
-    if(is_bad_attractor()) {
+    if(is_bad_attractor() || (density_plot.n_points > max_iters)) {
         stop_btn.click();
     }
     if(continue_flag) {
@@ -154,6 +156,7 @@ function search() {
             generate_btn.click();
         } else {
             search_flag = false;
+            search_btn.innerHTML = "Search";
         }
     } 
     if(search_flag) {
@@ -200,8 +203,11 @@ resize_btn.addEventListener("click", () => {
 search_btn.addEventListener("click", () => {
     search_flag = !search_flag;
     if(search_flag) {
+        search_btn.innerHTML = "Stop search";
         randomize_btn.click();
         generate_btn.click();
         search();
+    } else {
+        search_btn.innerHTML = "Search";
     }
 });
