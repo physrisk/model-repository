@@ -2,20 +2,22 @@ const my_parse_float = (val) => parseFloat(("" + val).replace(",", "."));
 
 let probs_plot = new plotlyPlot(
     "probsPlot",
-    ["mid-pin row", "prob. fallen"],
+    ["mid-pin row", "lg[prob. down]"],
     [10, 15, 40, 50]
 );
-probs_plot.setRanges([1, 9], [0, 1]);
 
 let rng = new Random();
 let fall_prob = 0.5;
 let threshold_level = 5;
-let total_levels = 2 * threshold_level - 1;
+let total_levels = 0;
 
 let canvas = document.getElementById("pins");
-let canvas_top_padding = 15;
-let pin_radius = 10;
+let canvas_default_top_padding = 10;
+let canvas_desired_bottom_padding = 5;
+let canvas_side_padding = 10;
 let board_width = 15;
+let canvas_top_padding = 0;
+let pin_radius = 0;
 
 let update_interval = 10;
 let continue_flag = false;
@@ -25,6 +27,21 @@ let data = Array(threshold_level).fill(0);
 let stop_btn = document.getElementById("stop");
 let step_btn = document.getElementById("step");
 let start_btn = document.getElementById("start");
+
+function update_simulation_setup() {
+    total_levels = 2 * threshold_level - 1;
+    pin_radius =
+        Math.min(
+            (canvas.width - 2 * canvas_side_padding) / threshold_level,
+            (canvas.height - canvas_default_top_padding) / total_levels
+        ) / 2;
+    canvas_top_padding = Math.max(
+        200 - canvas_desired_bottom_padding - 2 * total_levels * pin_radius,
+        canvas_default_top_padding
+    );
+
+    probs_plot.setRanges([1, total_levels], true);
+}
 
 function knock_pin() {
     return rng.random() < fall_prob ? 1 : 0;
@@ -67,7 +84,7 @@ function plot_figures() {
                 .fill(null)
                 .map((v, i) => 2 * i + 1),
         ],
-        [data.map((v) => v / data[0])],
+        [data.map((v) => Math.log10(v / data[0]))],
         "lines+markers",
         ["#36b"]
     );
@@ -166,6 +183,11 @@ start_btn.addEventListener("click", () => {
     step_btn.disabled = true;
     stop_btn.innerHTML = "Stop";
 
+    threshold_level = parseInt(
+        document.getElementById("threshold_level").value
+    );
+    update_simulation_setup();
+
     fall_prob = my_parse_float(document.getElementById("prob").value);
     data = Array(threshold_level).fill(0);
 
@@ -193,5 +215,6 @@ step_btn.addEventListener("click", () => {
 stop_btn.disabled = true;
 
 // on load
+update_simulation_setup();
 step();
 plot_figures();
