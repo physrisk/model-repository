@@ -54,12 +54,22 @@ function step() {
     let prob_score = 0.5;
     // red team possesion
     possesion = possesion + 1;
-    prob_score = 0.5 + (score_diff < 0 ? advantage : -advantage);
+    prob_score = 0.5;
+    if (score_diff < 0) {
+        prob_score = 0.5 + advantage;
+    } else if (score_diff > 0) {
+        prob_score = 0.5 - advantage;
+    }
     score_diff = score_diff + take_shot(prob_score);
     game_data[possesion] = score_diff;
     // blue team possesion
     possesion = possesion + 1;
-    prob_score = 0.5 + (score_diff > 0 ? advantage : -advantage);
+    prob_score = 0.5;
+    if (score_diff > 0) {
+        prob_score = 0.5 + advantage;
+    } else if (score_diff < 0) {
+        prob_score = 0.5 - advantage;
+    }
     score_diff = score_diff - take_shot(prob_score);
     game_data[possesion] = score_diff;
     if (possesion >= end_game) {
@@ -102,6 +112,7 @@ function run_game() {
     if (!continue_flag && possesion >= end_game) {
         start_btn.disabled = false;
         stop_btn.disabled = false;
+        speed_btn.disabled = false;
     }
 }
 
@@ -119,6 +130,7 @@ start_btn.addEventListener("click", () => {
     restart_game();
 
     stop_btn.disabled = false;
+    speed_btn.disabled = true;
 });
 stop_btn.addEventListener("click", () => {
     stop_btn.disabled = true;
