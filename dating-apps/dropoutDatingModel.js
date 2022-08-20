@@ -16,7 +16,7 @@ class DropoutDatingModel {
         this.pickiness = pickiness;
         this.match_threshold = match_threshold;
 
-        this.attractivness = Array(this.n_agents)
+        this.attractiveness = Array(this.n_agents)
             .fill(0)
             .map(() => this.generate_attractiveness())
             .sort((a, b) => a > b);
@@ -59,8 +59,8 @@ class DropoutDatingModel {
         if (sender_id == recepient_id) {
             return;
         }
-        let x_i = this.attractivness[sender_id];
-        let x_j = this.attractivness[recepient_id];
+        let x_i = this.attractiveness[sender_id];
+        let x_j = this.attractiveness[recepient_id];
         let reaction = this.get_reaction(x_i, x_j);
         this.popularity[sender_id][recepient_id] =
             this.popularity[sender_id][recepient_id] + reaction;

@@ -48,7 +48,7 @@ function plot_figures() {
         .map((v, i) => {
             return model.get_popularity(i);
         });
-    pop_plot.update([model.attractivness], [pop_data], "lines", ["#46b"]);
+    pop_plot.update([model.attractiveness], [pop_data], "lines", ["#46b"]);
 
     const like_data = Array(model.n_agents)
         .fill(null)

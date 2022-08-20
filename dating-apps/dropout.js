@@ -64,8 +64,8 @@ function plot_figures() {
 
     if (model.matched_pairs.length > 0) {
         match_plot.update(
-            [model.matched_pairs.map((v) => model.attractivness[v[0]])],
-            [model.matched_pairs.map((v) => model.attractivness[v[1]])],
+            [model.matched_pairs.map((v) => model.attractiveness[v[0]])],
+            [model.matched_pairs.map((v) => model.attractiveness[v[1]])],
             "markers",
             ["#46b"]
         );
@@ -74,7 +74,7 @@ function plot_figures() {
     }
 
     const matches_deltas = model.matched_pairs.map((v) =>
-        Math.abs(model.attractivness[v[0]] - model.attractivness[v[1]])
+        Math.abs(model.attractiveness[v[0]] - model.attractiveness[v[1]])
     );
     const delta_min = Math.min(...matches_deltas);
     const delta_max = Math.max(...matches_deltas);

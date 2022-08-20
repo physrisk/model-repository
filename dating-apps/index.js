@@ -1,7 +1,7 @@
 const my_parse_float = (val) => parseFloat(("" + val).replace(",", "."));
 
-let attractivness_plot = new plotlyPlot(
-    "attractivnessPlot",
+let attractiveness_plot = new plotlyPlot(
+    "attractivenessPlot",
     ["x_i", "L_i, M_i"],
     [10, 15, 40, 50]
 );
@@ -42,7 +42,7 @@ const rel_bin_color = "#000";
 
 const n_delta_bins = 30;
 
-//attractivness_plot.setRanges(true, [-1, n_agents + 1]);
+//attractiveness_plot.setRanges(true, [-1, n_agents + 1]);
 delta_plot.setRanges([0, 1], true);
 
 function plot_figures(relations, agent_status, matches_deltas) {
@@ -77,7 +77,7 @@ function plot_figures(relations, agent_status, matches_deltas) {
         }
     }
 
-    attractivness_plot.update(
+    attractiveness_plot.update(
         [
             agent_status.attractiveness,
             agent_status.attractiveness,
