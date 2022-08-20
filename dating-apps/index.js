@@ -94,8 +94,8 @@ function plot_figures(relations, agent_status, matches_deltas) {
         [rel_like_color, rel_match_color, rel_bin_color, rel_bin_color]
     );
 
-    const delta_min = 0;
-    const delta_max = 1;
+    const delta_min = Math.min(...matches_deltas);
+    const delta_max = Math.max(...matches_deltas);
     const delta_step = (delta_max - delta_min) / n_delta_bins;
     const delta_bins = Array(n_delta_bins)
         .fill(null)
