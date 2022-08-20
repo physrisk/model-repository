@@ -114,13 +114,6 @@ class ReplaceDatingModel {
             Math.min(...a.map((e) => (Array.isArray(e) ? get_min(e) : e)));
         return get_min(this.popularity);
     }
-    get_matches(i) {
-        let matches = 0;
-        for (let j = 0; j < this.n_agents; j += 1) {
-            matches = matches + this.is_matched(i, j);
-        }
-        return matches;
-    }
     is_matched(i, j) {
         return (
             this.popularity[i][j] > this.match_threshold &&
