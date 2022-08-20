@@ -23,9 +23,6 @@ class DropoutDatingModel {
         this.popularity = Array(this.n_agents)
             .fill(null)
             .map(() => Array(this.n_agents).fill(0));
-        this.likes = Array(this.n_agents)
-            .fill(null)
-            .map(() => Array(this.n_agents).fill(0));
         this.matched_pairs = [];
 
         this.active = Array(this.n_agents).fill(true);
@@ -67,10 +64,6 @@ class DropoutDatingModel {
         let reaction = this.get_reaction(x_i, x_j);
         this.popularity[sender_id][recepient_id] =
             this.popularity[sender_id][recepient_id] + reaction;
-        if (reaction > 0) {
-            this.likes[sender_id][recepient_id] =
-                this.likes[sender_id][recepient_id] + reaction;
-        }
         if (this.is_matched(sender_id, recepient_id)) {
             this.remove_pair(sender_id, recepient_id);
         }
@@ -100,19 +93,6 @@ class DropoutDatingModel {
         const get_min = (a) =>
             Math.min(...a.map((e) => (Array.isArray(e) ? get_min(e) : e)));
         return get_min(this.popularity);
-    }
-    get_popularity(i) {
-        return jStat.sum(this.popularity[i]);
-    }
-    get_likes(i) {
-        return jStat.sum(this.likes[i]);
-    }
-    get_matches(i) {
-        let matches = 0;
-        for (let j = 0; j < this.n_agents; j += 1) {
-            matches = matches + this.is_matched(i, j);
-        }
-        return matches;
     }
     is_matched(i, j) {
         return (
