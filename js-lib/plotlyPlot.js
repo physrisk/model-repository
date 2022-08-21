@@ -88,4 +88,14 @@ class plotlyPlot {
             delete this.layout.yaxis.range;
         }
     }
+    setXTicks(vals, text) {
+        this.layout.xaxis.tickmode = "array";
+        this.layout.xaxis.tickvals = vals;
+        this.layout.xaxis.ticktext = text;
+    }
+    setYTicks(vals, text) {
+        this.layout.yaxis.tickmode = "array";
+        this.layout.yaxis.tickvals = vals;
+        this.layout.yaxis.ticktext = text;
+    }
 }
