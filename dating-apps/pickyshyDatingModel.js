@@ -3,6 +3,7 @@ class PickyshyDatingModel {
         n_agents = 100,
         beta_max = 10,
         beta_min = 4,
+        delta = 0,
         match_threshold = 5
     ) {
         this.normal_mean = 0.5;
@@ -12,6 +13,7 @@ class PickyshyDatingModel {
         this.n_agents = n_agents;
         this.beta_max = Math.max(beta_max, beta_min);
         this.beta_min = Math.min(beta_min, beta_max);
+        this.delta = delta;
         this.match_threshold = match_threshold;
 
         this.attractiveness = Array(this.n_agents)
@@ -60,16 +62,6 @@ class PickyshyDatingModel {
         }
     }
     remove_pair(sender_id, recepient_id) {
-        this.matched.attractiveness.push([
-            this.attractiveness[sender_id],
-            this.attractiveness[recepient_id],
-        ]);
-        this.matched.deltas.push(
-            Math.abs(
-                this.attractiveness[sender_id] -
-                    this.attractiveness[recepient_id]
-            )
-        );
         let match_type = match_type_mixed;
         if (this.picky_type[sender_id] && this.picky_type[recepient_id]) {
             match_type = match_type_picky;
@@ -79,7 +71,27 @@ class PickyshyDatingModel {
         ) {
             match_type = match_type_shy;
         }
-
+        if (
+            match_type == match_type_picky ||
+            match_type == match_type_shy ||
+            !this.picky_type[sender_id]
+        ) {
+            this.matched.attractiveness.push([
+                this.attractiveness[sender_id],
+                this.attractiveness[recepient_id],
+            ]);
+        } else {
+            this.matched.attractiveness.push([
+                this.attractiveness[recepient_id],
+                this.attractiveness[sender_id],
+            ]);
+        }
+        this.matched.deltas.push(
+            Math.abs(
+                this.attractiveness[sender_id] -
+                    this.attractiveness[recepient_id]
+            )
+        );
         this.matched.types.push(match_type);
         this.remove_single(sender_id);
         this.introduce_single();
@@ -117,14 +129,16 @@ class PickyshyDatingModel {
     }
     get_reaction(i, j) {
         let prob = 0;
-        const diff = this.attractiveness[j] - this.attractiveness[i];
-        if (this.picky_type) {
+        let diff = this.attractiveness[j] - this.attractiveness[i];
+        if (this.picky_type[i]) {
+            diff = diff - this.delta;
             if (diff < 0) {
                 prob = Math.min(1, Math.exp(this.beta_max * diff));
             } else {
                 prob = Math.min(1, Math.exp(-this.beta_min * diff));
             }
         } else {
+            diff = diff + this.delta;
             if (diff < 0) {
                 prob = Math.min(1, Math.exp(this.beta_min * diff));
             } else {

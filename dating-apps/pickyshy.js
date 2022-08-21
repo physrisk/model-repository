@@ -94,30 +94,15 @@ function plot_figures() {
             ["#c00", "#835", "#46b"]
         );
 
-        const matches_attractiveness_picky =
-            model.matched.attractiveness.filter(
-                (v, i) => model.matched.types[i] == match_type_picky
-            );
         const matches_attractiveness_mixed =
             model.matched.attractiveness.filter(
                 (v, i) => model.matched.types[i] == match_type_mixed
             );
-        const matches_attractiveness_shy = model.matched.attractiveness.filter(
-            (v, i) => model.matched.types[i] == match_type_shy
-        );
         match_plot.update(
-            [
-                matches_attractiveness_picky.map((v) => v[0]),
-                matches_attractiveness_mixed.map((v) => v[0]),
-                matches_attractiveness_shy.map((v) => v[0]),
-            ],
-            [
-                matches_attractiveness_picky.map((v) => v[1]),
-                matches_attractiveness_mixed.map((v) => v[1]),
-                matches_attractiveness_shy.map((v) => v[1]),
-            ],
-            "markers",
-            ["#c00", "#835", "#46b"]
+            [matches_attractiveness_mixed.map((v) => v[0]), [0, 1]],
+            [matches_attractiveness_mixed.map((v) => v[1]), [0, 1]],
+            ["markers", "lines"],
+            ["#835", "#666"]
         );
 
         const matches_delta_picky = model.matched.deltas.filter(
@@ -183,9 +168,16 @@ start_btn.addEventListener("click", () => {
         document.getElementById("beta_min").value = beta_max;
         [beta_min, beta_max] = [beta_max, beta_min];
     }
+    const delta = my_parse_float(document.getElementById("delta").value);
     const threshold = parseInt(document.getElementById("threshold").value);
 
-    model = new PickyshyDatingModel(n_agents, beta_max, beta_min, threshold);
+    model = new PickyshyDatingModel(
+        n_agents,
+        beta_max,
+        beta_min,
+        delta,
+        threshold
+    );
 
     continue_flag = true;
     setTimeout(run, update_interval);
