@@ -44,18 +44,18 @@ class DynamicDatingModel {
             Math.floor(this.rng.uniform(0, this.n_agents)),
         ];
     }
-    put_like(sender_id, recepient_id) {
-        if (sender_id == recepient_id) {
+    put_like(sender_id, recipient_id) {
+        if (sender_id == recipient_id) {
             return;
         }
         let x_i = this.attractiveness[sender_id];
-        let x_j = this.attractiveness[recepient_id];
+        let x_j = this.attractiveness[recipient_id];
         let reaction = this.get_reaction(x_i, x_j);
-        this.popularity[sender_id][recepient_id] =
-            this.popularity[sender_id][recepient_id] + reaction;
+        this.popularity[sender_id][recipient_id] =
+            this.popularity[sender_id][recipient_id] + reaction;
         if (reaction > 0) {
-            this.likes[sender_id][recepient_id] =
-                this.likes[sender_id][recepient_id] + reaction;
+            this.likes[sender_id][recipient_id] =
+                this.likes[sender_id][recipient_id] + reaction;
         }
     }
     get_reaction(x_i, x_j) {

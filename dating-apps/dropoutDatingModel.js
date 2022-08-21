@@ -55,23 +55,23 @@ class DropoutDatingModel {
     pick_pair() {
         return [this.pick_active(), this.pick_active()];
     }
-    put_like(sender_id, recepient_id) {
-        if (sender_id == recepient_id) {
+    put_like(sender_id, recipient_id) {
+        if (sender_id == recipient_id) {
             return;
         }
         let x_i = this.attractiveness[sender_id];
-        let x_j = this.attractiveness[recepient_id];
+        let x_j = this.attractiveness[recipient_id];
         let reaction = this.get_reaction(x_i, x_j);
-        this.popularity[sender_id][recepient_id] =
-            this.popularity[sender_id][recepient_id] + reaction;
-        if (this.is_matched(sender_id, recepient_id)) {
-            this.remove_pair(sender_id, recepient_id);
+        this.popularity[sender_id][recipient_id] =
+            this.popularity[sender_id][recipient_id] + reaction;
+        if (this.is_matched(sender_id, recipient_id)) {
+            this.remove_pair(sender_id, recipient_id);
         }
     }
-    remove_pair(sender_id, recepient_id) {
-        this.matched_pairs.push([sender_id, recepient_id]);
+    remove_pair(sender_id, recipient_id) {
+        this.matched_pairs.push([sender_id, recipient_id]);
         this.active[sender_id] = false;
-        this.active[recepient_id] = false;
+        this.active[recipient_id] = false;
         this.n_actives = this.n_actives - 2;
     }
     get_reaction(x_i, x_j) {

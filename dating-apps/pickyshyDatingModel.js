@@ -50,25 +50,25 @@ class PickyshyDatingModel {
             Math.floor(this.rng.uniform(0, this.n_agents)),
         ];
     }
-    put_like(sender_id, recepient_id) {
-        if (sender_id == recepient_id) {
+    put_like(sender_id, recipient_id) {
+        if (sender_id == recipient_id) {
             return;
         }
-        let reaction = this.get_reaction(sender_id, recepient_id);
-        this.popularity[sender_id][recepient_id] =
-            this.popularity[sender_id][recepient_id] + reaction;
-        if (this.is_matched(sender_id, recepient_id)) {
-            this.record_match(sender_id, recepient_id);
-            this.remove_pair(sender_id, recepient_id);
+        let reaction = this.get_reaction(sender_id, recipient_id);
+        this.popularity[sender_id][recipient_id] =
+            this.popularity[sender_id][recipient_id] + reaction;
+        if (this.is_matched(sender_id, recipient_id)) {
+            this.record_match(sender_id, recipient_id);
+            this.remove_pair(sender_id, recipient_id);
         }
     }
-    record_match(sender_id, recepient_id) {
+    record_match(sender_id, recipient_id) {
         let match_type = match_type_mixed;
-        if (this.picky_type[sender_id] && this.picky_type[recepient_id]) {
+        if (this.picky_type[sender_id] && this.picky_type[recipient_id]) {
             match_type = match_type_picky;
         } else if (
             !this.picky_type[sender_id] &&
-            !this.picky_type[recepient_id]
+            !this.picky_type[recipient_id]
         ) {
             match_type = match_type_shy;
         }
@@ -79,26 +79,26 @@ class PickyshyDatingModel {
         ) {
             this.matched.attractiveness.push([
                 this.attractiveness[sender_id],
-                this.attractiveness[recepient_id],
+                this.attractiveness[recipient_id],
             ]);
         } else {
             this.matched.attractiveness.push([
-                this.attractiveness[recepient_id],
+                this.attractiveness[recipient_id],
                 this.attractiveness[sender_id],
             ]);
         }
         this.matched.deltas.push(
             Math.abs(
                 this.attractiveness[sender_id] -
-                    this.attractiveness[recepient_id]
+                    this.attractiveness[recipient_id]
             )
         );
         this.matched.types.push(match_type);
     }
-    remove_pair(sender_id, recepient_id) {
+    remove_pair(sender_id, recipient_id) {
         this.remove_single(sender_id);
         this.introduce_single();
-        this.remove_single(recepient_id);
+        this.remove_single(recipient_id);
         this.introduce_single();
     }
     remove_single(id) {
