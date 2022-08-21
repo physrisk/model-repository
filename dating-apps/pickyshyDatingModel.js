@@ -58,10 +58,11 @@ class PickyshyDatingModel {
         this.popularity[sender_id][recepient_id] =
             this.popularity[sender_id][recepient_id] + reaction;
         if (this.is_matched(sender_id, recepient_id)) {
+            this.record_match(sender_id, recepient_id);
             this.remove_pair(sender_id, recepient_id);
         }
     }
-    remove_pair(sender_id, recepient_id) {
+    record_match(sender_id, recepient_id) {
         let match_type = match_type_mixed;
         if (this.picky_type[sender_id] && this.picky_type[recepient_id]) {
             match_type = match_type_picky;
@@ -93,6 +94,8 @@ class PickyshyDatingModel {
             )
         );
         this.matched.types.push(match_type);
+    }
+    remove_pair(sender_id, recepient_id) {
         this.remove_single(sender_id);
         this.introduce_single();
         this.remove_single(recepient_id);
