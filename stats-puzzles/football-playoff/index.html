@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>The Riddler Football Playoff</title>
+    <link rel="stylesheet" type="text/css" href="../../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../js-lib/universal-style.css">
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/jstat-192.min.js"></script>
+    <style>
+        #mu{width:80px}
+        #distributionPlot{width:350px}
+        #gameList{vertical-align:top;width:150px}
+        #gameList .seed1{color:#36b}
+        #gameList .seed2{color:#c22}
+        #gameList .seed3{color:#395}
+        #gameList .seed4{color:#d73}
+        #fractionPlot{height:10px}
+        button{width:110px}
+        span.controlBlock.increaseMargin{margin-left:25px}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div class="label fullSize">Iteration #<span id="iter"></span> (mean: <span id="mean"></span>)</div>
+    <div id="gameList">
+        <p class="header">Semi-Final</p>
+        <p id="game1"><span id="team11" class="seed1"></span> - <span id="team12" class="seed4"></span></p>
+        <p id="game2"><span id="team21" class="seed2"></span> - <span id="team22" class="seed3"></span></p>
+        <p class="header">Final</p>
+        <p id="game3"><span id="team31"></span> - <span id="team32"></span></p>
+    </div>
+    <div id="distributionPlot"></div>
+    <canvas id="fractionPlot" class="fullSize" height="10" width="500"></canvas>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock">
+        <label for="alpha">&alpha; = </label>
+        <input id="alpha" type="number" min="0.2" max="5" step="0.2" value="1">
+    </span>
+    <span class="controlBlock">
+        <label for="beta">&beta; = </label>
+        <input id="beta" type="number" min="0.2" max="5" step="0.2" value="1">
+    </span>
+    <span class="controlBlock">
+        <label for="gamma">&gamma; = </label>
+        <input id="gamma" type="number" min="-3" max="3" step="0.5" value="1">
+    </span>
+    <br>
+    <span class="controlBlock">
+        <button id="start">Start</button>
+    </span>
+    <span class="controlBlock">
+        <button id="stop">Stop</button>
+    </span>
+    <span class="controlBlock">
+        <button id="step">Step</button>
+    </span>
+    <span class="controlBlock increaseMargin">
+        <button id="logaxis">Lin-axis</button>
+    </span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./index.js"></script>
+</body>
+</html>
