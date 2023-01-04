@@ -45,6 +45,12 @@ let team22_label = document.getElementById("team22");
 let team31_label = document.getElementById("team31");
 let team32_label = document.getElementById("team32");
 
+function reset_params() {
+    document.getElementById("alpha").value = alpha;
+    document.getElementById("beta").value = beta;
+    document.getElementById("gamma").value = gamma;
+}
+
 function update_simulation() {
     alpha = my_parse_float(document.getElementById("alpha").value);
     beta = my_parse_float(document.getElementById("beta").value);
@@ -266,6 +272,7 @@ stop_btn.addEventListener("click", () => {
 });
 stop_btn.disabled = true;
 step_btn.addEventListener("click", () => {
+    reset_params();
     run(true);
 });
 axis_btn.addEventListener("click", () => {
