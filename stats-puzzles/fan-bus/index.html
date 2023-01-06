@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Fan Bus</title>
+    <link rel="stylesheet" type="text/css" href="../../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../js-lib/universal-style.css">
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/jstat-192.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+<div id="figureWrapper">
+    <div class="label fullSize">Iteration #<span id="iter"></span> (last blue bus <span id="lastPerc"></span>% of time)</div>
+    <div id="seriesPlot" class="halfSize"></div>
+    <div id="distPlot" class="halfSize"></div>
+</div><!-- #figureWrapper -->
+<div id="controlWrapper">
+    <span class="controlBlock">
+        <label for="n_reds">N<sub>r</sub> = </label>
+        <input id="n_reds" type="number" min="1" max="50" step="1" value="11">
+    </span>
+    <span class="controlBlock">
+        <label for="n_blues">N<sub>b</sub> = </label>
+        <input id="n_blues" type="number" min="1" max="50" step="1" value="7">
+    </span>
+    <br>
+    <span class="controlBlock">
+        <button id="start">Start</button>
+    </span>
+    <span class="controlBlock">
+        <button id="stop">Stop</button>
+    </span>
+    <span class="controlBlock">
+        <button id="step">Step</button>
+    </span>
+</div><!-- #controlWrapper -->
+</div><!-- #wrapper -->
+<script language="javascript" type="text/javascript" src="./index.js"></script>
+</body>
+</html>
