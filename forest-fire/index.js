@@ -3,6 +3,7 @@ const my_parse_float = (val) => parseFloat(("" + val).replace(",", "."));
 let rng = new Random();
 
 let canvas = document.getElementById("forest");
+let canvas_center_on = [0, 0];
 const CANVAS_COLORS = ["#333", "#3d3", "#3d3", "#f63"];
 const CANVAS_BURNT = 3;
 const CANVAS_MARKED = 2;
@@ -104,7 +105,10 @@ function burn_tree(positions) {
 
 function burn_forest() {
     next = burn_tree(next);
-    plot_forest();
+    plot_forest(
+        Math.floor(canvas_center_on[0] + forest.length / 2),
+        Math.floor(canvas_center_on[1] + forest.length / 2)
+    );
 }
 
 function burn() {
@@ -112,6 +116,7 @@ function burn() {
         rho = my_parse_float(document.getElementById("density").value);
         forest = plant_forest(rho);
         next = [pick_tree()];
+        canvas_center_on = next[0];
     }
     burn_forest();
     if (next.length > 0 && continue_flag) {
