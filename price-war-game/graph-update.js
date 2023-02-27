@@ -22,25 +22,38 @@ function calculate_probability(n, params, which = 1) {
     let c = params[0] / (params[0] - params[1]);
     let upper_bound = (50 * c) / (c - 1);
     let lower_bound = (50 * (1 + c)) / c;
+    let result = 0;
 
     // best
-    if (which == 1) {
-        return 0 + (n < upper_bound);
+    if ((which == 1 && params[2]) || (which == -1 && !params[2])) {
+        result = 0 + (n < upper_bound);
+        if (!params[2]) {
+            return 1 - result;
+        }
+        return result;
     }
 
     // worst
-    if (which == -1) {
-        return 1 - (n > lower_bound);
+    if ((which == -1 && params[2]) || (which == 1 && !params[2])) {
+        result = 1 - (n > lower_bound);
+        if (!params[2]) {
+            return 1 - result;
+        }
+        return result;
     }
 
     // medium
     if (lower_bound < n && n < upper_bound) {
-        return 50 / (50 - n) + c;
+        result = 50 / (50 - n) + c;
+    } else if (n <= lower_bound) {
+        result = 1;
+    } else {
+        result = 0;
     }
-    if (n <= lower_bound) {
-        return 1;
+    if (!params[2]) {
+        return 1 - result;
     }
-    return 0;
+    return result;
 }
 
 function update_view() {
