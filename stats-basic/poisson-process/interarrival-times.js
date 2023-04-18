@@ -13,9 +13,8 @@ const TIMES_PER_UPDATE = 1000;
 const UPDATE_INTERVAL = 100;
 let continue_flag = false;
 
-const DESIRED_PROB = 0.01;
 let arrival_rate = 4;
-let delta_t = DESIRED_PROB / arrival_rate;
+let delta_t = 0.04;
 
 const MAX_GT_LENGTH = 30 * TIMES_PER_UPDATE;
 let generated_times = [];
@@ -70,8 +69,7 @@ start_btn.addEventListener("click", () => {
     resume_btn.innerHTML = "Pause";
 
     arrival_rate = my_parse_float(document.getElementById("rate").value);
-    delta_t = DESIRED_PROB / arrival_rate;
-    document.getElementById("delta_t").value = delta_t;
+    delta_t = my_parse_float(document.getElementById("delta_t").value);
     generated_times = [];
 
     step();
