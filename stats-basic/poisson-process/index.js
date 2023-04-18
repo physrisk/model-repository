@@ -21,7 +21,8 @@ let iterations = 0;
 let average_series = Array(HISTORY_LENGTH) // history
     .fill(null)
     .map((v, i) => [(DURATION * (i + 0.5)) / HISTORY_LENGTH, 0]);
-let histogram = Array(Math.ceil(2.5 * arrival_rate))
+const HIST_MULT = 4;
+let histogram = Array(Math.ceil(HIST_MULT * arrival_rate))
     .fill(null)
     .map((v, i) => [i, 0, jStat.poisson.pdf(i, arrival_rate)]);
 
@@ -93,7 +94,7 @@ start_btn.addEventListener("click", () => {
     average_series = Array(HISTORY_LENGTH)
         .fill(null)
         .map((v, i) => [(DURATION * (i + 0.5)) / HISTORY_LENGTH, 0]);
-    histogram = Array(Math.ceil(2.5 * arrival_rate))
+    histogram = Array(Math.ceil(HIST_MULT * arrival_rate))
         .fill(null)
         .map((v, i) => [i, 0, jStat.poisson.pdf(i, arrival_rate)]);
 
