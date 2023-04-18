@@ -78,6 +78,8 @@ function step() {
     // decide if to continue
     if (continue_flag) {
         setTimeout(step, UPDATE_INTERVAL);
+    } else {
+        resume_btn.disabled = false;
     }
 }
 
