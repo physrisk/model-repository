@@ -29,13 +29,14 @@ let generated_waiting_times = [];
 
 function generate_day() {
     let events = [];
-    let tau = generate_arrival_time();
-    let t = tau;
-    while (t < DAY_DURATION) {
-        events.push(t);
-        tau = generate_arrival_time();
-        t = t + tau;
+    let t = 0;
+    let delta = 0;
+    while (t <= DAY_DURATION) {
+        delta = rng.uniform(-delta_arrival, delta_arrival);
+        events.push(Math.min(Math.max(t + delta, 0), DAY_DURATION));
+        t = t + avg_interarrival;
     }
+    events.sort((a, b) => a - b);
     return events;
 }
 
@@ -48,13 +49,6 @@ function convert(events) {
     series.time.push(DAY_DURATION);
     series.value.push(0);
     return series;
-}
-
-function generate_arrival_time() {
-    return rng.uniform(
-        avg_interarrival - delta_arrival,
-        avg_interarrival + delta_arrival
-    );
 }
 
 function make_histogram(data, n_bins = 30) {
@@ -135,8 +129,7 @@ start_btn.addEventListener("click", () => {
     delta_arrival = my_parse_float(
         document.getElementById("delta_arrival").value
     );
-    delta_arrival = Math.min(delta_arrival, avg_interarrival);
-    document.getElementById("delta_arrival").value = delta_arrival;
+
     generated_waiting_times = [];
 
     step();
