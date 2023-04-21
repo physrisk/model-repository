@@ -90,7 +90,7 @@ label {
     width: 330px;
 }
 #figureWrapper p {
-    margin: 1em 0;
+    margin: 1.5em 0 0.5em 0;
 }
 #figureWrapper p.header {
     font-size: 1.1em;
