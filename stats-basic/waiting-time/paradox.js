@@ -7,7 +7,7 @@ time_plot.setRanges(true, [0, 1.05]);
 time_plot.reset();
 let dist_plot = new plotlyPlot(
     "distributionPlot",
-    ["T", "p(T)"],
+    ["w", "p(w)"],
     [10, 15, 40, 60]
 );
 
