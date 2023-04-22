@@ -31,9 +31,13 @@ function generate_day() {
     let events = [];
     let t = 0;
     let delta = 0;
+    let last_t = 0;
+    let new_t = 0;
     while (t <= DAY_DURATION) {
         delta = rng.uniform(-delta_arrival, delta_arrival);
-        events.push(Math.min(Math.max(t + delta, 0), DAY_DURATION));
+        new_t = Math.max(t + delta, last_t);
+        events.push(Math.min(Math.max(new_t, 0), DAY_DURATION));
+        last_t = new_t;
         t = t + avg_interarrival;
     }
     events.sort((a, b) => a - b);
