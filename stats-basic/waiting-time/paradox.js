@@ -47,8 +47,15 @@ function generate_day() {
 function convert(events) {
     let series = { time: [0], value: [0] };
     events.forEach((v) => {
-        series.time.push(v, v, v);
-        series.value.push(0, 1, 0);
+        if (
+            series.time.length > 1 &&
+            series.time[series.time.length - 2] == v
+        ) {
+            series.value[series.time.length - 2] += 1;
+        } else {
+            series.time.push(v, v, v);
+            series.value.push(0, 1, 0);
+        }
     });
     series.time.push(DAY_DURATION);
     series.value.push(0);
@@ -103,6 +110,8 @@ function step() {
         "lines",
         COLORS[1]
     );
+    value_maximum = Math.max(...sim.day_series.value);
+    time_plot.setRanges(true, [0, value_maximum * 1.05]);
     time_plot.update(
         [sim.day_series.time, sim.arrival_series.time],
         [sim.day_series.value, sim.arrival_series.value],
