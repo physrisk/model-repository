@@ -15,6 +15,7 @@ let continue_flag = false;
 
 let arrival_rate = 4;
 let delta_t = 0.04;
+const PROB_MAX = 0.95;
 
 const MAX_GT_LENGTH = 30 * TIMES_PER_UPDATE;
 let generated_times = [];
@@ -68,8 +69,19 @@ start_btn.addEventListener("click", () => {
     resume_btn.disabled = false;
     resume_btn.innerHTML = "Pause";
 
+    let delta_t_input = document.getElementById("delta_t");
+
     arrival_rate = my_parse_float(document.getElementById("rate").value);
-    delta_t = my_parse_float(document.getElementById("delta_t").value);
+    delta_t = my_parse_float(delta_t_input.value);
+
+    if (arrival_rate * delta_t >= PROB_MAX) {
+        let step = my_parse_float(delta_t_input.step);
+        while (arrival_rate * delta_t >= PROB_MAX) {
+            delta_t = delta_t - step;
+        }
+        delta_t_input.value = delta_t;
+    }
+
     generated_times = [];
 
     step();
