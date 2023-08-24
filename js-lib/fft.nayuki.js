@@ -173,6 +173,26 @@ function real_psd(series) {
     return psd;
 }
 
+function rescale_psd(psd, new_bin_edges) {
+    // take the average value from the bin to approximate the PSD
+    let last_idx = 1;
+    let new_psd = Array(new_bin_edges.length)
+        .fill(null)
+        .map((v, i) => {
+            let average = 0;
+            let used = 0;
+            for (; last_idx <= new_bin_edges[i]; last_idx += 1) {
+                used = used + 1;
+                average = average + (psd[last_idx] - average) / used;
+            }
+            if (used == 0) {
+                return null;
+            }
+            return average;
+        });
+    return new_psd;
+}
+
 // convolution function which uses FFT
 function convolution(series_a, series_b) {
     const fft = new FFTNayuki(2 * series_a.length);
