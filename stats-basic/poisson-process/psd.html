@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>PSD of a Poisson point process</title>
+    <link rel="stylesheet" type="text/css" href="../../js-lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../js-lib/universal-style.css">
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotly-131.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/plotlyPlot.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/jstat-192.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/random-026.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js-lib/fft.nayuki.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="figureWrapper">
+        <div id="seriesPlot" class="fullSize"></div>
+        <div id="psdPlot" class="fullSize"></div>
+    </div><!-- #figureWrapper -->
+    <div id="controlWrapper">
+        <span class="controlBlock">
+            <label for="event_rate">&lambda; = </label>
+            10^<input id="event_rate" type="number" min="-5" max="0" step="0.5" value="-4">
+            <label> [1/s]</label>
+        </span>
+        <br>
+        <span class="controlBlock">
+            <button name="generate" id="generate">Generate</button>
+        </span>
+    </div><!-- #controlWrapper -->
+    <script language="javascript" type="text/javascript" src="./psd.js"></script>
+</body>
+</html>
